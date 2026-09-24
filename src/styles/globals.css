@@ -1,0 +1,138 @@
+@import "tailwindcss";
+
+/* ------------------------------------------------------------------ *
+ * Design tokens (see CLAUDE.md → Design system)
+ * The default palette is removed so off-system colours (and pure white)
+ * cannot be used by accident.
+ * ------------------------------------------------------------------ */
+@theme {
+  --color-*: initial;
+  --color-wall: #4a0e1a;
+  --color-wall-deep: #2e0710;
+  --color-wall-shadow: #1a0409;
+  --color-gold: #b8935a;
+  --color-gold-light: #d9be86;
+  --color-gold-deep: #7a5a2a;
+  --color-ivory: #f3ebdd;
+  --color-ivory-muted: #cbbfa8;
+  --color-light: #ffe8c2;
+  --color-mat: #dfd2b9;
+
+  --tracking-caps: 0.14em;
+  --tracking-display: 0.08em;
+
+  --text-placard: 0.8125rem;
+  --text-placard--line-height: 1.55;
+  --text-label: 1rem;
+  --text-label--line-height: 1.4;
+
+  --ease-gallery: cubic-bezier(0.22, 1, 0.36, 1);
+
+  --spacing-hang: clamp(4rem, 9vw, 9rem);
+}
+
+@theme inline {
+  --font-display: var(--font-cormorant), "Cormorant Garamond", Georgia, serif;
+  --font-caps: var(--font-cormorant-sc), "Cormorant SC", Georgia, serif;
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+}
+
+/* Spotlight intensity is a registered number so hover can ease it. */
+@property --spot {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: 1;
+}
+
+:root {
+  /* Tileable grain: grey fractal noise, used with overlay/soft-light blending
+     so it adds texture without shifting the overall tone. */
+  --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 0 0 0 0 1'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  --grain-gilt: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.55' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 0 0 0 0 .22'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  --grain-soft: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.1' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 0 0 0 0 .45'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+@layer base {
+  html {
+    background-color: var(--color-wall);
+    color: var(--color-ivory);
+    color-scheme: dark;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    min-height: 100svh;
+    font-family: var(--font-sans);
+    font-size: 0.9375rem;
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display);
+    font-weight: 300;
+    letter-spacing: 0.02em;
+    line-height: 1.15;
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  ::selection {
+    background-color: rgb(184 147 90 / 0.35);
+    color: var(--color-ivory);
+  }
+
+  :focus-visible {
+    outline: 1px solid var(--color-gold);
+    outline-offset: 4px;
+  }
+}
+
+/* ------------------------------------------------------------------ *
+ * The wall: one fixed layer behind everything.
+ * Layers (top → bottom): vignette, soft mottling, depth gradient.
+ * Grain sits in ::after so it can blend with what is beneath it.
+ * The vignette lives here, *under* the content, so it darkens only the
+ * wall — paintings stay the brightest thing and text contrast only rises.
+ * ------------------------------------------------------------------ */
+.wall {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-color: var(--color-wall);
+  background-image:
+    radial-gradient(ellipse 120% 85% at 50% 38%, transparent 42%, rgb(26 4 9 / 0.55) 78%, rgb(20 3 7 / 0.9) 100%),
+    radial-gradient(ellipse 60% 40% at 18% 22%, rgb(104 24 40 / 0.2), transparent 70%),
+    radial-gradient(ellipse 55% 45% at 84% 64%, rgb(28 4 10 / 0.3), transparent 70%),
+    radial-gradient(ellipse 45% 35% at 62% 12%, rgb(96 22 36 / 0.12), transparent 70%),
+    linear-gradient(to bottom, #3a0a14 0%, var(--color-wall) 28%, var(--color-wall) 58%, var(--color-wall-deep) 100%);
+}
+
+.wall::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: var(--grain);
+  opacity: 0.16;
+  mix-blend-mode: overlay;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

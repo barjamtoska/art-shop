@@ -1,0 +1,58 @@
+{
+  "young-woman-with-a-water-pitcher": {
+    "src": "/seed/young-woman-with-a-water-pitcher.jpg",
+    "width": 2087,
+    "height": 2369,
+    "blurDataURL": "data:image/webp;base64,UklGRkoAAABXRUJQVlA4ID4AAAAQAgCdASoLAAwAA4BaJYwCsAD0ezHvB57AAP295up89PtOEHK1EVmkxjw5o1l2xLZWGbs2Fregkn2hANAAAA==",
+    "credit": "The Metropolitan Museum of Art, Marquand Collection, Gift of Henry G. Marquand, 1889. Open Access (CC0).",
+    "sourceUrl": "https://www.metmuseum.org/art/collection/search/437881"
+  },
+  "two-men-contemplating-the-moon": {
+    "src": "/seed/two-men-contemplating-the-moon.jpg",
+    "width": 2369,
+    "height": 1899,
+    "blurDataURL": "data:image/webp;base64,UklGRkAAAABXRUJQVlA4IDQAAADwAQCdASoMAAoAA4BaJYwCdAEfa/5ynQAA/vGEc0yVK9MP912ownnKGiwUlvbv1lcoAAAA",
+    "credit": "The Metropolitan Museum of Art, Wrightsman Fund, 2000. Open Access (CC0).",
+    "sourceUrl": "https://www.metmuseum.org/art/collection/search/438417"
+  },
+  "madame-x": {
+    "src": "/seed/madame-x.jpg",
+    "width": 1246,
+    "height": 2390,
+    "blurDataURL": "data:image/webp;base64,UklGRjwAAABXRUJQVlA4IDAAAADQAQCdASoGAAwAA4BaJYwCdAD0TmoSQAD+3PRRq192i+b0vdijq6DMag0tp1rAAAA=",
+    "credit": "The Metropolitan Museum of Art, Arthur Hoppock Hearn Fund, 1916. Open Access (CC0).",
+    "sourceUrl": "https://www.metmuseum.org/art/collection/search/12127"
+  },
+  "heart-of-the-andes": {
+    "src": "/seed/heart-of-the-andes.jpg",
+    "width": 2378,
+    "height": 1309,
+    "blurDataURL": "data:image/webp;base64,UklGRlQAAABXRUJQVlA4IEgAAAAQAgCdASoMAAcAA4BaJagCdAEfbo4GOqcAAPjk+KrIpU0xDH8aEgb+WyFRZKNR8gDwajuTo+cr2rfwYq3fd1Lhn9qwwbDgAAA=",
+    "credit": "The Metropolitan Museum of Art, Bequest of Margaret E. Dows, 1909. Open Access (CC0).",
+    "sourceUrl": "https://www.metmuseum.org/art/collection/search/10481"
+  },
+  "aristotle-with-a-bust-of-homer": {
+    "src": "/seed/aristotle-with-a-bust-of-homer.jpg",
+    "width": 2275,
+    "height": 2400,
+    "blurDataURL": "data:image/webp;base64,UklGRjwAAABXRUJQVlA4IDAAAADwAQCdASoLAAwAA4BaJZwCdAEO9nRmOAAA/vhSwMOPeldab3h0rQhH9MtQue9eAAA=",
+    "credit": "The Metropolitan Museum of Art, Purchase, special contributions and funds given or bequeathed by friends of the Museum, 1961. Open Access (CC0).",
+    "sourceUrl": "https://www.metmuseum.org/art/collection/search/437394"
+  },
+  "the-musicians": {
+    "src": "/seed/the-musicians.jpg",
+    "width": 2386,
+    "height": 1850,
+    "blurDataURL": "data:image/webp;base64,UklGRlYAAABXRUJQVlA4IEoAAADwAQCdASoMAAkAA4BaJQBOgCBvjs10r4AA/vFQkfgGZc2oO4rUZ74+vGbEjSeJgtjt/XXLqITTb1JyRJvQb94gbLaRCCE3TgAAAA==",
+    "credit": "The Metropolitan Museum of Art, Rogers Fund, 1952. Open Access (CC0).",
+    "sourceUrl": "https://www.metmuseum.org/art/collection/search/435844"
+  },
+  "wheat-field-with-cypresses": {
+    "src": "/seed/wheat-field-with-cypresses.jpg",
+    "width": 2361,
+    "height": 1855,
+    "blurDataURL": "data:image/webp;base64,UklGRkgAAABXRUJQVlA4IDwAAAAQAgCdASoMAAkAA4BaJbACdH8AFlrhglkAAPzLvm6BKySm3loy7YXb0mMRkj8koCMC2Ooko8j09Os2AAA=",
+    "credit": "The Metropolitan Museum of Art, Purchase, The Annenberg Foundation Gift, 1993. Open Access (CC0).",
+    "sourceUrl": "https://www.metmuseum.org/art/collection/search/436535"
+  }
+}

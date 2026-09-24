@@ -1,0 +1,264 @@
+/* ==================================================================
+ * A physical gilded frame, ivory mat and warm spotlight, in CSS only.
+ *
+ * Light always comes from above: the top rail catches it, the bottom rail
+ * falls into shade, the frame casts its shadow down onto the wall and onto
+ * the top edge of the mat, and the lower mat bevel is the brightest edge.
+ *
+ * All sizes are container-relative (cqi) so the same component reads
+ * correctly as a thumbnail, on the wall, and at full size in the room.
+ * ================================================================== */
+
+.root {
+  --spot-strength: 1;
+  container-type: inline-size;
+  position: relative;
+  width: 100%;
+  transition: --spot 700ms var(--ease-gallery);
+}
+
+.root[data-size="hero"] {
+  --spot-strength: 1.25;
+}
+
+/* ---------- The light on the wall ---------------------------------- */
+
+/* A pool of warm light from a source above: brightest on the wall just
+   above the frame, spilling past its sides, gone before the placard.
+   Two layers: light falling on a red wall reads as a deeper, brighter
+   crimson (not a pale haze), plus a faint #FFE8C2 glow for warmth. Both
+   fade out fully inside the box (centre 45%, clear by 84% of a 52% radius). */
+.spot {
+  position: absolute;
+  z-index: -1;
+  inset: -42% -50% -30%;
+  pointer-events: none;
+  --a: calc(var(--spot) * var(--spot-strength));
+  background:
+    radial-gradient(
+      ellipse 52% 52% at 50% 45%,
+      rgb(255 232 194 / calc(0.07 * var(--a))) 0%,
+      rgb(255 232 194 / calc(0.04 * var(--a))) 35%,
+      rgb(255 232 194 / calc(0.012 * var(--a))) 62%,
+      transparent 82%
+    ),
+    radial-gradient(
+      ellipse 52% 52% at 50% 45%,
+      rgb(150 38 52 / calc(0.62 * var(--a))) 0%,
+      rgb(150 38 52 / calc(0.46 * var(--a))) 30%,
+      rgb(150 38 52 / calc(0.24 * var(--a))) 50%,
+      rgb(150 38 52 / calc(0.08 * var(--a))) 66%,
+      rgb(150 38 52 / calc(0.02 * var(--a))) 76%,
+      transparent 84%
+    );
+  animation: spot-on 800ms var(--ease-gallery) both;
+}
+
+/* ---------- The moulding ------------------------------------------- */
+
+.frame {
+  --fw: clamp(9px, 7cqi, 58px); /* moulding width per side */
+  --mw: clamp(7px, 5.6cqi, 52px); /* mat margin */
+
+  /* The moulding profile from outer edge to sight edge: outer bead, groove,
+     broad cove, deep hollow, inner ridge, sight-edge lip. Every rail uses the
+     same profile, so the ridges meet cleanly at the mitres. Mostly mid-tone
+     aged gold with narrow highlights on the ridges — never yellow. */
+  --profile:
+    #1c1206 0%, #4a3514 2%, #9c7c45 4.5%, #d2b981 6.5%, #7c602f 8.5%, #3e2b10 11%, #6a5027 14%, #9a7a43 20%,
+    #c4a567 28%, #d6bd88 32%, #b08e54 36%, #7f6231 44%, #573419 52%, #5d4520 58%, #8c6e38 63%, #bf9f63 69%, #d9c28e 72%,
+    #a98849 75%, #6b5126 82%, #3f2c11 88%, #6a5028 93%, #9b7b44 96%, #1d1307 100%;
+
+  position: relative;
+  padding: var(--fw);
+  background: #2a1d0a; /* shows as a fine joint line along the mitres */
+  box-shadow:
+    0 1px 1px rgb(12 2 5 / 0.5),
+    0 16px 24px -8px rgb(12 2 5 / 0.72),
+    0 44px 64px -22px rgb(12 2 5 / 0.62);
+}
+
+.frame[data-style="slim"] {
+  --fw: clamp(6px, 3.8cqi, 30px);
+  --profile:
+    #1c1206 0%, #5a4219 5%, #b3924f 13%, #d4bb85 19%, #9a7a43 28%, #5e4520 42%, #4a3515 52%, #8c6e38 64%, #c9aa6e 74%,
+    #8f703a 84%, #3a2910 94%, #1d1307 100%;
+}
+
+/* Each rail = spotlight falloff (--light) over gilt grain over the profile.
+   The light is centred above the frame: the top rail is brightest in the
+   middle, the side rails darken toward the floor, the bottom rail is in shade. */
+.rail {
+  position: absolute;
+  background-image: var(--light), var(--grain-gilt), linear-gradient(var(--dir), var(--profile));
+  background-blend-mode: normal, overlay, normal;
+}
+
+.top {
+  --dir: to bottom;
+  --light: linear-gradient(
+    to right,
+    rgb(12 5 0 / 0.2),
+    rgb(255 238 205 / 0.1) 35%,
+    rgb(255 238 205 / 0.12) 50%,
+    rgb(255 238 205 / 0.1) 65%,
+    rgb(12 5 0 / 0.2)
+  );
+  inset: 0 0 auto;
+  height: var(--fw);
+  clip-path: polygon(0 0, 100% 0, calc(100% - var(--fw)) 100%, var(--fw) 100%);
+}
+
+.bottom {
+  --dir: to top;
+  --light: linear-gradient(to right, rgb(12 5 0 / 0.56), rgb(12 5 0 / 0.4) 50%, rgb(12 5 0 / 0.56));
+  inset: auto 0 0;
+  height: var(--fw);
+  clip-path: polygon(var(--fw) 0, calc(100% - var(--fw)) 0, 100% 100%, 0 100%);
+}
+
+.left {
+  --dir: to right;
+  --light: linear-gradient(to bottom, rgb(255 238 205 / 0.05), rgb(12 5 0 / 0.16) 50%, rgb(12 5 0 / 0.38));
+  inset: 0 auto 0 0;
+  width: var(--fw);
+  clip-path: polygon(0 0, 100% var(--fw), 100% calc(100% - var(--fw)), 0 100%);
+}
+
+.right {
+  --dir: to left;
+  --light: linear-gradient(to bottom, rgb(12 5 0 / 0.06), rgb(12 5 0 / 0.26) 50%, rgb(12 5 0 / 0.46));
+  inset: 0 0 0 auto;
+  width: var(--fw);
+  clip-path: polygon(0 var(--fw), 100% 0, 100% 100%, 0 calc(100% - var(--fw)));
+}
+
+/* ---------- The mat (passe-partout) -------------------------------- */
+
+.mat {
+  position: relative;
+  /* Bottom-weighted, as framers cut them: the lower margin is wider. */
+  padding: var(--mw) var(--mw) calc(var(--mw) * 1.16);
+  background-color: var(--color-mat);
+  /* Lit from above: slightly shaded under the top rail, then the light
+     falls off gently toward the bottom so the mat never outshines the work. */
+  background-image:
+    linear-gradient(to bottom, rgb(60 38 8 / 0.1), transparent 22%, transparent 55%, rgb(60 38 8 / 0.16)),
+    var(--grain-soft);
+  background-blend-mode: normal, soft-light;
+  box-shadow:
+    inset 0 calc(var(--fw) * 0.16) calc(var(--fw) * 0.3) rgb(30 15 2 / 0.5),
+    inset calc(var(--fw) * 0.06) 0 calc(var(--fw) * 0.2) rgb(30 15 2 / 0.2),
+    inset calc(var(--fw) * -0.06) 0 calc(var(--fw) * 0.2) rgb(30 15 2 / 0.24),
+    inset 0 0 0 1px rgb(40 24 6 / 0.45);
+}
+
+/* The bevelled window cut into the mat, showing its lighter core. The upper
+   bevel faces down (in shade); the lower bevel faces up into the light. */
+.opening {
+  position: relative;
+  border: max(2px, 0.55cqi) solid;
+  border-color: #c4b597 #dfd2ba #efe6d4 #d8cab0;
+  box-shadow: 0 0 0 1px rgb(80 60 30 / 0.22);
+}
+
+.painting {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* Light pool on the canvas: warms the upper part without shifting colour. */
+.opening::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: radial-gradient(ellipse 95% 75% at 50% 0%, rgb(255 232 194 / 0.14), transparent 72%);
+  mix-blend-mode: soft-light;
+}
+
+/* The mat's own shadow falling onto the top edge of the painting. */
+.opening::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  box-shadow: inset 0 2px 3px rgb(0 0 0 / 0.3);
+}
+
+/* ---------- Lights on ---------------------------------------------- */
+
+/* Before the light comes on, the work is a dark silhouette on the wall. */
+.shade {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  background: rgb(22 3 9 / 0.82);
+  opacity: 0;
+  animation: shade-off 800ms var(--ease-gallery) 250ms both;
+}
+
+@keyframes spot-on {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes shade-off {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+.root[data-lit="off"] .spot {
+  animation: none;
+  opacity: 0;
+}
+
+.root[data-lit="off"] .shade {
+  animation: none;
+  opacity: 1;
+}
+
+.root[data-lit="on"] .spot {
+  animation: none;
+  opacity: 1;
+  transition: opacity 800ms var(--ease-gallery);
+}
+
+.root[data-lit="on"] .shade {
+  animation: none;
+  opacity: 0;
+  transition: opacity 800ms var(--ease-gallery) 250ms;
+}
+
+/* When the work is a link, the light warms slightly as you approach. */
+:is(a:hover, a:focus-visible) .root,
+.root[data-interactive]:hover {
+  --spot: 1.4;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .root {
+    transition: none;
+  }
+  .spot,
+  .root[data-lit] .spot {
+    animation: none;
+    transition: none;
+    opacity: 1;
+  }
+  .shade,
+  .root[data-lit] .shade {
+    animation: none;
+    transition: none;
+    opacity: 0;
+  }
+}

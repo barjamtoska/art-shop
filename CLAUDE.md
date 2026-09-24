@@ -33,3 +33,6 @@ When in doubt, choose restraint, space, and calm over density and urgency.
 - Secrets only in environment variables; never commit them.
 - After any UI change, use Playwright to screenshot desktop (1440px) and mobile (390px) and check against this design system.
 - Commit after each completed phase.
+
+## Next.js
+@AGENTS.md
