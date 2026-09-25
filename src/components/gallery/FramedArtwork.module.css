@@ -44,11 +44,11 @@
     ),
     radial-gradient(
       ellipse 52% 52% at 50% 45%,
-      rgb(150 38 52 / calc(0.62 * var(--a))) 0%,
-      rgb(150 38 52 / calc(0.46 * var(--a))) 30%,
-      rgb(150 38 52 / calc(0.24 * var(--a))) 50%,
-      rgb(150 38 52 / calc(0.08 * var(--a))) 66%,
-      rgb(150 38 52 / calc(0.02 * var(--a))) 76%,
+      rgb(152 44 34 / calc(0.62 * var(--a))) 0%,
+      rgb(152 44 34 / calc(0.46 * var(--a))) 30%,
+      rgb(152 44 34 / calc(0.24 * var(--a))) 50%,
+      rgb(152 44 34 / calc(0.08 * var(--a))) 66%,
+      rgb(152 44 34 / calc(0.02 * var(--a))) 76%,
       transparent 84%
     );
   animation: spot-on 800ms var(--ease-gallery) both;
@@ -73,9 +73,9 @@
   padding: var(--fw);
   background: #2a1d0a; /* shows as a fine joint line along the mitres */
   box-shadow:
-    0 1px 1px rgb(12 2 5 / 0.5),
-    0 16px 24px -8px rgb(12 2 5 / 0.72),
-    0 44px 64px -22px rgb(12 2 5 / 0.62);
+    0 1px 1px rgb(12 3 2 / 0.5),
+    0 16px 24px -8px rgb(12 3 2 / 0.72),
+    0 44px 64px -22px rgb(12 3 2 / 0.62);
 }
 
 .frame[data-style="slim"] {
@@ -201,7 +201,7 @@
   inset: 0;
   z-index: 2;
   pointer-events: none;
-  background: rgb(22 3 9 / 0.82);
+  background: rgb(22 5 4 / 0.82);
   opacity: 0;
   animation: shade-off 800ms var(--ease-gallery) 250ms both;
 }
@@ -260,7 +260,7 @@
 /* An empty frame: the mat window shows the wall behind (the 404 room). */
 .void {
   background:
-    radial-gradient(ellipse 80% 70% at 50% 20%, rgb(150 38 52 / 0.35), transparent 70%), var(--color-wall-deep);
+    radial-gradient(ellipse 80% 70% at 50% 20%, rgb(152 44 34 / 0.35), transparent 70%), var(--color-wall-deep);
   box-shadow: inset 0 3px 6px rgb(0 0 0 / 0.5);
 }
 

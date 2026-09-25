@@ -11,7 +11,7 @@ export default function Loading() {
   return (
     <div className="flex min-h-[60svh] items-center justify-center px-4" role="status">
       <div
-        className="fade-in aspect-[4/5] w-[min(260px,56vw)] border border-gold/15 shadow-[0_30px_60px_-20px_rgb(12_2_5/0.6)]"
+        className="fade-in aspect-[4/5] w-[min(260px,56vw)] border border-gold/15 shadow-[0_30px_60px_-20px_rgb(12_3_2/0.6)]"
         style={{ animationDuration: "800ms" }}
       />
       <span className="sr-only">Loading</span>

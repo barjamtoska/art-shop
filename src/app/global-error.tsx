@@ -11,7 +11,7 @@ export default function GlobalError({ reset }: { error: Error & { digest?: strin
           minHeight: "100vh",
           display: "grid",
           placeItems: "center",
-          background: "#2e0710",
+          background: "#2e0908",
           color: "#f3ebdd",
           fontFamily: "Georgia, serif",
           textAlign: "center",

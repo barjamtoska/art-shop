@@ -37,7 +37,7 @@ const light = hex(token("light"));
 // peak (crimson 0.62, glow 0.07) only ever falls behind the frame itself;
 // see `.spot` in FramedArtwork.module.css.
 const mottled = over([104, 24, 40], 0.35, wall);
-const litWall = over(light, 0.04, over([150, 38, 52], 0.2, mottled));
+const litWall = over(light, 0.04, over([152, 44, 34], 0.2, mottled));
 
 const backgrounds = { wall, wallDeep, litWall };
 

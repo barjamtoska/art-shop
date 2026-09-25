@@ -6,9 +6,9 @@ Every page should feel like walking through a quiet, warmly lit museum at night.
 When in doubt, choose restraint, space, and calm over density and urgency.
 
 ## Design system
-- Background: deep burgundy walls — base #4A0E1A, darker #2E0710 for depth, subtle wall texture/noise.
+- Background: deep maroon walls — base #501210, darker #2E0908 for depth, subtle wall texture/noise.
 - Accents: aged gold #B8935A (frames, dividers, hover states). Never bright yellow.
-- Text: warm ivory #F3EBDD; secondary #CBBFA8. All text must pass WCAG AA contrast on burgundy.
+- Text: warm ivory #F3EBDD; secondary #CBBFA8. All text must pass WCAG AA contrast on maroon.
 - Typography: headings in Cormorant Garamond (light/regular, generous letter-spacing, small caps for labels);
   body/UI in Inter or similar, small and quiet.
 - Lighting: each painting sits under a soft warm spotlight (radial gradient from above, warm #FFE8C2 glow at low opacity),

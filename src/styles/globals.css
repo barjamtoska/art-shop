@@ -7,8 +7,8 @@
  * ------------------------------------------------------------------ */
 @theme {
   --color-*: initial;
-  --color-wall: #4a0e1a;
-  --color-wall-deep: #2e0710;
+  --color-wall: #501210;
+  --color-wall-deep: #2e0908;
   --color-wall-shadow: #1a0409;
   --color-gold: #b8935a;
   --color-gold-light: #d9be86;
@@ -110,11 +110,11 @@
   pointer-events: none;
   background-color: var(--color-wall);
   background-image:
-    radial-gradient(ellipse 120% 85% at 50% 38%, transparent 42%, rgb(26 4 9 / 0.55) 78%, rgb(20 3 7 / 0.9) 100%),
-    radial-gradient(ellipse 60% 40% at 18% 22%, rgb(104 24 40 / 0.2), transparent 70%),
-    radial-gradient(ellipse 55% 45% at 84% 64%, rgb(28 4 10 / 0.3), transparent 70%),
-    radial-gradient(ellipse 45% 35% at 62% 12%, rgb(96 22 36 / 0.12), transparent 70%),
-    linear-gradient(to bottom, #3a0a14 0%, var(--color-wall) 28%, var(--color-wall) 58%, var(--color-wall-deep) 100%);
+    radial-gradient(ellipse 120% 85% at 50% 38%, transparent 42%, rgb(26 5 4 / 0.55) 78%, rgb(20 4 3 / 0.9) 100%),
+    radial-gradient(ellipse 60% 40% at 18% 22%, rgb(108 28 22 / 0.2), transparent 70%),
+    radial-gradient(ellipse 55% 45% at 84% 64%, rgb(28 5 4 / 0.3), transparent 70%),
+    radial-gradient(ellipse 45% 35% at 62% 12%, rgb(100 26 20 / 0.12), transparent 70%),
+    linear-gradient(to bottom, #3c0c0b 0%, var(--color-wall) 28%, var(--color-wall) 58%, var(--color-wall-deep) 100%);
 }
 
 .wall::after {
@@ -133,7 +133,7 @@
   inset: 0;
   z-index: -1;
   pointer-events: none;
-  background: radial-gradient(ellipse 70% 65% at 50% 48%, rgb(18 2 7 / 0.3), rgb(12 1 4 / 0.72) 100%);
+  background: radial-gradient(ellipse 70% 65% at 50% 48%, rgb(18 3 2 / 0.3), rgb(12 2 1 / 0.72) 100%);
 }
 
 /* ------------------------------------------------------------------ *
