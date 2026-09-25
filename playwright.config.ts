@@ -11,6 +11,8 @@ export default defineConfig({
   testDir: "tests",
   testMatch: ["e2e/**/*.spec.ts", "visual/**/*.spec.ts"],
   fullyParallel: true,
+  // Against the dev server, a route's first visit waits on compilation.
+  expect: { timeout: 10_000 },
   reporter: process.env.CI ? "github" : "line",
   use: { baseURL },
   projects: [

@@ -10,10 +10,12 @@ type Props = {
   variant?: "wall" | "room";
   /** When set, the title links to the artwork room. */
   href?: string;
+  /** Stretch the title link over the nearest positioned ancestor (the hung work). */
+  stretch?: boolean;
   className?: string;
 };
 
-export function Placard({ artwork, variant = "wall", href, className }: Props) {
+export function Placard({ artwork, variant = "wall", href, stretch = false, className }: Props) {
   const { artist, title, yearLabel, mediumDescription, heightCm, widthCm, depthCm, status } = artwork;
   const room = variant === "room";
   const classes = [styles.placard, room && styles.room, className].filter(Boolean).join(" ");
@@ -27,7 +29,7 @@ export function Placard({ artwork, variant = "wall", href, className }: Props) {
       <dt className="sr-only">{copy.placard.title}</dt>
       <dd className={styles.title}>
         {href ? (
-          <Link href={href} className={styles.titleLink}>
+          <Link href={href} className={stretch ? `${styles.titleLink} ${styles.stretched}` : styles.titleLink}>
             {titleText}
           </Link>
         ) : (

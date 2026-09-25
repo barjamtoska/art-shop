@@ -9,6 +9,7 @@
     "lint": "eslint",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
+    "test:e2e": "playwright test tests/e2e",
     "shots": "playwright test tests/visual",
     "format": "prettier --write .",
     "seed:images": "node scripts/fetch-seed-images.mts"
@@ -16,7 +17,8 @@
   "dependencies": {
     "next": "16.3.6",
     "react": "19.2.8",
-    "react-dom": "19.2.8"
+    "react-dom": "19.2.8",
+    "server-only": "^0.0.1"
   },
   "devDependencies": {
     "@playwright/test": "^1.63.0",

@@ -56,6 +56,24 @@
   background-size: 100% 1px;
 }
 
+/* On the wall, the title link covers the whole hung work (frame included),
+   so there is one link per work for keyboard and screen-reader users. */
+.stretched::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+}
+
+.stretched:focus-visible {
+  outline: none;
+}
+
+/* The hung item shows its hover state for any part of the work. */
+:global([data-hover-light]:hover) .titleLink {
+  background-size: 100% 1px;
+}
+
 .meta {
   margin-top: 0.45rem;
 }
@@ -64,6 +82,12 @@
    <dt> sits between them.) */
 .inline {
   display: inline;
+}
+
+/* Dimensions never break ("61 × 41.9 / cm"); if they must wrap, they move
+   to the next line together with their separator. */
+.inline ~ .inline {
+  white-space: nowrap;
 }
 
 .inline ~ .inline::before {

@@ -1,0 +1,55 @@
+/* Works hung along a centre line, as in a museum: in each row the frames'
+   centres align, and each wall label hangs below its frame without
+   affecting that alignment. On phones, one work per "wall". */
+
+.hang {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  row-gap: 6rem;
+}
+
+.item {
+  position: relative;
+}
+
+.label {
+  margin-top: 2.25rem;
+}
+
+@media (min-width: 768px) {
+  .hang {
+    /* The wall ends where the header's content does, so no work hangs
+       against the edge of the screen. */
+    max-width: 76rem;
+    margin-inline: auto;
+    flex-flow: row wrap;
+    justify-content: center;
+    align-items: center;
+    column-gap: var(--spacing-hang);
+    row-gap: 17rem;
+    /* room for the last row's labels */
+    padding-bottom: 12rem;
+  }
+
+  /* Zero-height, so labels never shift the frames off the centre line. */
+  .label {
+    height: 0;
+  }
+
+  .label > * {
+    width: max(100%, 15rem);
+  }
+}
+
+.compact {
+  row-gap: 5rem;
+}
+
+@media (min-width: 768px) {
+  .compact {
+    column-gap: clamp(3rem, 6vw, 6rem);
+    row-gap: 14rem;
+    padding-bottom: 10rem;
+  }
+}

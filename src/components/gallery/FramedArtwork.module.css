@@ -157,15 +157,19 @@
    bevel faces down (in shade); the lower bevel faces up into the light. */
 .opening {
   position: relative;
+  overflow: hidden;
   border: max(2px, 0.55cqi) solid;
   border-color: #c4b597 #dfd2ba #efe6d4 #d8cab0;
   box-shadow: 0 0 0 1px rgb(80 60 30 / 0.22);
 }
 
+/* As in real framing, the mat overlaps the work's edges slightly, hiding
+   the unpainted tacking margin and ragged edges that photographs show. */
 .painting {
   display: block;
   width: 100%;
   height: auto;
+  transform: scale(1.025);
 }
 
 /* Light pool on the canvas: warms the upper part without shifting colour. */
@@ -239,10 +243,25 @@
   transition: opacity 800ms var(--ease-gallery) 250ms;
 }
 
-/* When the work is a link, the light warms slightly as you approach. */
+/* When the work leads somewhere, the light warms slightly as you approach.
+   `[data-hover-light]` marks the hung item that contains the work's link. */
 :is(a:hover, a:focus-visible) .root,
+[data-hover-light]:is(:hover, :focus-within) .root,
 .root[data-interactive]:hover {
   --spot: 1.4;
+}
+
+/* Keyboard focus on the work's link is shown around the frame itself. */
+[data-hover-light]:has(a:focus-visible) .frame {
+  outline: 1px solid var(--color-gold);
+  outline-offset: 8px;
+}
+
+/* An empty frame: the mat window shows the wall behind (the 404 room). */
+.void {
+  background:
+    radial-gradient(ellipse 80% 70% at 50% 20%, rgb(150 38 52 / 0.35), transparent 70%), var(--color-wall-deep);
+  box-shadow: inset 0 3px 6px rgb(0 0 0 / 0.5);
 }
 
 @media (prefers-reduced-motion: reduce) {

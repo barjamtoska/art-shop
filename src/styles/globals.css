@@ -28,7 +28,7 @@
 
   --ease-gallery: cubic-bezier(0.22, 1, 0.36, 1);
 
-  --spacing-hang: clamp(4rem, 9vw, 9rem);
+  --spacing-hang: clamp(4rem, 7vw, 7.5rem);
 }
 
 @theme inline {
@@ -124,6 +124,68 @@
   background-image: var(--grain);
   opacity: 0.16;
   mix-blend-mode: overlay;
+}
+
+/* The Entrance is darker than the rooms beyond it: a second layer dims the
+   wall (still under the content), so the one lit painting carries the page. */
+.dim-wall {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background: radial-gradient(ellipse 70% 65% at 50% 48%, rgb(18 2 7 / 0.3), rgb(12 1 4 / 0.72) 100%);
+}
+
+/* ------------------------------------------------------------------ *
+ * Motion: slow fades only (400–800ms, ease-out). `--delay` staggers.
+ * ------------------------------------------------------------------ */
+@keyframes gallery-fade-in {
+  from {
+    opacity: 0;
+  }
+}
+
+.fade-in {
+  animation: gallery-fade-in 800ms var(--ease-gallery) var(--delay, 0ms) both;
+}
+
+/* ------------------------------------------------------------------ *
+ * Full-screen dialogs (mobile menu, brushwork viewer)
+ * ------------------------------------------------------------------ */
+.menu-dialog,
+.zoom-dialog {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100dvh;
+  max-width: none;
+  max-height: none;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  color: var(--color-ivory);
+}
+
+.menu-dialog {
+  background: rgb(30 4 11 / 0.97);
+}
+
+.zoom-dialog {
+  background: #14030a;
+}
+
+.menu-dialog[open],
+.zoom-dialog[open] {
+  animation: gallery-fade-in 500ms var(--ease-gallery);
+}
+
+.menu-dialog::backdrop,
+.zoom-dialog::backdrop {
+  background: transparent;
+}
+
+html:has(dialog[open]) {
+  overflow: hidden;
 }
 
 @media (prefers-reduced-motion: reduce) {

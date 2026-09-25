@@ -8,7 +8,16 @@ import { test, type Page } from "@playwright/test";
  * Run with `npm run shots` (optionally `-- --grep lab`).
  */
 const pages = [
-  { name: "home", path: "/" },
+  { name: "entrance", path: "/" },
+  { name: "collection", path: "/collection" },
+  { name: "collection-filtered", path: "/collection?exhibition=nocturnes" },
+  { name: "artwork", path: "/collection/young-woman-with-a-water-pitcher" },
+  { name: "artwork-sold", path: "/collection/madame-x" },
+  { name: "exhibitions", path: "/exhibitions" },
+  { name: "exhibition", path: "/exhibitions/nocturnes" },
+  { name: "artists", path: "/artists" },
+  { name: "artist", path: "/artists/edgar-degas" },
+  { name: "not-found", path: "/this-room-does-not-exist" },
   { name: "lab", path: "/lab" },
 ];
 
@@ -19,15 +28,21 @@ test.setTimeout(240_000);
 
 async function loadEverything(page: Page) {
   await page.evaluate(() => document.fonts.ready);
-  // Scroll through so lazy images load, then return to the top.
+  // Lazy images load only once on screen, and WebKit paints these pages so
+  // slowly at 2x that a quick scroll-through passes them before they start.
+  // So bring each rendered painting into view and wait for it, then return to
+  // the top. (Lazy images inside display:none never load: skip those.)
   await page.evaluate(async () => {
-    for (let y = 0; y < document.body.scrollHeight; y += window.innerHeight / 2) {
-      window.scrollTo(0, y);
-      await new Promise((r) => setTimeout(r, 120));
+    for (const img of Array.from(document.images)) {
+      if (img.complete || !img.checkVisibility()) continue;
+      img.scrollIntoView({ block: "center" });
+      await new Promise<void>((resolve) => {
+        img.addEventListener("load", () => resolve(), { once: true });
+        img.addEventListener("error", () => resolve(), { once: true });
+      });
     }
     window.scrollTo(0, 0);
   });
-  await page.waitForFunction(() => Array.from(document.images).every((img) => img.complete));
 }
 
 for (const { name, path } of pages) {

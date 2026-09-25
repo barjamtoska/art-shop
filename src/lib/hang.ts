@@ -4,8 +4,8 @@
  * are clamped so nothing becomes a postage stamp or overwhelms the room.
  */
 
-const MIN_PX = 240;
-const MAX_PX = 540;
+const MIN_PX = 220;
+const MAX_PX = 480;
 const MAX_HEIGHT_PX = 500; // keeps tall portraits from towering over the hang
 // Painting width as a share of the framed width, and the extra height the
 // frame + bottom-weighted mat add, both as a share of the framed width.
@@ -20,13 +20,15 @@ export type HangSize = {
   sizes: string;
 };
 
-export function hangSize(widthCm: number, heightCm: number): HangSize {
-  const byWidth = 180 + widthCm * 2.2;
+/** `scale` shrinks the whole hang (e.g. 0.72 for a secondary row of works). */
+export function hangSize(widthCm: number, heightCm: number, scale = 1): HangSize {
+  const byWidth = 160 + widthCm * 2;
   const byHeight = MAX_HEIGHT_PX * (widthCm / heightCm);
-  const px = Math.round(Math.min(MAX_PX, Math.max(MIN_PX, Math.min(byWidth, byHeight))));
+  const natural = Math.min(MAX_PX, Math.max(MIN_PX, Math.min(byWidth, byHeight)));
+  const px = Math.round(natural * scale);
 
   // On phones every work is shown large enough to see, still keeping some scale.
-  const vw = Math.round(64 + ((px - MIN_PX) / (MAX_PX - MIN_PX)) * 22);
+  const vw = Math.round(64 + ((natural - MIN_PX) / (MAX_PX - MIN_PX)) * 22);
 
   return {
     width: `min(${px}px, ${vw}vw)`,

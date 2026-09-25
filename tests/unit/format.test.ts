@@ -22,8 +22,8 @@ describe("dimensions", () => {
 
 describe("hangSize", () => {
   it("keeps small works legible and large works within bounds", () => {
-    expect(hangSize(20, 25).width).toBe("min(240px, 64vw)");
-    expect(hangSize(302.9, 168).width).toBe("min(540px, 86vw)");
+    expect(hangSize(20, 25).width).toBe("min(220px, 64vw)");
+    expect(hangSize(302.9, 168).width).toBe("min(480px, 86vw)");
   });
 
   it("caps tall works by height", () => {

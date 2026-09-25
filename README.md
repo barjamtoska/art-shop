@@ -23,6 +23,7 @@ Open `/lab` in development to see the frame, mat, spotlight and placard componen
 | `npm run lint`        | ESLint                                                                             |
 | `npm run typecheck`   | TypeScript, no emit                                                                |
 | `npm test`            | Unit tests (Vitest), including WCAG AA contrast checks on the colour tokens        |
+| `npm run test:e2e`    | End-to-end tests: a walk through the gallery, 404s, keyboard, overflow, alt text   |
 | `npm run shots`       | Screenshots at 1440px and 390px in Chromium and WebKit into `./screenshots`        |
 | `npx playwright test` | End-to-end tests and screenshots                                                   |
 | `npm run seed:images` | Re-download and prepare the public-domain seed paintings (`-- --force` to refresh) |

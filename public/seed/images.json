@@ -54,5 +54,61 @@
     "blurDataURL": "data:image/webp;base64,UklGRkgAAABXRUJQVlA4IDwAAAAQAgCdASoMAAkAA4BaJbACdH8AFlrhglkAAPzLvm6BKySm3loy7YXb0mMRkj8koCMC2Ooko8j09Os2AAA=",
     "credit": "The Metropolitan Museum of Art, Purchase, The Annenberg Foundation Gift, 1993. Open Access (CC0).",
     "sourceUrl": "https://www.metmuseum.org/art/collection/search/436535"
+  },
+  "dancer-with-a-fan": {
+    "src": "/seed/dancer-with-a-fan.jpg",
+    "width": 1700,
+    "height": 2400,
+    "blurDataURL": "data:image/webp;base64,UklGRjwAAABXRUJQVlA4IDAAAABwAQCdASoIAAwAA4BaJQBOgBpgAADfxxk1h4IitTFxb3uJUd4N7gjFhu24JuwMAAA=",
+    "credit": "The Metropolitan Museum of Art, H. O. Havemeyer Collection, Bequest of Mrs. H. O. Havemeyer, 1929. Open Access (CC0).",
+    "sourceUrl": "https://www.metmuseum.org/art/collection/search/436135"
+  },
+  "sloop-nassau": {
+    "src": "/seed/sloop-nassau.jpg",
+    "width": 2400,
+    "height": 1682,
+    "blurDataURL": "data:image/webp;base64,UklGRkgAAABXRUJQVlA4IDwAAACwAQCdASoMAAgAA4BaJYgCdADZYScQAP7t3pR9M9qUNrkMb/X2eBPuR4BgMqSSDGS+Wfj3wyVbzCKHsAA=",
+    "credit": "The Metropolitan Museum of Art, Amelia B. Lazarus Fund, 1910. Open Access (CC0).",
+    "sourceUrl": "https://www.metmuseum.org/art/collection/search/11139"
+  },
+  "moonlight-strandgade-30": {
+    "src": "/seed/moonlight-strandgade-30.jpg",
+    "width": 2378,
+    "height": 1901,
+    "blurDataURL": "data:image/webp;base64,UklGRj4AAABXRUJQVlA4IDIAAACwAQCdASoMAAoAA4BaJYwCdADb61FQAP7kKVBW9A+pRLkVW9XIWxzuoHQbADHeTdOAAA==",
+    "credit": "The Metropolitan Museum of Art, Purchase, European Paintings Funds, and Annette de la Renta Gift, 2012. Open Access (CC0).",
+    "sourceUrl": "https://www.metmuseum.org/art/collection/search/441933"
+  },
+  "soap-bubbles": {
+    "src": "/seed/soap-bubbles.jpg",
+    "width": 2383,
+    "height": 2298,
+    "blurDataURL": "data:image/webp;base64,UklGRkAAAABXRUJQVlA4IDQAAABwAQCdASoMAAwAA4BaJYwCdAIigAD+8VmSfYr5eXzaPBrjFxt2OwUjeHbQAlvrTi4t4AAA",
+    "credit": "The Metropolitan Museum of Art, Wentworth Fund, 1949. Open Access (CC0).",
+    "sourceUrl": "https://www.metmuseum.org/art/collection/search/435888"
+  },
+  "whalers": {
+    "src": "/seed/whalers.jpg",
+    "width": 2388,
+    "height": 1791,
+    "blurDataURL": "data:image/webp;base64,UklGRkgAAABXRUJQVlA4IDwAAADwAQCdASoMAAkAA4BaJZACdAEPSEWXsuQA/sfgKnUAc7li5BUdm3dQGrfDzOAD5RA+lUe9y1pPedpkAAA=",
+    "credit": "The Metropolitan Museum of Art, Catharine Lorillard Wolfe Collection, Wolfe Fund, 1896. Open Access (CC0).",
+    "sourceUrl": "https://www.metmuseum.org/art/collection/search/437854"
+  },
+  "circus-sideshow": {
+    "src": "/seed/circus-sideshow.jpg",
+    "width": 2390,
+    "height": 1592,
+    "blurDataURL": "data:image/webp;base64,UklGRjYAAABXRUJQVlA4ICoAAADQAQCdASoMAAgAA4BaJZwAAueKsenLgAD+3O+6zKAz5WE7N0h3+g2QAAA=",
+    "credit": "The Metropolitan Museum of Art, Bequest of Stephen C. Clark, 1960. Open Access (CC0).",
+    "sourceUrl": "https://www.metmuseum.org/art/collection/search/437654"
+  },
+  "moonlight-marine": {
+    "src": "/seed/moonlight-marine.jpg",
+    "width": 2379,
+    "height": 2241,
+    "blurDataURL": "data:image/webp;base64,UklGRloAAABXRUJQVlA4IE4AAADQAQCdASoMAAsAA4BaJQBOgB6UgWRvAAD+Ql3S27rXufAt7OkNGOT0bnhH3IYXi1sp2RT/4vuWbO3i/JAx25jp3+nv0Aeb1AkiAMPZAAA=",
+    "credit": "The Metropolitan Museum of Art, Samuel D. Lee Fund, 1934. Open Access (CC0).",
+    "sourceUrl": "https://www.metmuseum.org/art/collection/search/11979"
   }
 }

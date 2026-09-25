@@ -1,4 +1,5 @@
 import { expect, test } from "@playwright/test";
+import { skipInteractionOnWindowsWebKit } from "./support";
 
 test.describe("design foundation", () => {
   test("never scrolls sideways (spotlights are clipped at the page edge)", async ({ page }) => {
@@ -7,16 +8,20 @@ test.describe("design foundation", () => {
     expect(overflow).toBeLessThanOrEqual(0);
   });
 
-  test("works below the fold light up as they come into view", async ({ page }) => {
-    await page.goto("/lab", { waitUntil: "networkidle" });
-    const last = page.locator("[data-reveal]").last();
+  test.describe(() => {
+    skipInteractionOnWindowsWebKit();
 
-    // Off-screen works are switched off once the page is interactive (generous
-    // timeout: against a cold dev server, hydration waits on compilation)…
-    await expect(last).toHaveAttribute("data-lit", "off", { timeout: 20_000 });
-    // …and switched on when the visitor reaches them.
-    await last.scrollIntoViewIfNeeded();
-    await expect(last).toHaveAttribute("data-lit", "on");
+    test("works below the fold light up as they come into view", async ({ page }) => {
+      await page.goto("/lab", { waitUntil: "networkidle" });
+      const last = page.locator("[data-reveal]").last();
+
+      // Off-screen works are switched off once the page is interactive (generous
+      // timeout: against a cold dev server, hydration waits on compilation)…
+      await expect(last).toHaveAttribute("data-lit", "off", { timeout: 20_000 });
+      // …and switched on when the visitor reaches them.
+      await last.scrollIntoViewIfNeeded();
+      await expect(last).toHaveAttribute("data-lit", "on");
+    });
   });
 
   test("with reduced motion, every work is simply lit", async ({ page }) => {

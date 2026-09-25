@@ -27,6 +27,13 @@ const SOURCES: Source[] = [
   { slug: "aristotle-with-a-bust-of-homer", met: 437394, darkEdges: true },
   { slug: "the-musicians", met: 435844 },
   { slug: "wheat-field-with-cypresses", met: 436535 },
+  { slug: "dancer-with-a-fan", met: 436135 },
+  { slug: "sloop-nassau", met: 11139 },
+  { slug: "moonlight-marine", met: 11979 },
+  { slug: "moonlight-strandgade-30", met: 441933 },
+  { slug: "soap-bubbles", met: 435888 },
+  { slug: "whalers", met: 437854 },
+  { slug: "circus-sideshow", met: 437654 },
 ];
 
 const OUT_DIR = path.join(process.cwd(), "public", "seed");
@@ -51,15 +58,26 @@ async function exists(file: string) {
   }
 }
 
+/** Intermediate steps stay lossless; the artwork is JPEG-encoded exactly once. */
+const lossless = (pipeline: Sharp) => pipeline.png({ compressionLevel: 1 }).toBuffer();
+
+/** The Met's API sits behind a bot filter that occasionally answers with an HTML challenge; back off and retry. */
+async function fetchWithRetry(url: string, attempts = 5): Promise<Response> {
+  for (let attempt = 1; ; attempt++) {
+    const res = await fetch(url);
+    const type = res.headers.get("content-type") ?? "";
+    if (res.ok && !type.includes("text/html")) return res;
+    if (attempt >= attempts) throw new Error(`${url}: HTTP ${res.status} (${type})`);
+    await new Promise((r) => setTimeout(r, 4000 * attempt));
+  }
+}
+
 /**
  * Paintings are rarely photographed perfectly square to the camera, so after
  * trimming, a thin wedge of black backdrop can remain along an edge. Scan
  * inward from each side and crop past any line that still contains
  * backdrop-black pixels (capped, so a dark painting is never eaten into).
  */
-/** Intermediate steps stay lossless; the artwork is JPEG-encoded exactly once. */
-const lossless = (pipeline: Sharp) => pipeline.png({ compressionLevel: 1 }).toBuffer();
-
 async function backdropWedgeCrop(image: Buffer) {
   const { data, info } = await sharp(image).raw().toBuffer({ resolveWithObject: true });
   const { width, height, channels } = info;
@@ -101,15 +119,14 @@ async function main() {
       continue;
     }
 
-    const res = await fetch(`https://collectionapi.metmuseum.org/public/collection/v1/objects/${met}`);
-    if (!res.ok) throw new Error(`Met object ${met}: HTTP ${res.status}`);
+    const res = await fetchWithRetry(`https://collectionapi.metmuseum.org/public/collection/v1/objects/${met}`);
     const object = await res.json();
     if (!object.isPublicDomain || !object.primaryImage) {
       throw new Error(`Met object ${met} (${slug}) is not public domain or has no image`);
     }
 
     console.log(`↓ ${slug} ← ${object.primaryImage}`);
-    const original = Buffer.from(await (await fetch(object.primaryImage)).arrayBuffer());
+    const original = Buffer.from(await (await fetchWithRetry(object.primaryImage)).arrayBuffer());
 
     // Museum photography often includes a backdrop margin; trim it so the
     // painting's own edge meets our mat: first whatever colour the corner is,
