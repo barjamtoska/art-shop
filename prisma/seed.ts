@@ -9,6 +9,10 @@
  * (once — an existing upload is reused); without them, they are served from
  * /public/seed.
  *
+ * The gallery has one artist. The demonstration works are by one painter
+ * (Winslow Homer); if the owner's own profile already exists, the demo is
+ * skipped rather than showing another painter's works under their name.
+ *
  * Two demo works are created as already sold, standing for works that sold
  * before the site existed. That is the only place a work is created SOLD;
  * in the running application, only a verified Stripe webhook marks a sale.
@@ -19,7 +23,7 @@ import { v2 as cloudinary } from "cloudinary";
 import { PrismaClient } from "../src/generated/prisma/client";
 import {
   featuredArtworkSlug,
-  seedArtists,
+  seedArtist,
   seedArtworks,
   seedExhibitions,
   seedMediums,
@@ -66,13 +70,20 @@ async function main() {
     await db.medium.upsert({ where: { slug: medium.slug }, update: {}, create: medium });
   }
 
-  for (const artist of seedArtists) {
-    await db.artist.upsert({
-      where: { slug: artist.slug },
-      update: {},
-      create: { ...artist, biography: paragraphs(artist.biography) },
-    });
+  const existing = await db.artist.findFirst({ select: { id: true, slug: true, name: true } });
+  if (existing && existing.slug !== seedArtist.slug) {
+    console.log(`The gallery already has its artist (${existing.name}); demonstration works were not added.`);
+    return;
   }
+  const artist =
+    existing ??
+    (await db.artist.create({
+      data: {
+        ...seedArtist,
+        biography: paragraphs(seedArtist.biography),
+        statement: paragraphs(seedArtist.statement),
+      },
+    }));
 
   const anyFeatured = await db.artwork.count({ where: { featured: true } });
   let created = 0;
@@ -88,7 +99,7 @@ async function main() {
         slug: work.slug,
         title: work.title,
         yearLabel: work.yearLabel,
-        artist: { connect: { slug: work.artist.slug } },
+        artist: { connect: { id: artist.id } },
         medium: { connect: { slug: work.medium.slug } },
         mediumDescription: work.mediumDescription,
         heightMm: toMm(work.heightCm),

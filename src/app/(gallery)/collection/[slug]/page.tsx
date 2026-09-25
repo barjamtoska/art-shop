@@ -32,7 +32,7 @@ export default async function ArtworkRoom({ params }: PageProps<"/collection/[sl
   const artwork = await getArtwork((await params).slug);
   if (!artwork) notFound();
 
-  const [artist, related] = await Promise.all([getArtist(artwork.artist.slug), getRelatedWorks(artwork, 3)]);
+  const [artist, related] = await Promise.all([getArtist(), getRelatedWorks(artwork, 3)]);
   const size = roomSize(artwork.image.width / artwork.image.height);
   const a = copy.artwork;
 
@@ -102,7 +102,7 @@ export default async function ArtworkRoom({ params }: PageProps<"/collection/[sl
             </p>
             <p className="mt-5 text-ivory-muted">{artist.shortBio}</p>
             <div className="mt-8">
-              <QuietLink href={`/artists/${artist.slug}`}>{copy.actions.viewArtist}</QuietLink>
+              <QuietLink href="/artist">{copy.actions.viewArtist}</QuietLink>
             </div>
           </section>
         )}

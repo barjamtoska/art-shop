@@ -11,7 +11,7 @@ export default async function OrdersPage() {
   const orders = await db.order.findMany({
     orderBy: { createdAt: "desc" },
     take: 200,
-    include: { artwork: { select: { title: true, artist: { select: { name: true } } } } },
+    include: { artwork: { select: { title: true, yearLabel: true } } },
   });
 
   return (
@@ -36,7 +36,7 @@ export default async function OrdersPage() {
                 <td className="text-ivory-muted">{order.certificateNumber ?? "—"}</td>
                 <td>
                   {order.artwork.title}
-                  <span className="block text-ivory-muted">{order.artwork.artist.name}</span>
+                  <span className="block text-ivory-muted">{order.artwork.yearLabel}</span>
                 </td>
                 <td>{order.collectorName ?? order.email ?? "—"}</td>
                 <td className="whitespace-nowrap">{formatPrice(order.amountCents)}</td>

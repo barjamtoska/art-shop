@@ -1,12 +1,13 @@
 /**
  * Collection filters live in the URL, so every view of the collection can be
  * linked, bookmarked and rendered on the server without JavaScript.
- *   /collection?exhibition=nocturnes&artist=…&medium=oil&available=1&room=2
+ *   /collection?exhibition=the-weather-coast&medium=oil&available=1&room=2
+ * (One artist shows here, so there is no artist filter; an old `artist`
+ * parameter is simply ignored.)
  */
 
 export type CollectionFilters = {
   exhibition?: string;
-  artist?: string;
   medium?: string;
   /** Hide works in private collections. */
   available: boolean;
@@ -34,7 +35,6 @@ export function parseCollectionFilters(params: SearchParams): CollectionFilters 
   const room = Number.parseInt(single(params.room) ?? "1", 10);
   return {
     exhibition: slugParam(params.exhibition),
-    artist: slugParam(params.artist),
     medium: slugParam(params.medium),
     available: single(params.available) === "1",
     room: Number.isFinite(room) && room > 1 && room < 1000 ? room : 1,
@@ -42,7 +42,7 @@ export function parseCollectionFilters(params: SearchParams): CollectionFilters 
 }
 
 export function hasActiveFilters(filters: CollectionFilters): boolean {
-  return Boolean(filters.exhibition || filters.artist || filters.medium || filters.available);
+  return Boolean(filters.exhibition || filters.medium || filters.available);
 }
 
 /**
@@ -53,7 +53,6 @@ export function collectionHref(current: CollectionFilters, changes: Partial<Coll
   const next = { ...current, room: 1, ...changes };
   const params = new URLSearchParams();
   if (next.exhibition) params.set("exhibition", next.exhibition);
-  if (next.artist) params.set("artist", next.artist);
   if (next.medium) params.set("medium", next.medium);
   if (next.available) params.set("available", "1");
   if (next.room > 1) params.set("room", String(next.room));

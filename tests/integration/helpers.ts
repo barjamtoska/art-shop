@@ -1,13 +1,11 @@
 import { randomUUID } from "node:crypto";
 import { db } from "@/lib/db";
 
-/** A throwaway artwork (with its own artist) for one test. */
+/** A throwaway artwork, by the gallery's one artist, for one test. */
 export async function makeArtwork(overrides: Record<string, unknown> = {}, options: { image?: boolean } = {}) {
   const tag = randomUUID().slice(0, 8);
   const medium = await db.medium.findFirstOrThrow({ where: { slug: "oil" } });
-  const artist = await db.artist.create({
-    data: { slug: `test-artist-${tag}`, name: `Test Artist ${tag}`, sortName: `Artist, Test ${tag}` },
-  });
+  const artist = await db.artist.findFirstOrThrow();
   return db.artwork.create({
     data: {
       slug: `test-work-${tag}`,
@@ -25,7 +23,7 @@ export async function makeArtwork(overrides: Record<string, unknown> = {}, optio
         images: {
           create: {
             storage: "LOCAL",
-            key: "/seed/madame-x.jpg",
+            key: "/seed/maine-coast.jpg",
             width: 1000,
             height: 1250,
             alt: "A test painting used only by the integration tests.",
@@ -56,5 +54,4 @@ export async function cleanupTestRecords() {
   await db.order.deleteMany({ where: { artwork: works } });
   await db.exhibition.deleteMany({ where: { slug: { startsWith: "test-" } } });
   await db.artwork.deleteMany({ where: works });
-  await db.artist.deleteMany({ where: { slug: { startsWith: "test-artist-" } } });
 }

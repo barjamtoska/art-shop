@@ -5,19 +5,17 @@ describe("parseCollectionFilters", () => {
   it("reads filters from the query string", () => {
     expect(
       parseCollectionFilters({
-        exhibition: "nocturnes",
-        artist: "edgar-degas",
-        medium: "pastel",
+        exhibition: "the-weather-coast",
+        medium: "watercolour",
         available: "1",
         room: "2",
       }),
-    ).toEqual({ exhibition: "nocturnes", artist: "edgar-degas", medium: "pastel", available: true, room: 2 });
+    ).toEqual({ exhibition: "the-weather-coast", medium: "watercolour", available: true, room: 2 });
   });
 
   it("defaults to the whole collection, room I", () => {
     expect(parseCollectionFilters({})).toEqual({
       exhibition: undefined,
-      artist: undefined,
       medium: undefined,
       available: false,
       room: 1,
@@ -25,19 +23,28 @@ describe("parseCollectionFilters", () => {
   });
 
   it("ignores malformed values instead of failing", () => {
-    const filters = parseCollectionFilters({ artist: "<script>", medium: ["oil", "pastel"], room: "-4" });
-    expect(filters.artist).toBeUndefined();
+    const filters = parseCollectionFilters({ exhibition: "<script>", medium: ["oil", "watercolour"], room: "-4" });
+    expect(filters.exhibition).toBeUndefined();
     expect(filters.medium).toBe("oil");
     expect(filters.room).toBe(1);
     expect(parseCollectionFilters({ room: "abc" }).room).toBe(1);
   });
 });
 
+describe("one artist", () => {
+  it("has no artist filter; an old artist link shows the whole collection", () => {
+    const filters = parseCollectionFilters({ artist: "edgar-degas" });
+    expect(filters).not.toHaveProperty("artist");
+    expect(hasActiveFilters(filters)).toBe(false);
+    expect(collectionHref(filters)).toBe("/collection");
+  });
+});
+
 describe("collectionHref", () => {
-  const base = parseCollectionFilters({ exhibition: "nocturnes", room: "2" });
+  const base = parseCollectionFilters({ exhibition: "the-weather-coast", room: "2" });
 
   it("changing a filter returns to the first room", () => {
-    expect(collectionHref(base, { medium: "oil" })).toBe("/collection?exhibition=nocturnes&medium=oil");
+    expect(collectionHref(base, { medium: "oil" })).toBe("/collection?exhibition=the-weather-coast&medium=oil");
   });
 
   it("can clear a filter", () => {
@@ -45,7 +52,7 @@ describe("collectionHref", () => {
   });
 
   it("keeps filters when moving between rooms", () => {
-    expect(collectionHref(base, { room: 3 })).toBe("/collection?exhibition=nocturnes&room=3");
+    expect(collectionHref(base, { room: 3 })).toBe("/collection?exhibition=the-weather-coast&room=3");
   });
 
   it("knows when any filter is active", () => {

@@ -6,7 +6,7 @@
  *   node scripts/fetch-seed-images.mts           # fetch missing images
  *   node scripts/fetch-seed-images.mts --force   # re-fetch everything
  */
-import { mkdir, readFile, writeFile, access } from "node:fs/promises";
+import { access, mkdir, readdir, readFile, unlink, writeFile } from "node:fs/promises";
 import path from "node:path";
 import sharp, { type Sharp } from "sharp";
 
@@ -20,20 +20,23 @@ type Source = {
 // Keep in sync with the seed collection. Every object must be flagged
 // isPublicDomain by The Met; the script refuses anything that is not.
 const SOURCES: Source[] = [
-  { slug: "young-woman-with-a-water-pitcher", met: 437881 },
-  { slug: "two-men-contemplating-the-moon", met: 438417 },
-  { slug: "madame-x", met: 12127 },
-  { slug: "heart-of-the-andes", met: 10481 },
-  { slug: "aristotle-with-a-bust-of-homer", met: 437394, darkEdges: true },
-  { slug: "the-musicians", met: 435844 },
-  { slug: "wheat-field-with-cypresses", met: 436535 },
-  { slug: "dancer-with-a-fan", met: 436135 },
+  // Winslow Homer (1836–1910): one painter, as the gallery will show one artist.
+  { slug: "moonlight-wood-island-light", met: 11127, darkEdges: true },
+  { slug: "northeaster", met: 11130 },
+  { slug: "cannon-rock", met: 11113 },
+  { slug: "maine-coast", met: 11126 },
+  { slug: "the-gulf-stream", met: 11122 },
+  { slug: "searchlight-on-harbor-entrance", met: 11136 },
+  { slug: "eagle-head-manchester", met: 11117 },
+  { slug: "snap-the-whip", met: 11140 },
+  { slug: "the-veteran-in-a-new-field", met: 11145 },
   { slug: "sloop-nassau", met: 11139 },
-  { slug: "moonlight-marine", met: 11979 },
-  { slug: "moonlight-strandgade-30", met: 441933 },
-  { slug: "soap-bubbles", met: 435888 },
-  { slug: "whalers", met: 437854 },
-  { slug: "circus-sideshow", met: 437654 },
+  { slug: "hurricane-bahamas", met: 11124 },
+  { slug: "palm-tree-nassau", met: 11131 },
+  { slug: "fishing-boats-key-west", met: 11120 },
+  { slug: "shore-and-surf-nassau", met: 11138 },
+  { slug: "inside-the-bar", met: 11125 },
+  { slug: "fisherwomen", met: 11119 },
 ];
 
 const OUT_DIR = path.join(process.cwd(), "public", "seed");
@@ -110,7 +113,17 @@ async function main() {
   const force = process.argv.includes("--force");
   await mkdir(OUT_DIR, { recursive: true });
 
-  const manifest: Record<string, Entry> = (await exists(MANIFEST)) ? JSON.parse(await readFile(MANIFEST, "utf8")) : {};
+  const previous: Record<string, Entry> = (await exists(MANIFEST)) ? JSON.parse(await readFile(MANIFEST, "utf8")) : {};
+  // The manifest lists only the current sources; images no longer used are removed.
+  const manifest: Record<string, Entry> = {};
+  for (const { slug } of SOURCES) if (previous[slug]) manifest[slug] = previous[slug];
+  const current = new Set(SOURCES.map((s) => `${s.slug}.jpg`));
+  for (const name of await readdir(OUT_DIR)) {
+    if (name.endsWith(".jpg") && !current.has(name)) {
+      await unlink(path.join(OUT_DIR, name));
+      console.log(`✗ ${name} (no longer used)`);
+    }
+  }
 
   for (const { slug, met, darkEdges } of SOURCES) {
     const file = path.join(OUT_DIR, `${slug}.jpg`);

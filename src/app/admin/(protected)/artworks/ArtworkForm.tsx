@@ -6,7 +6,6 @@ import type { FormState } from "@/lib/admin-form";
 export type ArtworkFormValues = {
   title: string;
   slug: string;
-  artistId: string;
   mediumId: string;
   mediumDescription: string;
   yearLabel: string;
@@ -31,7 +30,6 @@ type Option = { value: string; label: string };
 type Props = {
   action: (state: FormState, formData: FormData) => Promise<FormState>;
   values: ArtworkFormValues;
-  artists: Option[];
   mediums: Option[];
   exhibitions: Option[];
   /** False on a new work: it gets its photograph first, then goes on view. */
@@ -39,7 +37,7 @@ type Props = {
   submitLabel: string;
 };
 
-export function ArtworkForm({ action, values, artists, mediums, exhibitions, canPublish, submitLabel }: Props) {
+export function ArtworkForm({ action, values, mediums, exhibitions, canPublish, submitLabel }: Props) {
   return (
     <AdminForm action={action} submitLabel={submitLabel}>
       <Fieldset legend="The work">
@@ -48,18 +46,15 @@ export function ArtworkForm({ action, values, artists, mediums, exhibitions, can
           name="slug"
           label="URL name"
           defaultValue={values.slug}
-          hint="Used in the work's address, e.g. /collection/young-woman-with-a-water-pitcher. Leave empty to make one from the title. Changing it breaks links already shared."
+          hint="Used in the work's address, e.g. /collection/moonlight-wood-island-light. Leave empty to make one from the title. Changing it breaks links already shared."
         />
-        <div className="grid gap-6 sm:grid-cols-2">
-          <SelectField
-            name="artistId"
-            label="Artist"
-            defaultValue={values.artistId}
-            options={artists}
-            placeholder="Choose…"
-          />
-          <TextField name="yearLabel" label="Date" defaultValue={values.yearLabel} placeholder="c. 1662" />
-        </div>
+        <TextField
+          name="yearLabel"
+          label="Date"
+          defaultValue={values.yearLabel}
+          placeholder="1894, or c. 1895"
+          className="max-w-xs"
+        />
         <div className="grid gap-6 sm:grid-cols-2">
           <SelectField
             name="mediumId"
@@ -168,7 +163,7 @@ export function ArtworkForm({ action, values, artists, mediums, exhibitions, can
             <CheckboxField
               name="published"
               label="On view"
-              hint="Visible in the collection, its exhibitions and on the artist's page."
+              hint="Visible in the collection, its exhibitions and on The Artist page."
               defaultChecked={values.published}
             />
             <CheckboxField

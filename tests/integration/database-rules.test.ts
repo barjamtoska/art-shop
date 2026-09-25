@@ -24,6 +24,21 @@ describe("each work is unique", () => {
   });
 });
 
+describe("one artist", () => {
+  it("the gallery can never have a second artist", async () => {
+    await expect(
+      db.artist.create({ data: { slug: "a-second-artist", name: "A Second Artist", sortName: "Artist, A Second" } }),
+    ).rejects.toThrow(/Unique constraint/);
+  });
+
+  it("a portrait is complete and described, or absent", async () => {
+    const artist = await db.artist.findFirstOrThrow();
+    await expect(
+      db.artist.update({ where: { id: artist.id }, data: { portraitStorage: "LOCAL", portraitKey: "/x.jpg" } }),
+    ).rejects.toThrow(/Artist_portrait_complete/);
+  });
+});
+
 describe("the Entrance", () => {
   it("has room for only one featured work", async () => {
     const featured = await db.artwork.findFirst({ where: { featured: true }, select: { id: true } });

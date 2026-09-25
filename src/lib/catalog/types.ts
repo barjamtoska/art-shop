@@ -48,15 +48,19 @@ export type Artwork = {
   isDemo: boolean;
 };
 
+/** The one artist whose work the gallery shows: its owner. */
 export type Artist = {
   slug: string;
   name: string;
-  /** Used for alphabetical order, e.g. "Vermeer, Johannes". */
+  /** e.g. "Homer, Winslow" (for catalogue listings). */
   sortName: string;
   lifeDates: string;
   nationality: string;
   shortBio: string;
   biography: string[];
+  /** "In the artist's words", one string per paragraph; may be empty. */
+  statement: string[];
+  portrait?: { src: string; width: number; height: number; alt: string };
 };
 
 export type Exhibition = {

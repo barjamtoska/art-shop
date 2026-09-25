@@ -16,16 +16,17 @@ describe("getCollection", () => {
   });
 
   it("shows an exhibition's works in their curated order", async () => {
-    const page = await getCollection(filters({ exhibition: "nocturnes" }));
-    const exhibition = await getExhibition("nocturnes");
+    const page = await getCollection(filters({ exhibition: "the-weather-coast" }));
+    const exhibition = await getExhibition("the-weather-coast");
     expect(page.works.map((w) => w.slug)).toEqual(exhibition!.works.map((w) => w.slug));
-    expect(page.selected.exhibition?.title).toBe("Nocturnes");
+    expect(page.selected.exhibition?.title).toBe("The Weather Coast");
   });
 
   it("combines filters", async () => {
-    const page = await getCollection(filters({ medium: "oil", artist: "vincent-van-gogh" }));
-    expect(page.works.every((w) => w.medium.slug === "oil" && w.artist.slug === "vincent-van-gogh")).toBe(true);
+    const page = await getCollection(filters({ medium: "watercolour", exhibition: "islands-in-the-sun" }));
     expect(page.total).toBeGreaterThan(0);
+    expect(page.works.every((w) => w.medium.slug === "watercolour")).toBe(true);
+    expect(page.works.every((w) => w.exhibitions.some((e) => e.slug === "islands-in-the-sun"))).toBe(true);
   });
 
   it("hides works in private collections when asked", async () => {
@@ -56,19 +57,27 @@ describe("the rest of the catalogue", () => {
     }
   });
 
-  it("finds works, artists and exhibitions by slug", async () => {
-    expect((await getArtwork("madame-x"))?.status).toBe("SOLD");
+  it("finds works and exhibitions by slug", async () => {
+    expect((await getArtwork("the-veteran-in-a-new-field"))?.status).toBe("SOLD");
     expect(await getArtwork("nope")).toBeNull();
-    expect((await getArtist("edgar-degas"))?.works.length).toBeGreaterThan(0);
     expect(await getExhibition("nope")).toBeNull();
   });
 
+  it("shows one artist, whose works are the whole collection", async () => {
+    const artist = await getArtist();
+    const collection = await getCollection(filters());
+    expect(artist?.name).toBe("Winslow Homer");
+    expect(artist?.biography.length).toBeGreaterThan(0);
+    expect(artist?.works).toHaveLength(collection.total);
+    expect(collection.works.every((w) => w.artist.name === "Winslow Homer")).toBe(true);
+  });
+
   it("suggests related works from the same exhibition first, never the work itself", async () => {
-    const work = (await getArtwork("moonlight-marine"))!;
+    const work = (await getArtwork("maine-coast"))!;
     const related = await getRelatedWorks(work, 3);
     expect(related).toHaveLength(3);
     expect(related.map((w) => w.slug)).not.toContain(work.slug);
-    expect(related.every((w) => w.exhibitions.some((e) => e.slug === "nocturnes"))).toBe(true);
+    expect(related.every((w) => w.exhibitions.some((e) => e.slug === "the-weather-coast"))).toBe(true);
   });
 
   it("every seed work has alt text and a description", async () => {

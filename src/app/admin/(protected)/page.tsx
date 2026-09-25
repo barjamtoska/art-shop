@@ -16,7 +16,7 @@ export default async function AdminOverview() {
     db.artwork.count({ where: { published: false } }),
     db.artwork.findMany({
       where: { status: "RESERVED", reservedUntil: { gt: now } },
-      select: { id: true, title: true, reservedUntil: true, artist: { select: { name: true } } },
+      select: { id: true, title: true, reservedUntil: true },
       orderBy: { reservedUntil: "asc" },
     }),
     db.order.findMany({
@@ -52,7 +52,6 @@ export default async function AdminOverview() {
                   <Link href={`/admin/artworks/${work.id}`} className="underline decoration-gold/40 underline-offset-4">
                     {work.title}
                   </Link>
-                  <span className="text-ivory-muted"> · {work.artist.name}</span>
                 </td>
                 <td>{formatDateTime(work.reservedUntil!)}</td>
               </tr>

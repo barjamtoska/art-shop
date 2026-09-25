@@ -41,19 +41,13 @@ export default async function Entrance() {
               href={`/collection/${work.slug}`}
               className="mt-14 block sm:mt-16"
               style={{ width: size.width }}
-              aria-label={`${work.title}, ${work.artist.name}`}
+              aria-label={`${work.title}, ${work.yearLabel}`}
             >
               <FramedArtwork image={work.image} frameStyle={work.frameStyle} size="hero" sizes={size.sizes} preload />
             </Link>
 
-            {/* On phones, title and artist sit on their own lines rather than breaking mid-name. */}
             <p className="fade-in mt-10 font-display text-lg text-ivory-muted" style={delay(600)}>
-              <cite className="block sm:inline">{work.title}</cite>
-              <span className="sr-only">, </span>
-              <span className="mx-2 hidden text-gold/80 sm:inline" aria-hidden="true">
-                ·
-              </span>
-              <span className="block sm:inline">{work.artist.name}</span>
+              <cite>{work.title}</cite>, <span className="whitespace-nowrap">{work.yearLabel}</span>
             </p>
           </>
         ) : (

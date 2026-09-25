@@ -25,7 +25,6 @@ export default async function NewArtworkPage() {
         values={{
           title: "",
           slug: "",
-          artistId: "",
           mediumId: "",
           mediumDescription: "",
           yearLabel: "",

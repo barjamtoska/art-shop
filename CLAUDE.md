@@ -2,6 +2,7 @@
 
 ## Vision
 This is a luxury art gallery that happens to sell paintings, not a shop that looks like a gallery.
+It shows and sells the work of one artist: its owner.
 Every page should feel like walking through a quiet, warmly lit museum at night.
 When in doubt, choose restraint, space, and calm over density and urgency.
 
@@ -15,7 +16,8 @@ When in doubt, choose restraint, space, and calm over density and urgency.
   with a gentle vignette at page edges. Paintings are the brightest thing on screen.
 - Frames: gilded frame built with layered borders, inset/outset box-shadows and a subtle gold gradient,
   plus an ivory mat (passe-partout) between frame and painting. Frames must look physical, not flat.
-- Placards: every artwork has a small museum placard (artist, title, year, medium, dimensions, price in small type).
+- Placards: every artwork has a small museum placard (title, year, medium, dimensions, price in small type).
+  With a single artist, the name is not repeated on placards; it appears on The Artist page and in page titles.
 - Motion: slow fades and gentle reveals (400–800ms, ease-out). No bounce, no parallax gimmicks, respect prefers-reduced-motion.
 - Language: "Acquire" instead of "Buy", "Collection" instead of "Products", "Exhibitions" instead of "Categories".
 - Forbidden: loud CTAs, discount badges, pop-ups, carousels that auto-spin, stock-photo vibes, pure white backgrounds.

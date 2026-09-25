@@ -6,21 +6,47 @@ import { FormMessage, buttonClass } from "@/components/admin/forms";
 import { idle, type FormState } from "@/lib/admin-form";
 import type { UploadTarget } from "@/lib/image-upload";
 
+export type Wording = {
+  label: string;
+  replaceLabel: string;
+  fileHint: string;
+  altHint: string;
+  altMissing: string;
+};
+
+const artworkWording: Wording = {
+  label: "Photograph",
+  replaceLabel: "Replace the photograph",
+  fileHint: "JPEG, PNG, WebP or TIFF, colour-accurate, ideally 4000px on the long edge for the brushwork viewer.",
+  altHint: "What the painting shows, in a sentence or two — for visitors who cannot see it.",
+  altMissing: "Describe the painting for someone who cannot see it (at least a sentence).",
+};
+
 type Props = {
   prepare: () => Promise<UploadTarget>;
   attach: (upload: { key: string; alt: string; credit: string }) => Promise<FormState>;
   defaultAlt: string;
-  defaultCredit: string;
+  /** Leave undefined to hide the credit field (e.g. for the portrait). */
+  defaultCredit?: string;
   hasImage: boolean;
+  wording?: Wording;
 };
 
 const ACCEPT = "image/jpeg,image/png,image/webp,image/tiff";
 
 /**
- * Uploads the work's photograph: straight to Cloudinary in production (or to
- * the development store), then asks the server to verify and attach it.
+ * Uploads an image (a work's photograph, the artist's portrait): straight to
+ * Cloudinary in production (or to the development store), then asks the
+ * server to verify and attach it.
  */
-export function ImageUploader({ prepare, attach, defaultAlt, defaultCredit, hasImage }: Props) {
+export function ImageUploader({
+  prepare,
+  attach,
+  defaultAlt,
+  defaultCredit,
+  hasImage,
+  wording = artworkWording,
+}: Props) {
   const router = useRouter();
   const id = useId();
   const [state, setState] = useState<FormState>(idle);
@@ -39,8 +65,8 @@ export function ImageUploader({ prepare, attach, defaultAlt, defaultCredit, hasI
     if (alt.trim().length < 20) {
       setState({
         status: "error",
-        message: "Describe the painting first.",
-        fieldErrors: { alt: ["Describe the painting for someone who cannot see it (at least a sentence)."] },
+        message: "Add the description first.",
+        fieldErrors: { alt: [wording.altMissing] },
       });
       return;
     }
@@ -91,7 +117,7 @@ export function ImageUploader({ prepare, attach, defaultAlt, defaultCredit, hasI
     >
       <div>
         <label htmlFor={`${id}-file`} className="mb-1.5 block text-sm text-ivory">
-          {hasImage ? "Replace the photograph" : "Photograph"}
+          {hasImage ? wording.replaceLabel : wording.label}
         </label>
         <input
           id={`${id}-file`}
@@ -100,9 +126,7 @@ export function ImageUploader({ prepare, attach, defaultAlt, defaultCredit, hasI
           accept={ACCEPT}
           className="block w-full text-sm text-ivory-muted file:mr-4 file:border file:border-gold/50 file:bg-transparent file:px-4 file:py-2 file:text-ivory"
         />
-        <p className="mt-1.5 text-xs text-ivory-muted">
-          JPEG, PNG, WebP or TIFF, colour-accurate, ideally 4000px on the long edge for the brushwork viewer.
-        </p>
+        <p className="mt-1.5 text-xs text-ivory-muted">{wording.fileHint}</p>
       </div>
       <div>
         <label htmlFor={`${id}-alt`} className="mb-1.5 block text-sm text-ivory">
@@ -118,7 +142,7 @@ export function ImageUploader({ prepare, attach, defaultAlt, defaultCredit, hasI
           className="block w-full border border-gold/30 bg-wall-deep/70 px-3 py-2 leading-relaxed text-ivory aria-invalid:border-alert"
         />
         <p id={`${id}-alt-hint`} className="mt-1.5 text-xs text-ivory-muted">
-          What the painting shows, in a sentence or two — for visitors who cannot see it.
+          {wording.altHint}
         </p>
         {altError && (
           <p id={`${id}-alt-error`} className="mt-1.5 text-sm text-alert">
@@ -126,17 +150,19 @@ export function ImageUploader({ prepare, attach, defaultAlt, defaultCredit, hasI
           </p>
         )}
       </div>
-      <div>
-        <label htmlFor={`${id}-credit`} className="mb-1.5 block text-sm text-ivory">
-          Photo credit (optional)
-        </label>
-        <input
-          id={`${id}-credit`}
-          name="credit"
-          defaultValue={defaultCredit}
-          className="block w-full border border-gold/30 bg-wall-deep/70 px-3 py-2 text-ivory"
-        />
-      </div>
+      {defaultCredit !== undefined && (
+        <div>
+          <label htmlFor={`${id}-credit`} className="mb-1.5 block text-sm text-ivory">
+            Photo credit (optional)
+          </label>
+          <input
+            id={`${id}-credit`}
+            name="credit"
+            defaultValue={defaultCredit}
+            className="block w-full border border-gold/30 bg-wall-deep/70 px-3 py-2 text-ivory"
+          />
+        </div>
+      )}
       <div className="flex flex-wrap items-center gap-5">
         <button type="submit" className={buttonClass} disabled={progress !== null} aria-busy={progress !== null}>
           {progress ?? (hasImage ? "Upload and replace" : "Upload")}

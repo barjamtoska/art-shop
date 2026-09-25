@@ -7,7 +7,7 @@ import { cloudinaryConfigured, env, localFallbacks } from "./env";
 import { placeholderSrc, type StoredImage } from "./images";
 
 /*
- * Artwork image uploads.
+ * Image uploads: artwork photographs and the artist's portrait.
  *
  * Cloudinary (production): the browser uploads straight to Cloudinary with a
  * signed, single-use request for a public ID we choose — originals are far
@@ -40,13 +40,20 @@ export type UploadTarget =
 
 export type VerifiedImage = StoredImage & { width: number; height: number; blurDataUrl: string | null };
 
-const cloudinaryPrefix = (artworkId: string) => `${env.CLOUDINARY_FOLDER}/artworks/${artworkId}/`;
-const localPrefix = (artworkId: string) => `/uploads/${artworkId}/`;
+/** Where an upload belongs: one artwork's folder, or the artist's portrait. */
+export type UploadFolder = `artworks/${string}` | "artist";
 
-export function uploadTarget(artworkId: string): UploadTarget {
+export function isUploadFolder(value: string): value is UploadFolder {
+  return value === "artist" || /^artworks\/[a-z0-9]{1,40}$/.test(value);
+}
+
+const cloudinaryPrefix = (folder: UploadFolder) => `${env.CLOUDINARY_FOLDER}/${folder}/`;
+const localPrefix = (folder: UploadFolder) => `/uploads/${folder}/`;
+
+export function uploadTarget(folder: UploadFolder): UploadTarget {
   if (cloudinaryConfigured) {
     const params = {
-      public_id: `${cloudinaryPrefix(artworkId)}${randomUUID()}`,
+      public_id: `${cloudinaryPrefix(folder)}${randomUUID()}`,
       timestamp: String(Math.floor(Date.now() / 1000)),
     };
     const signature = cloudinary.utils.api_sign_request(params, env.CLOUDINARY_API_SECRET!);
@@ -57,20 +64,19 @@ export function uploadTarget(artworkId: string): UploadTarget {
     };
   }
   if (!localFallbacks) throw new Error("Cloudinary is not configured");
-  return { kind: "local", url: "/api/admin/uploads", fields: { artworkId } };
+  return { kind: "local", url: "/api/admin/uploads", fields: { folder } };
 }
 
-/** Confirms an upload exists, belongs to this artwork, and reads its true size. */
-export async function verifyUpload(artworkId: string, key: string): Promise<VerifiedImage> {
+/** Confirms an upload exists, belongs where it claims, and reads its true size. */
+export async function verifyUpload(folder: UploadFolder, key: string): Promise<VerifiedImage> {
   if (cloudinaryConfigured) {
-    if (!key.startsWith(cloudinaryPrefix(artworkId))) throw new Error("That upload does not belong to this work.");
+    if (!key.startsWith(cloudinaryPrefix(folder))) throw new Error("That upload does not belong here.");
     const resource = await cloudinary.api.resource(key, { resource_type: "image" });
     const image: StoredImage = { storage: "CLOUDINARY", key };
     return { ...image, width: resource.width, height: resource.height, blurDataUrl: await cloudinaryBlur(image) };
   }
 
-  if (!key.startsWith(localPrefix(artworkId)) || key.includes(".."))
-    throw new Error("That upload does not belong to this work.");
+  if (!key.startsWith(localPrefix(folder)) || key.includes("..")) throw new Error("That upload does not belong here.");
   const file = publicPath(key);
   await stat(file);
   const { default: sharp } = await import("sharp");
@@ -80,7 +86,7 @@ export async function verifyUpload(artworkId: string, key: string): Promise<Veri
 }
 
 /** Writes a development upload; returns its public path. */
-export async function saveLocalUpload(artworkId: string, file: File): Promise<string> {
+export async function saveLocalUpload(folder: UploadFolder, file: File): Promise<string> {
   if (cloudinaryConfigured || !localFallbacks) throw new Error("Local uploads are for development only");
   const { default: sharp } = await import("sharp");
   const buffer = Buffer.from(await file.arrayBuffer());
@@ -89,7 +95,7 @@ export async function saveLocalUpload(artworkId: string, file: File): Promise<st
   if (!extension) throw new Error("Please upload a JPEG, PNG, WebP or TIFF image.");
 
   // Browsers cannot show TIFF: store a high-quality JPEG instead.
-  const key = `${localPrefix(artworkId)}${randomUUID()}.${extension === "tif" ? "jpg" : extension}`;
+  const key = `${localPrefix(folder)}${randomUUID()}.${extension === "tif" ? "jpg" : extension}`;
   const target = publicPath(key);
   const { mkdir, writeFile } = await import("node:fs/promises");
   await mkdir(path.dirname(target), { recursive: true });

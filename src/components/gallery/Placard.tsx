@@ -16,16 +16,13 @@ type Props = {
 };
 
 export function Placard({ artwork, variant = "wall", href, stretch = false, className }: Props) {
-  const { artist, title, yearLabel, mediumDescription, heightCm, widthCm, depthCm, status } = artwork;
+  const { title, yearLabel, mediumDescription, heightCm, widthCm, depthCm, status } = artwork;
   const room = variant === "room";
   const classes = [styles.placard, room && styles.room, className].filter(Boolean).join(" ");
   const titleText = <cite>{title}</cite>;
 
   return (
     <dl className={classes}>
-      <dt className="sr-only">{copy.placard.artist}</dt>
-      <dd className={styles.artist}>{artist.name}</dd>
-
       <dt className="sr-only">{copy.placard.title}</dt>
       <dd className={styles.title}>
         {href ? (

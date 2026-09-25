@@ -1,67 +1,75 @@
 {
-  "young-woman-with-a-water-pitcher": {
-    "src": "/seed/young-woman-with-a-water-pitcher.jpg",
-    "width": 2087,
-    "height": 2369,
-    "blurDataURL": "data:image/webp;base64,UklGRkoAAABXRUJQVlA4ID4AAAAQAgCdASoLAAwAA4BaJYwCsAD0ezHvB57AAP295up89PtOEHK1EVmkxjw5o1l2xLZWGbs2Fregkn2hANAAAA==",
-    "credit": "The Metropolitan Museum of Art, Marquand Collection, Gift of Henry G. Marquand, 1889. Open Access (CC0).",
-    "sourceUrl": "https://www.metmuseum.org/art/collection/search/437881"
+  "moonlight-wood-island-light": {
+    "src": "/seed/moonlight-wood-island-light.jpg",
+    "width": 2400,
+    "height": 1823,
+    "blurDataURL": "data:image/webp;base64,UklGRkAAAABXRUJQVlA4IDQAAACwAQCdASoMAAkAA4BaJZwAAsf3AZ1AAP7BhzQTuQYHOkDFh/JI9PU8eLcH+Ao2LwR0CAAA",
+    "credit": "The Metropolitan Museum of Art, Gift of George A. Hearn, in memory of Arthur Hoppock Hearn, 1911. Open Access (CC0).",
+    "sourceUrl": "https://www.metmuseum.org/art/collection/search/11127"
   },
-  "two-men-contemplating-the-moon": {
-    "src": "/seed/two-men-contemplating-the-moon.jpg",
-    "width": 2369,
-    "height": 1899,
-    "blurDataURL": "data:image/webp;base64,UklGRkAAAABXRUJQVlA4IDQAAADwAQCdASoMAAoAA4BaJYwCdAEfa/5ynQAA/vGEc0yVK9MP912ownnKGiwUlvbv1lcoAAAA",
-    "credit": "The Metropolitan Museum of Art, Wrightsman Fund, 2000. Open Access (CC0).",
-    "sourceUrl": "https://www.metmuseum.org/art/collection/search/438417"
+  "northeaster": {
+    "src": "/seed/northeaster.jpg",
+    "width": 2379,
+    "height": 1618,
+    "blurDataURL": "data:image/webp;base64,UklGRkwAAABXRUJQVlA4IEAAAADwAQCdASoMAAgAA4BaJZQCdADcTzwlMgAA/snjzpiYfhxEnX7DK6M3MU6CmBI1/Aw7/bpQxsBcNcMASVUuOAAA",
+    "credit": "The Metropolitan Museum of Art, Gift of George A. Hearn, 1910. Open Access (CC0).",
+    "sourceUrl": "https://www.metmuseum.org/art/collection/search/11130"
   },
-  "madame-x": {
-    "src": "/seed/madame-x.jpg",
-    "width": 1246,
-    "height": 2390,
-    "blurDataURL": "data:image/webp;base64,UklGRjwAAABXRUJQVlA4IDAAAADQAQCdASoGAAwAA4BaJYwCdAD0TmoSQAD+3PRRq192i+b0vdijq6DMag0tp1rAAAA=",
-    "credit": "The Metropolitan Museum of Art, Arthur Hoppock Hearn Fund, 1916. Open Access (CC0).",
-    "sourceUrl": "https://www.metmuseum.org/art/collection/search/12127"
+  "cannon-rock": {
+    "src": "/seed/cannon-rock.jpg",
+    "width": 1886,
+    "height": 1893,
+    "blurDataURL": "data:image/webp;base64,UklGRkwAAABXRUJQVlA4IEAAAACwAQCdASoMAAwAA4BaJZQAAlIzDUJAAP3R/5BO5BdZ9umh+klNb8cNlnpj1yMlsUB5EsoHDQbgoL4FEfdD4AAA",
+    "credit": "The Metropolitan Museum of Art, Gift of George A. Hearn, 1906. Open Access (CC0).",
+    "sourceUrl": "https://www.metmuseum.org/art/collection/search/11113"
   },
-  "heart-of-the-andes": {
-    "src": "/seed/heart-of-the-andes.jpg",
+  "maine-coast": {
+    "src": "/seed/maine-coast.jpg",
+    "width": 2384,
+    "height": 1611,
+    "blurDataURL": "data:image/webp;base64,UklGRkIAAABXRUJQVlA4IDYAAAAQAgCdASoMAAgAA4BaJYwC7AEDnqylp7YAAPAxEvNIrr0pm36nANgM2saq0BQXYSVNiSJ2AAA=",
+    "credit": "The Metropolitan Museum of Art, Gift of George A. Hearn, in memory of Arthur Hoppock Hearn, 1911. Open Access (CC0).",
+    "sourceUrl": "https://www.metmuseum.org/art/collection/search/11126"
+  },
+  "the-gulf-stream": {
+    "src": "/seed/the-gulf-stream.jpg",
     "width": 2378,
-    "height": 1309,
-    "blurDataURL": "data:image/webp;base64,UklGRlQAAABXRUJQVlA4IEgAAAAQAgCdASoMAAcAA4BaJagCdAEfbo4GOqcAAPjk+KrIpU0xDH8aEgb+WyFRZKNR8gDwajuTo+cr2rfwYq3fd1Lhn9qwwbDgAAA=",
-    "credit": "The Metropolitan Museum of Art, Bequest of Margaret E. Dows, 1909. Open Access (CC0).",
-    "sourceUrl": "https://www.metmuseum.org/art/collection/search/10481"
+    "height": 1441,
+    "blurDataURL": "data:image/webp;base64,UklGRjwAAABXRUJQVlA4IDAAAADwAQCdASoMAAcAA4BaJZQC06EO/urxiAAA/tD+VTOXMZoc6yhm22J4grn/rq0AAAA=",
+    "credit": "The Metropolitan Museum of Art, Catharine Lorillard Wolfe Collection, Wolfe Fund, 1906. Open Access (CC0).",
+    "sourceUrl": "https://www.metmuseum.org/art/collection/search/11122"
   },
-  "aristotle-with-a-bust-of-homer": {
-    "src": "/seed/aristotle-with-a-bust-of-homer.jpg",
-    "width": 2275,
-    "height": 2400,
-    "blurDataURL": "data:image/webp;base64,UklGRjwAAABXRUJQVlA4IDAAAADwAQCdASoLAAwAA4BaJZwCdAEO9nRmOAAA/vhSwMOPeldab3h0rQhH9MtQue9eAAA=",
-    "credit": "The Metropolitan Museum of Art, Purchase, special contributions and funds given or bequeathed by friends of the Museum, 1961. Open Access (CC0).",
-    "sourceUrl": "https://www.metmuseum.org/art/collection/search/437394"
+  "searchlight-on-harbor-entrance": {
+    "src": "/seed/searchlight-on-harbor-entrance.jpg",
+    "width": 2389,
+    "height": 1460,
+    "blurDataURL": "data:image/webp;base64,UklGRkQAAABXRUJQVlA4IDgAAADQAQCdASoMAAcAA4BaJZQCdAD1Xll24AD+7yqtOuEl4OxhImD12JwGmQJFwBNfZJIIs0hpr0oAAA==",
+    "credit": "The Metropolitan Museum of Art, Gift of George A. Hearn, 1906. Open Access (CC0).",
+    "sourceUrl": "https://www.metmuseum.org/art/collection/search/11136"
   },
-  "the-musicians": {
-    "src": "/seed/the-musicians.jpg",
-    "width": 2386,
-    "height": 1850,
-    "blurDataURL": "data:image/webp;base64,UklGRlYAAABXRUJQVlA4IEoAAADwAQCdASoMAAkAA4BaJQBOgCBvjs10r4AA/vFQkfgGZc2oO4rUZ74+vGbEjSeJgtjt/XXLqITTb1JyRJvQb94gbLaRCCE3TgAAAA==",
-    "credit": "The Metropolitan Museum of Art, Rogers Fund, 1952. Open Access (CC0).",
-    "sourceUrl": "https://www.metmuseum.org/art/collection/search/435844"
+  "eagle-head-manchester": {
+    "src": "/seed/eagle-head-manchester.jpg",
+    "width": 2388,
+    "height": 1623,
+    "blurDataURL": "data:image/webp;base64,UklGRkYAAABXRUJQVlA4IDoAAACwAQCdASoMAAgAA4BaJYgCdADMDXEAAP4Z+uymV7D4xihChpa5+tG9NlTJzhS5bxUQrxl9bQSTRAAA",
+    "credit": "The Metropolitan Museum of Art, Gift of Mrs. William F. Milton, 1923. Open Access (CC0).",
+    "sourceUrl": "https://www.metmuseum.org/art/collection/search/11117"
   },
-  "wheat-field-with-cypresses": {
-    "src": "/seed/wheat-field-with-cypresses.jpg",
-    "width": 2361,
-    "height": 1855,
-    "blurDataURL": "data:image/webp;base64,UklGRkgAAABXRUJQVlA4IDwAAAAQAgCdASoMAAkAA4BaJbACdH8AFlrhglkAAPzLvm6BKySm3loy7YXb0mMRkj8koCMC2Ooko8j09Os2AAA=",
-    "credit": "The Metropolitan Museum of Art, Purchase, The Annenberg Foundation Gift, 1993. Open Access (CC0).",
-    "sourceUrl": "https://www.metmuseum.org/art/collection/search/436535"
+  "snap-the-whip": {
+    "src": "/seed/snap-the-whip.jpg",
+    "width": 2388,
+    "height": 1449,
+    "blurDataURL": "data:image/webp;base64,UklGRjwAAABXRUJQVlA4IDAAAADQAQCdASoMAAcAA4BaJYgCdAEUqMDwYAD+J2WQzwa2dYM8Nu7/kq0w8qOOslLqwAA=",
+    "credit": "The Metropolitan Museum of Art, Gift of Christian A. Zabriskie, 1950. Open Access (CC0).",
+    "sourceUrl": "https://www.metmuseum.org/art/collection/search/11140"
   },
-  "dancer-with-a-fan": {
-    "src": "/seed/dancer-with-a-fan.jpg",
-    "width": 1700,
-    "height": 2400,
-    "blurDataURL": "data:image/webp;base64,UklGRjwAAABXRUJQVlA4IDAAAABwAQCdASoIAAwAA4BaJQBOgBpgAADfxxk1h4IitTFxb3uJUd4N7gjFhu24JuwMAAA=",
-    "credit": "The Metropolitan Museum of Art, H. O. Havemeyer Collection, Bequest of Mrs. H. O. Havemeyer, 1929. Open Access (CC0).",
-    "sourceUrl": "https://www.metmuseum.org/art/collection/search/436135"
+  "the-veteran-in-a-new-field": {
+    "src": "/seed/the-veteran-in-a-new-field.jpg",
+    "width": 2389,
+    "height": 1507,
+    "blurDataURL": "data:image/webp;base64,UklGRlAAAABXRUJQVlA4IEQAAABQAgCdASoMAAgAA4BaJaACdFKAdP+B8v4S8SAA/NleiLUfSY4sRaX5pzfJJAt4tVgUew8B0nz2mNu4pUgcT8UbKqxIAA==",
+    "credit": "The Metropolitan Museum of Art, Bequest of Miss Adelaide Milton de Groot (1876-1967), 1967. Open Access (CC0).",
+    "sourceUrl": "https://www.metmuseum.org/art/collection/search/11145"
   },
   "sloop-nassau": {
     "src": "/seed/sloop-nassau.jpg",
@@ -71,44 +79,52 @@
     "credit": "The Metropolitan Museum of Art, Amelia B. Lazarus Fund, 1910. Open Access (CC0).",
     "sourceUrl": "https://www.metmuseum.org/art/collection/search/11139"
   },
-  "moonlight-strandgade-30": {
-    "src": "/seed/moonlight-strandgade-30.jpg",
-    "width": 2378,
-    "height": 1901,
-    "blurDataURL": "data:image/webp;base64,UklGRj4AAABXRUJQVlA4IDIAAACwAQCdASoMAAoAA4BaJYwCdADb61FQAP7kKVBW9A+pRLkVW9XIWxzuoHQbADHeTdOAAA==",
-    "credit": "The Metropolitan Museum of Art, Purchase, European Paintings Funds, and Annette de la Renta Gift, 2012. Open Access (CC0).",
-    "sourceUrl": "https://www.metmuseum.org/art/collection/search/441933"
+  "hurricane-bahamas": {
+    "src": "/seed/hurricane-bahamas.jpg",
+    "width": 2400,
+    "height": 1654,
+    "blurDataURL": "data:image/webp;base64,UklGRk4AAABXRUJQVlA4IEIAAADQAQCdASoMAAgAA4BaJZwC7ADcc3qQAAD+BprGuC+98qOqoggyyHgu0iEF+ygs+LKqqvlrqYfNtqBqPvRqnvNfoAA=",
+    "credit": "The Metropolitan Museum of Art, Amelia B. Lazarus Fund, 1910. Open Access (CC0).",
+    "sourceUrl": "https://www.metmuseum.org/art/collection/search/11124"
   },
-  "soap-bubbles": {
-    "src": "/seed/soap-bubbles.jpg",
-    "width": 2383,
-    "height": 2298,
-    "blurDataURL": "data:image/webp;base64,UklGRkAAAABXRUJQVlA4IDQAAABwAQCdASoMAAwAA4BaJYwCdAIigAD+8VmSfYr5eXzaPBrjFxt2OwUjeHbQAlvrTi4t4AAA",
-    "credit": "The Metropolitan Museum of Art, Wentworth Fund, 1949. Open Access (CC0).",
-    "sourceUrl": "https://www.metmuseum.org/art/collection/search/435888"
+  "palm-tree-nassau": {
+    "src": "/seed/palm-tree-nassau.jpg",
+    "width": 1658,
+    "height": 2400,
+    "blurDataURL": "data:image/webp;base64,UklGRkoAAABXRUJQVlA4ID4AAADwAQCdASoIAAwAA4BaJQBOgB8vSRN1wAAA/u/S/zAKNXtOktsYbWFqCiBQYYwlwG0I1HDnH2Xj3Knj0wAAAA==",
+    "credit": "The Metropolitan Museum of Art, Amelia B. Lazarus Fund, 1910. Open Access (CC0).",
+    "sourceUrl": "https://www.metmuseum.org/art/collection/search/11131"
   },
-  "whalers": {
-    "src": "/seed/whalers.jpg",
-    "width": 2388,
-    "height": 1791,
-    "blurDataURL": "data:image/webp;base64,UklGRkgAAABXRUJQVlA4IDwAAADwAQCdASoMAAkAA4BaJZACdAEPSEWXsuQA/sfgKnUAc7li5BUdm3dQGrfDzOAD5RA+lUe9y1pPedpkAAA=",
-    "credit": "The Metropolitan Museum of Art, Catharine Lorillard Wolfe Collection, Wolfe Fund, 1896. Open Access (CC0).",
-    "sourceUrl": "https://www.metmuseum.org/art/collection/search/437854"
-  },
-  "circus-sideshow": {
-    "src": "/seed/circus-sideshow.jpg",
-    "width": 2390,
-    "height": 1592,
-    "blurDataURL": "data:image/webp;base64,UklGRjYAAABXRUJQVlA4ICoAAADQAQCdASoMAAgAA4BaJZwAAueKsenLgAD+3O+6zKAz5WE7N0h3+g2QAAA=",
-    "credit": "The Metropolitan Museum of Art, Bequest of Stephen C. Clark, 1960. Open Access (CC0).",
-    "sourceUrl": "https://www.metmuseum.org/art/collection/search/437654"
-  },
-  "moonlight-marine": {
-    "src": "/seed/moonlight-marine.jpg",
+  "fishing-boats-key-west": {
+    "src": "/seed/fishing-boats-key-west.jpg",
     "width": 2379,
-    "height": 2241,
-    "blurDataURL": "data:image/webp;base64,UklGRloAAABXRUJQVlA4IE4AAADQAQCdASoMAAsAA4BaJQBOgB6UgWRvAAD+Ql3S27rXufAt7OkNGOT0bnhH3IYXi1sp2RT/4vuWbO3i/JAx25jp3+nv0Aeb1AkiAMPZAAA=",
-    "credit": "The Metropolitan Museum of Art, Samuel D. Lee Fund, 1934. Open Access (CC0).",
-    "sourceUrl": "https://www.metmuseum.org/art/collection/search/11979"
+    "height": 1516,
+    "blurDataURL": "data:image/webp;base64,UklGRkYAAABXRUJQVlA4IDoAAADQAQCdASoMAAgAA4BaJQAAYpcRpoyhuAD+yPyzaXIeM8JWpyOhDPVODaiJGrzwafMclUbO11dHjaAA",
+    "credit": "The Metropolitan Museum of Art, Amelia B. Lazarus Fund, 1910. Open Access (CC0).",
+    "sourceUrl": "https://www.metmuseum.org/art/collection/search/11120"
+  },
+  "inside-the-bar": {
+    "src": "/seed/inside-the-bar.jpg",
+    "width": 2400,
+    "height": 1281,
+    "blurDataURL": "data:image/webp;base64,UklGRkgAAABXRUJQVlA4IDwAAADQAQCdASoMAAYAA4BaJYwCdAELVYulyADyg+jr8ffo+NAnjKY5pjaB8ttQ4/qVCVwnif/FH56e9oWeAAA=",
+    "credit": "The Metropolitan Museum of Art, Gift of Louise Ryals Arkell, in memory of Bartlett Arkell, 1954. Open Access (CC0).",
+    "sourceUrl": "https://www.metmuseum.org/art/collection/search/11125"
+  },
+  "fisherwomen": {
+    "src": "/seed/fisherwomen.jpg",
+    "width": 2400,
+    "height": 1644,
+    "blurDataURL": "data:image/webp;base64,UklGRj4AAABXRUJQVlA4IDIAAADQAQCdASoMAAgAA4BaJaQAAujV574l4AD+8i4nFtbqv0cXUT8WoKGTkArvn4hXyxAAAA==",
+    "credit": "The Metropolitan Museum of Art, Museum Accession. Open Access (CC0).",
+    "sourceUrl": "https://www.metmuseum.org/art/collection/search/11119"
+  },
+  "shore-and-surf-nassau": {
+    "src": "/seed/shore-and-surf-nassau.jpg",
+    "width": 2400,
+    "height": 1683,
+    "blurDataURL": "data:image/webp;base64,UklGRkQAAABXRUJQVlA4IDgAAADQAQCdASoMAAgAA4BaJZQC7AELTvo94ADMgpqRsWzQILJKY968YbdWI6Nzw4L4BxcdYpXpanAAAA==",
+    "credit": "The Metropolitan Museum of Art, Amelia B. Lazarus Fund, 1910. Open Access (CC0).",
+    "sourceUrl": "https://www.metmuseum.org/art/collection/search/11138"
   }
 }

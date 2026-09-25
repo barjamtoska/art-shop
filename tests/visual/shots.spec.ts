@@ -14,13 +14,12 @@ type Shot = { name: string; path: string; admin?: boolean; open?: (page: Page) =
 const pages: Shot[] = [
   { name: "entrance", path: "/" },
   { name: "collection", path: "/collection" },
-  { name: "collection-filtered", path: "/collection?exhibition=nocturnes" },
-  { name: "artwork", path: "/collection/young-woman-with-a-water-pitcher" },
-  { name: "artwork-sold", path: "/collection/madame-x" },
+  { name: "collection-filtered", path: "/collection?exhibition=the-weather-coast" },
+  { name: "artwork", path: "/collection/moonlight-wood-island-light" },
+  { name: "artwork-sold", path: "/collection/the-veteran-in-a-new-field" },
   { name: "exhibitions", path: "/exhibitions" },
-  { name: "exhibition", path: "/exhibitions/nocturnes" },
-  { name: "artists", path: "/artists" },
-  { name: "artist", path: "/artists/edgar-degas" },
+  { name: "exhibition", path: "/exhibitions/islands-in-the-sun" },
+  { name: "artist", path: "/artist" },
   { name: "not-found", path: "/this-room-does-not-exist" },
   { name: "lab", path: "/lab" },
   { name: "admin-sign-in", path: "/admin/sign-in" },
@@ -30,16 +29,17 @@ const pages: Shot[] = [
     name: "admin-artwork",
     path: "/admin/artworks",
     admin: true,
-    open: (page) => page.getByRole("link", { name: "Young Woman with a Water Pitcher" }).click(),
+    open: (page) => page.getByRole("link", { name: "Moonlight, Wood Island Light" }).click(),
   },
   { name: "admin-artwork-new", path: "/admin/artworks/new", admin: true },
   {
     name: "admin-exhibition",
     path: "/admin/exhibitions",
     admin: true,
-    open: (page) => page.getByRole("link", { name: "Nocturnes" }).click(),
+    open: (page) => page.getByRole("link", { name: "The Weather Coast" }).click(),
   },
   { name: "admin-mediums", path: "/admin/mediums", admin: true },
+  { name: "admin-artist", path: "/admin/artist", admin: true },
 ];
 
 const MAX_SCREENS = 8;

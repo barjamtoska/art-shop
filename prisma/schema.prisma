@@ -1,12 +1,13 @@
 // Maison — data model.
 //
-// Rules the schema enforces (with raw SQL in the first migration where Prisma
+// Rules the schema enforces (with raw SQL in the migrations where Prisma
 // cannot express them):
 // - Each work is unique: an Artwork is one physical painting (stock = 1).
 // - At most one PAID order per artwork (partial unique index): the database
 //   itself refuses a double sale.
 // - At most one featured artwork, shown on the Entrance (partial unique index).
 // - Certificate numbers come from a sequence, so they never repeat.
+// - One artist: the gallery shows and sells the work of its owner alone.
 
 generator client {
   provider = "prisma-client"
@@ -42,21 +43,30 @@ enum ImageStorage {
   CLOUDINARY
 }
 
+/// The one artist whose work the gallery shows and sells: the owner.
+/// The database allows a single row (see the raw SQL in the migrations).
 model Artist {
-  id          String    @id @default(cuid())
-  slug        String    @unique
-  name        String
-  /// Alphabetical order, e.g. "Vermeer, Johannes".
-  sortName    String
-  lifeDates   String    @default("")
-  nationality String    @default("")
-  shortBio    String    @default("")
+  id              String        @id @default(cuid())
+  slug            String        @unique
+  name            String
+  /// Alphabetical order, e.g. "Homer, Winslow".
+  sortName        String
+  lifeDates       String        @default("")
+  nationality     String        @default("")
+  shortBio        String        @default("")
   /// Paragraphs separated by a blank line.
-  biography   String    @default("")
-  published   Boolean   @default(true)
-  artworks    Artwork[]
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+  biography       String        @default("")
+  /// "In the artist's words": paragraphs separated by a blank line.
+  statement       String        @default("")
+  /// Optional portrait photograph (same storage as artwork images).
+  portraitStorage ImageStorage?
+  portraitKey     String?
+  portraitWidth   Int?
+  portraitHeight  Int?
+  portraitAlt     String?
+  artworks        Artwork[]
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
 }
 
 model Medium {

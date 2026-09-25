@@ -1,3 +1,6 @@
+import { execFileSync } from "node:child_process";
+import { copyFile, mkdir, rm } from "node:fs/promises";
+import path from "node:path";
 import { afterAll, beforeEach, describe, expect, it, vi } from "vitest";
 import { db } from "@/lib/db";
 import { cleanupTestRecords, makeArtwork, makeOrder } from "./helpers";
@@ -20,6 +23,8 @@ vi.mock("next/cache", () => ({ revalidatePath: vi.fn() }));
 
 const { createArtwork, deleteArtwork, updateArtwork } = await import("@/app/admin/(protected)/artworks/actions");
 const { updateExhibition } = await import("@/app/admin/(protected)/exhibitions/actions");
+const { attachPortrait, removeDemoWorks, removePortrait, saveArtist } =
+  await import("@/app/admin/(protected)/artist/actions");
 const { revalidatePath } = await import("next/cache");
 
 afterAll(cleanupTestRecords);
@@ -34,7 +39,6 @@ async function artworkForm(work: Awaited<ReturnType<typeof makeArtwork>>, change
   const values: Record<string, string | null> = {
     title: work.title,
     slug: work.slug,
-    artistId: work.artistId,
     mediumId: work.mediumId,
     mediumDescription: work.mediumDescription,
     yearLabel: work.yearLabel,
@@ -194,5 +198,85 @@ describe("when something goes wrong", () => {
     const result = await updateArtwork(work.id, idle, form);
     expect(result.status).toBe("error");
     expect(result.message).toMatch(/no longer exists/);
+  });
+});
+
+describe("the artist", () => {
+  const profile = (changes: Record<string, string> = {}) => {
+    const form = new FormData();
+    const values = {
+      name: "Winslow Homer",
+      nationality: "American",
+      lifeDates: "1836–1910",
+      shortBio: "Painter of the sea.",
+      biography: ["First paragraph.", "", "", "Second paragraph."].join("\n"),
+      statement: "",
+      ...changes,
+    };
+    for (const [key, value] of Object.entries(values)) form.append(key, value);
+    return form;
+  };
+
+  it("saving updates the one profile, and never creates another", async () => {
+    const before = await db.artist.findFirstOrThrow();
+    const result = await saveArtist(idle, profile({ statement: "  I paint the sea.  " }));
+    expect(result.status).toBe("success");
+    expect(await db.artist.count()).toBe(1);
+    const after = await db.artist.findFirstOrThrow();
+    expect(after.id).toBe(before.id);
+    expect(after.statement).toBe("I paint the sea.");
+    expect(after.biography).toBe(["First paragraph.", "", "Second paragraph."].join("\n"));
+    // Put the seed profile back.
+    await db.artist.update({ where: { id: before.id }, data: before });
+  });
+
+  it("requires a name", async () => {
+    const result = await saveArtist(idle, profile({ name: " " }));
+    expect(result.fieldErrors?.name).toBeDefined();
+  });
+
+  it("takes a portrait only from the artist's own upload folder, and only described", async () => {
+    const outside = await attachPortrait({ key: "/uploads/artworks/abc/photo.jpg", alt: "The artist in the studio." });
+    expect(outside.status).toBe("error");
+    const undescribed = await attachPortrait({ key: "/uploads/artist/x.jpg", alt: "" });
+    expect(undescribed.fieldErrors?.alt).toBeDefined();
+
+    const dir = path.join(process.cwd(), "public/uploads/artist");
+    await mkdir(dir, { recursive: true });
+    await copyFile(path.join(process.cwd(), "public/seed/fisherwomen.jpg"), path.join(dir, "test-portrait.jpg"));
+    try {
+      const result = await attachPortrait({
+        key: "/uploads/artist/test-portrait.jpg",
+        alt: "The artist on the shore.",
+      });
+      expect(result.status).toBe("success");
+      const artist = await db.artist.findFirstOrThrow();
+      expect(artist.portraitKey).toBe("/uploads/artist/test-portrait.jpg");
+      expect(artist.portraitWidth).toBeGreaterThan(0);
+
+      expect((await removePortrait()).status).toBe("success");
+      expect((await db.artist.findFirstOrThrow()).portraitKey).toBeNull();
+    } finally {
+      await rm(dir, { recursive: true, force: true });
+    }
+  });
+
+  it("removing the demonstration works keeps any work with an order", async () => {
+    const kept = await db.artwork.findFirstOrThrow({ where: { isDemo: true } });
+    await makeOrder(kept.id, { status: "EXPIRED" });
+    try {
+      const result = await removeDemoWorks();
+      expect(result.status).toBe("success");
+      const left = await db.artwork.findMany({ where: { isDemo: true }, select: { id: true } });
+      expect(left).toEqual([{ id: kept.id }]);
+    } finally {
+      // Restore the demonstration collection for the other tests.
+      await db.order.deleteMany({ where: { artworkId: kept.id } });
+      await db.artwork.delete({ where: { id: kept.id } });
+      execFileSync(process.execPath, ["node_modules/prisma/build/index.js", "db", "seed"], {
+        env: { ...process.env, DATABASE_URL: process.env.TEST_DATABASE_URL },
+        stdio: "pipe",
+      });
+    }
   });
 });

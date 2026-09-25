@@ -22,7 +22,7 @@ export const metadata: Metadata = {
 export default function LabPage() {
   if (process.env.NODE_ENV === "production" && !process.env.ENABLE_LAB) notFound();
 
-  const hero = seedArtwork("young-woman-with-a-water-pitcher");
+  const hero = seedArtwork("moonlight-wood-island-light");
   const heroSize = roomSize(hero.image.width / hero.image.height);
   const wall = seedArtworks.filter((a) => a.slug !== hero.slug);
 

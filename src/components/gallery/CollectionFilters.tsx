@@ -30,10 +30,9 @@ function FilterMenu({ label, value, options }: { label: string; value: string; o
 }
 
 function summarise(page: CollectionPage, filters: Filters): string {
-  const { exhibition, artist, medium } = page.selected;
+  const { exhibition, medium } = page.selected;
   const parts = [`${page.total} ${page.total === 1 ? "work" : "works"}`];
   if (medium) parts.push(`in ${medium.name.toLowerCase()}`);
-  if (artist) parts.push(`by ${artist.name}`);
   if (exhibition) parts.push(`from ${exhibition.title}`);
   let sentence = parts.join(" ");
   if (filters.available) sentence += ", available to acquire";
@@ -45,7 +44,7 @@ type Props = { filters: Filters; options: FilterOptions; page: CollectionPage };
 /** Filters as museum signage: small-caps labels, quiet dropdowns, all plain links. */
 export function CollectionFilters({ filters, options, page }: Props) {
   const c = copy.collection;
-  const { exhibition, artist, medium } = page.selected;
+  const { exhibition, medium } = page.selected;
 
   return (
     <nav aria-label={c.filterLabel} className="mx-auto max-w-5xl text-center">
@@ -59,21 +58,6 @@ export function CollectionFilters({ filters, options, page }: Props) {
               label: e.title,
               href: collectionHref(filters, { exhibition: e.slug }),
               current: e.slug === exhibition?.slug,
-            })),
-          ]}
-        />
-        <span className={styles.dot} aria-hidden="true">
-          ·
-        </span>
-        <FilterMenu
-          label={c.artist}
-          value={artist?.name ?? c.all}
-          options={[
-            { label: c.allArtists, href: collectionHref(filters, { artist: undefined }), current: !artist },
-            ...options.artists.map((a) => ({
-              label: a.name,
-              href: collectionHref(filters, { artist: a.slug }),
-              current: a.slug === artist?.slug,
             })),
           ]}
         />

@@ -14,7 +14,7 @@ export default async function ArtworksPage({ searchParams }: PageProps<"/admin/a
   const works = await db.artwork.findMany({
     orderBy: [{ position: "asc" }, { createdAt: "asc" }],
     include: {
-      artist: { select: { name: true } },
+      medium: { select: { name: true } },
       images: { where: { kind: "PRIMARY" }, take: 1 },
     },
   });
@@ -63,7 +63,7 @@ export default async function ArtworksPage({ searchParams }: PageProps<"/admin/a
                     {work.title}
                   </Link>
                   <span className="block text-ivory-muted">
-                    {work.artist.name}, {work.yearLabel}
+                    {work.yearLabel} · {work.medium.name}
                   </span>
                   {work.isDemo && <span className="mt-1 block text-xs text-ivory-muted">Demonstration work</span>}
                 </td>

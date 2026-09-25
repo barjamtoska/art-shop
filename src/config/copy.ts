@@ -7,12 +7,11 @@ export const copy = {
   navigation: [
     { href: "/collection", label: "Collection" },
     { href: "/exhibitions", label: "Exhibitions" },
-    { href: "/artists", label: "Artists" },
+    { href: "/artist", label: "The Artist" },
   ],
   skipLink: "Skip to the gallery",
   menu: { open: "Menu", close: "Close", label: "Main" },
   placard: {
-    artist: "Artist",
     title: "Title",
     medium: "Medium",
     dimensions: "Dimensions",
@@ -29,7 +28,7 @@ export const copy = {
     enterExhibition: "Enter the exhibition",
     enquire: "Enquire about this work",
     backToCollection: "The Collection",
-    viewArtist: "More by this artist",
+    viewArtist: "About the artist",
   },
   entrance: {
     currentExhibition: "Now showing",
@@ -39,10 +38,8 @@ export const copy = {
     intro: "Every work is unique. Take your time; the lights stay on.",
     filterLabel: "Filter the collection",
     exhibition: "Exhibition",
-    artist: "Artist",
     medium: "Medium",
     allExhibitions: "All exhibitions",
-    allArtists: "All artists",
     allMediums: "All mediums",
     all: "All",
     availableOnly: "Available works",
@@ -68,10 +65,11 @@ export const copy = {
     intro: "Rooms arranged around a single idea. Each can be visited on its own, or as part of the collection.",
     works: (n: number) => `${n} ${n === 1 ? "work" : "works"}`,
   },
-  artists: {
-    title: "Artists",
-    intro: "The painters whose work hangs in the gallery.",
+  artist: {
+    title: "The Artist",
+    inTheirWords: "In the artist’s words",
     worksInCollection: "Works in the collection",
+    seeAll: "See the whole collection",
   },
   notFound: {
     title: "This room is closed",

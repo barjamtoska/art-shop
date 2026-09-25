@@ -3,7 +3,7 @@
  * ("68,000", "45,7"), strict about what gets stored.
  */
 
-/** "Young Woman with a Water-Pitcher" → "young-woman-with-a-water-pitcher" */
+/** "Moonlight, Wood Island Light" → "moonlight-wood-island-light" */
 export function slugify(text: string): string {
   return text
     .normalize("NFKD")

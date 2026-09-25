@@ -10,7 +10,7 @@ import {
 
 describe("slugify", () => {
   it("makes readable URL slugs, including from accented names", () => {
-    expect(slugify("Young Woman with a Water Pitcher")).toBe("young-woman-with-a-water-pitcher");
+    expect(slugify("Moonlight, Wood Island Light")).toBe("moonlight-wood-island-light");
     expect(slugify("Vilhelm Hammershøi")).toBe("vilhelm-hammershoi");
     expect(slugify("Jean Siméon Chardin")).toBe("jean-simeon-chardin");
     expect(slugify("  Madame X (Madame Pierre Gautreau), 1883–84 ")).toBe("madame-x-madame-pierre-gautreau-1883-84");

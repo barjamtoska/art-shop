@@ -23,7 +23,7 @@ export default async function OrderPage({ params }: PageProps<"/admin/orders/[id
   const { id } = await params;
   const order = await db.order.findUnique({
     where: { id },
-    include: { artwork: { select: { id: true, title: true, artist: { select: { name: true } } } } },
+    include: { artwork: { select: { id: true, title: true, yearLabel: true } } },
   });
   if (!order) notFound();
 
@@ -43,7 +43,7 @@ export default async function OrderPage({ params }: PageProps<"/admin/orders/[id
         href={`/admin/artworks/${order.artwork.id}`}
         className="underline decoration-gold/40 underline-offset-4"
       >
-        {order.artwork.title}, {order.artwork.artist.name}
+        {order.artwork.title}, {order.artwork.yearLabel}
       </Link>,
     ],
     ["Amount", formatPrice(order.amountCents)],

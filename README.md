@@ -24,7 +24,7 @@ Go to `/admin` and sign in with an address listed in `ADMIN_EMAILS`. Sign-in is 
 
 Without `RESEND_API_KEY` (development only), emails are not sent: each one is saved as an HTML file in `.dev-mail/`, and the sign-in link is also printed in the terminal running `npm run dev`. Without Cloudinary keys (development only), uploaded photographs are stored in `public/uploads/`.
 
-What the admin can change: works, artists, exhibitions (including their hanging order), mediums, shipping details of paid orders, and enquiries. What it cannot change: whether a work is available, on hold or sold. Only checkout and a verified Stripe payment do that.
+What the admin can change: works, the artist's profile and portrait, exhibitions (including their hanging order), mediums, shipping details of paid orders, and enquiries. What it cannot change: whether a work is available, on hold or sold. Only checkout and a verified Stripe payment do that.
 
 Public pages are generated from the database and kept until the catalogue changes. Every admin save refreshes them.
 
@@ -50,4 +50,4 @@ The e2e tests run against the dev server on port 3100 and change the development
 
 ## Seed images
 
-The demo collection uses public-domain (CC0) paintings from The Metropolitan Museum of Art's Open Access programme. Credits are recorded in `public/seed/images.json`. Demo prices are fictional, and the demo works must be replaced before launch.
+The gallery shows one artist, its owner. Until the owner's own works are added, the demo collection is 16 public-domain (CC0) works by a single painter, Winslow Homer, from The Metropolitan Museum of Art's Open Access programme. Credits are recorded in `public/seed/images.json`. Demo prices are fictional. Before launch, remove the demo works (Admin → The artist → Remove the demonstration works), then enter the owner's profile.

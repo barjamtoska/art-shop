@@ -33,7 +33,7 @@ async function removeTestWorks() {
     ]);
     for (const { id } of rows) {
       await client.query(`delete from "Artwork" where id = $1`, [id]);
-      await rm(path.join(process.cwd(), "public/uploads", id), { recursive: true, force: true });
+      await rm(path.join(process.cwd(), "public/uploads/artworks", id), { recursive: true, force: true });
     }
   } finally {
     await client.end();
@@ -95,31 +95,50 @@ test.describe("the collection", () => {
 
   test("an edit appears in the gallery straight away", async ({ page }) => {
     await page.goto("/admin/artworks");
-    await page.getByRole("link", { name: "Soap Bubbles" }).click();
-    await expect(page.getByRole("heading", { level: 1, name: "Soap Bubbles" })).toBeVisible();
+    await page.getByRole("link", { name: "Snap the Whip" }).click();
+    await expect(page.getByRole("heading", { level: 1, name: "Snap the Whip" })).toBeVisible();
     const editUrl = page.url();
     const title = page.getByLabel("Title");
-    await title.fill("Soap Bubbles (retitled)");
+    await title.fill("Snap the Whip (retitled)");
     await page.getByRole("button", { name: "Save", exact: true }).click();
     await expect(page.getByText("Saved. The work is on view.")).toBeVisible();
 
-    await page.goto("/collection/soap-bubbles");
-    await expect(page.getByRole("heading", { level: 1 })).toHaveText(/Soap Bubbles \(retitled\)/);
+    await page.goto("/collection/snap-the-whip");
+    await expect(page.getByRole("heading", { level: 1 })).toHaveText(/Snap the Whip \(retitled\)/);
 
     // Put it back, and check the gallery shows the original again.
     await page.goto(editUrl);
-    await page.getByLabel("Title").fill("Soap Bubbles");
+    await page.getByLabel("Title").fill("Snap the Whip");
     await page.getByRole("button", { name: "Save", exact: true }).click();
     await expect(page.getByText("Saved. The work is on view.")).toBeVisible();
-    await page.goto("/collection/soap-bubbles");
-    await expect(page.getByRole("heading", { level: 1 })).toHaveText("Soap Bubbles, Jean Siméon Chardin");
+    await page.goto("/collection/snap-the-whip");
+    await expect(page.getByRole("heading", { level: 1 })).toHaveText("Snap the Whip, Winslow Homer");
+  });
+
+  test("the artist's words appear on The Artist page", async ({ page }) => {
+    await page.goto("/admin/artist");
+    const statement = page.getByLabel("In the artist’s words (optional)");
+    const original = await statement.inputValue();
+    await statement.fill("I paint the sea, because it never keeps still.");
+    await page.getByRole("button", { name: "Save", exact: true }).click();
+    await expect(page.getByText("Saved.", { exact: true })).toBeVisible();
+
+    await page.goto("/artist");
+    await expect(page.getByRole("heading", { name: "In the artist’s words" })).toBeVisible();
+    await expect(page.getByText("I paint the sea, because it never keeps still.")).toBeVisible();
+
+    // Put it back.
+    await page.goto("/admin/artist");
+    await page.getByLabel("In the artist’s words (optional)").fill(original);
+    await page.getByRole("button", { name: "Save", exact: true }).click();
+    await expect(page.getByText("Saved.", { exact: true })).toBeVisible();
   });
 
   test("a new work goes from draft, to photographed, to on view, to deleted", async ({ page }) => {
     const title = `${TEST_TITLE_PREFIX} ${Date.now()}`;
     await page.goto("/admin/artworks/new");
     await page.getByLabel("Title").fill(title);
-    await page.getByLabel("Artist").selectOption({ index: 1 });
+    await expect(page.getByLabel("Artist")).toHaveCount(0); // one artist: nothing to choose
     await page.getByLabel("Date").fill("2026");
     await page.getByLabel("Medium (for the collection filter)").selectOption({ label: "Oil" });
     await page.getByLabel("Medium, as on the placard").fill("Oil on canvas");
@@ -139,11 +158,11 @@ test.describe("the collection", () => {
     await expect(page.getByText("Add an image before putting the work on view.")).toBeVisible();
 
     // Add the photograph (a description is required).
-    await page.locator("input[type=file]").setInputFiles(path.join(process.cwd(), "public/seed/moonlight-marine.jpg"));
+    await page.locator("input[type=file]").setInputFiles(path.join(process.cwd(), "public/seed/sloop-nassau.jpg"));
     await page
       .getByLabel("Description for screen readers")
       .last()
-      .fill("A small moonlit seascape: a sailing boat on dark water under a pale moon.");
+      .fill("A white sloop with billowing sails rides out a squall on turquoise water.");
     await page.getByRole("button", { name: "Upload" }).click();
     await expect(page.getByText("Photograph saved.")).toBeVisible({ timeout: 30_000 });
     await expect(page.getByText(/below the recommended 3000px/).first()).toBeVisible();
@@ -167,8 +186,8 @@ test.describe("the collection", () => {
 
   test("a sold work cannot be deleted, and its sale cannot be changed by hand", async ({ page }) => {
     await page.goto("/admin/artworks");
-    await page.getByRole("link", { name: /Madame X/ }).click();
-    await expect(page.getByRole("heading", { level: 1, name: /Madame X/ })).toBeVisible();
+    await page.getByRole("link", { name: "The Veteran in a New Field" }).click();
+    await expect(page.getByRole("heading", { level: 1, name: "The Veteran in a New Field" })).toBeVisible();
     await expect(page.getByText("Sold", { exact: true })).toBeVisible();
     await expect(page.getByRole("button", { name: "Delete this work" })).toHaveCount(0);
     await expect(page.getByText("set only by checkout and payment, never by hand")).toBeVisible();

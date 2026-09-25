@@ -12,7 +12,7 @@ import { displaySrc } from "@/lib/images";
 import { formatCentimetresInput, formatEurosInput } from "@/lib/parse";
 import { attachArtworkImage, deleteArtwork, prepareImageUpload, updateArtwork, updateImageDetails } from "../actions";
 import { ArtworkForm } from "../ArtworkForm";
-import { ImageUploader } from "../ImageUploader";
+import { ImageUploader } from "@/components/admin/ImageUploader";
 import { artworkFormOptions } from "../options";
 
 export async function generateMetadata({ params }: PageProps<"/admin/artworks/[id]">): Promise<Metadata> {
@@ -78,7 +78,6 @@ export default async function EditArtworkPage({ params, searchParams }: PageProp
           values={{
             title: work.title,
             slug: work.slug,
-            artistId: work.artistId,
             mediumId: work.mediumId,
             mediumDescription: work.mediumDescription,
             yearLabel: work.yearLabel,

@@ -19,12 +19,12 @@ describe("only what is on view is shown", () => {
     expect(await getArtwork(work.slug)).toBeNull();
   });
 
-  it("hiding an artist takes down their page and their works", async () => {
-    const work = await makeArtwork();
-    expect(await getArtwork(work.slug)).not.toBeNull();
-    await db.artist.update({ where: { id: work.artistId }, data: { published: false } });
-    expect(await getArtwork(work.slug)).toBeNull();
-    expect(await getArtist(work.artist.slug)).toBeNull();
+  it("The Artist page shows only works on view", async () => {
+    const draft = await makeArtwork({ published: false });
+    const shown = await makeArtwork();
+    const slugs = (await getArtist())!.works.map((w) => w.slug);
+    expect(slugs).toContain(shown.slug);
+    expect(slugs).not.toContain(draft.slug);
   });
 
   it("an exhibition shows only its works that are on view, in the curator's order", async () => {

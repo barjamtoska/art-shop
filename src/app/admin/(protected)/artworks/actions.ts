@@ -44,7 +44,6 @@ const artworkSchema = z.object({
     .trim()
     .max(80)
     .refine((value) => value === "" || SLUG_PATTERN.test(value), "Lowercase letters, numbers and hyphens only."),
-  artistId: z.string().min(1, "Choose the artist."),
   mediumId: z.string().min(1, "Choose the medium."),
   mediumDescription: z.string().trim().min(1, "Describe the medium, e.g. “Oil on canvas”.").max(200),
   yearLabel: z.string().trim().min(1, "Give the date, e.g. “c. 1662”.").max(40),
@@ -93,7 +92,6 @@ function artworkData(input: ArtworkInput) {
   return {
     title: input.title,
     slug: input.slug || slugify(input.title),
-    artistId: input.artistId,
     mediumId: input.mediumId,
     mediumDescription: input.mediumDescription,
     yearLabel: input.yearLabel,
@@ -160,8 +158,14 @@ export async function createArtwork(_state: FormState, formData: FormData): Prom
     const problem = await checkRules(input);
     if (problem) return problem;
 
+    // Every work is by the gallery's one artist.
+    const artist = await db.artist.findFirst({ select: { id: true } });
+    if (!artist) return failed("Set up the artist's profile first (The artist), then add works.");
+
     const artwork = await db.$transaction(async (tx) => {
-      const created = await tx.artwork.create({ data: { ...artworkData(input), published: false } });
+      const created = await tx.artwork.create({
+        data: { ...artworkData(input), artistId: artist.id, published: false },
+      });
       await syncExhibitions(tx, created.id, input.exhibitionIds);
       return created;
     }, transactionOptions);
@@ -219,7 +223,7 @@ export async function deleteArtwork(artworkId: string): Promise<FormState> {
 
 export async function prepareImageUpload(artworkId: string): Promise<UploadTarget> {
   await assertAdmin();
-  return uploadTarget(artworkId);
+  return uploadTarget(`artworks/${artworkId}`);
 }
 
 const imageDetailsSchema = z.object({
@@ -243,7 +247,7 @@ export async function attachArtworkImage(
 
     let image;
     try {
-      image = await verifyUpload(artworkId, upload.key);
+      image = await verifyUpload(`artworks/${artworkId}`, upload.key);
     } catch (error) {
       return failed(error instanceof Error ? error.message : "The upload could not be verified.");
     }

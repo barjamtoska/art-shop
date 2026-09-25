@@ -52,7 +52,7 @@ export function ExhibitionForm({
           name="slug"
           label="URL name"
           defaultValue={values.slug}
-          hint="Used in the address, e.g. /exhibitions/nocturnes. Leave empty to make one from the title."
+          hint="Used in the address, e.g. /exhibitions/the-weather-coast. Leave empty to make one from the title."
         />
         <div className="grid gap-6 sm:grid-cols-3">
           <TextField name="opensOn" label="Opens" type="date" defaultValue={values.opensOn} />

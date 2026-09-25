@@ -5,10 +5,10 @@ import { db } from "@/lib/db";
 export async function exhibitionWorkChoices() {
   const works = await db.artwork.findMany({
     orderBy: [{ position: "asc" }, { createdAt: "asc" }],
-    select: { id: true, title: true, published: true, artist: { select: { name: true } } },
+    select: { id: true, title: true, yearLabel: true, published: true },
   });
   return works.map((work) => ({
     id: work.id,
-    label: `${work.title} — ${work.artist.name}${work.published ? "" : " (draft)"}`,
+    label: `${work.title}, ${work.yearLabel}${work.published ? "" : " (draft)"}`,
   }));
 }

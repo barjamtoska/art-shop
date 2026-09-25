@@ -1,7 +1,9 @@
 /**
- * Demo collection: public-domain paintings from The Met Open Access (CC0).
- * Prices are fictional and every work is flagged `isDemo` — these must be
- * replaced with the gallery's real works before launch.
+ * Demonstration collection: public-domain works by a single painter, Winslow
+ * Homer, from The Met Open Access programme (CC0) — the gallery shows one
+ * artist, so the demo does too. Prices are fictional and every work is
+ * flagged `isDemo`; the artist's profile and these works are replaced with
+ * the owner's own before launch.
  *
  * Images are fetched and resized by `scripts/fetch-seed-images.mts`.
  * prisma/seed.ts loads this data into the database; the /lab page reads it
@@ -16,189 +18,29 @@ type ImageKey = keyof typeof images;
 
 export const seedMediums = {
   oil: { slug: "oil", name: "Oil" },
-  pastel: { slug: "pastel", name: "Pastel" },
   watercolour: { slug: "watercolour", name: "Watercolour" },
+  drawing: { slug: "drawing", name: "Drawing" },
 } satisfies Record<string, Medium>;
 
-// ---------------------------------------------------------------- Artists
+// ---------------------------------------------------------------- The artist
 
-export const seedArtists: Artist[] = [
-  {
-    slug: "johannes-vermeer",
-    name: "Johannes Vermeer",
-    sortName: "Vermeer, Johannes",
-    lifeDates: "1632–1675",
-    nationality: "Dutch",
-    shortBio: "Painter of Delft whose small, luminous interiors number only around thirty-five surviving works.",
-    biography: [
-      "Johannes Vermeer spent his whole life in Delft, where he was a member of the painters’ guild and also dealt in art. He worked slowly, and only around thirty-five of his paintings survive.",
-      "His subjects are mostly quiet domestic scenes — women reading, writing, pouring, making music — lit from a window at the left. Largely forgotten after his death, he was rediscovered in the nineteenth century and is now among the most admired painters of the Dutch Golden Age.",
-    ],
-  },
-  {
-    slug: "caspar-david-friedrich",
-    name: "Caspar David Friedrich",
-    sortName: "Friedrich, Caspar David",
-    lifeDates: "1774–1840",
-    nationality: "German",
-    shortBio:
-      "The leading painter of German Romanticism, known for figures seen from behind before vast, silent landscapes.",
-    biography: [
-      "Born in Greifswald on the Baltic coast, Caspar David Friedrich trained in Copenhagen and settled in Dresden, where he lived for the rest of his life.",
-      "His landscapes — ruins, mountains, moonlit shores — are rarely just views. Often a figure stands with their back to us, looking out, and invites us to look with them. After decades of neglect, his work was rediscovered in the twentieth century.",
-    ],
-  },
-  {
-    slug: "john-singer-sargent",
-    name: "John Singer Sargent",
-    sortName: "Sargent, John Singer",
-    lifeDates: "1856–1925",
-    nationality: "American",
-    shortBio: "The most sought-after portrait painter of his generation, working between Paris, London and Boston.",
-    biography: [
-      "Born in Florence to American parents, John Singer Sargent trained in Paris under Carolus-Duran and quickly became a celebrated portraitist.",
-      "After the scandal of Madame X in 1884 he moved to London, where he painted society for two decades before turning increasingly to watercolour landscapes and large mural commissions in Boston.",
-    ],
-  },
-  {
-    slug: "frederic-edwin-church",
-    name: "Frederic Edwin Church",
-    sortName: "Church, Frederic Edwin",
-    lifeDates: "1826–1900",
-    nationality: "American",
-    shortBio: "Hudson River School painter of vast, meticulous panoramas, from the Andes to the Arctic.",
-    biography: [
-      "Frederic Edwin Church was the only pupil of Thomas Cole, the founder of the Hudson River School.",
-      "Inspired by the naturalist Alexander von Humboldt, he travelled through South America, Labrador and the Middle East in search of subjects. His large canvases were exhibited like events, drawing paying crowds. His home and studio, Olana, overlooks the Hudson River.",
-    ],
-  },
-  {
-    slug: "rembrandt-van-rijn",
-    name: "Rembrandt van Rijn",
-    sortName: "Rembrandt van Rijn",
-    lifeDates: "1606–1669",
-    nationality: "Dutch",
-    shortBio: "The great painter, draughtsman and printmaker of seventeenth-century Amsterdam.",
-    biography: [
-      "Rembrandt Harmenszoon van Rijn was born in Leiden and moved to Amsterdam in the early 1630s, where he became the city’s most fashionable portraitist.",
-      "His mature work is marked by deep shadow, rich surfaces and an extraordinary sympathy for his sitters. Despite financial ruin later in life, he went on painting some of his most searching pictures, including many self-portraits.",
-    ],
-  },
-  {
-    slug: "caravaggio",
-    name: "Caravaggio",
-    sortName: "Caravaggio",
-    lifeDates: "1571–1610",
-    nationality: "Italian",
-    shortBio: "The painter whose dramatic light and unidealised models changed European painting.",
-    biography: [
-      "Michelangelo Merisi, known as Caravaggio after the Lombard town of his family, arrived in Rome in the early 1590s and found a patron in Cardinal Francesco Maria del Monte.",
-      "His paintings, sacred and secular, used ordinary people as models and a strong, raking light against darkness. His life was violent and short; his influence, carried across Europe by his followers, lasted for generations.",
-    ],
-  },
-  {
-    slug: "vincent-van-gogh",
-    name: "Vincent van Gogh",
-    sortName: "Gogh, Vincent van",
-    lifeDates: "1853–1890",
-    nationality: "Dutch",
-    shortBio: "Post-Impressionist whose short career produced some of the most loved paintings in the world.",
-    biography: [
-      "Vincent van Gogh came to painting late, after working as an art dealer and a lay preacher. In the last years of his life, in Arles and Saint-Rémy in the south of France, he painted with extraordinary intensity.",
-      "His letters to his brother Theo describe his ideas about colour and his love of the landscape around him. He sold very few paintings in his lifetime.",
-    ],
-  },
-  {
-    slug: "edgar-degas",
-    name: "Edgar Degas",
-    sortName: "Degas, Edgar",
-    lifeDates: "1834–1917",
-    nationality: "French",
-    shortBio: "Painter, draughtsman and sculptor of modern Paris — above all, of the ballet.",
-    biography: [
-      "Edgar Degas trained in the classical tradition and exhibited with the Impressionists, though he preferred to call himself a Realist.",
-      "Dancers in rehearsal, laundresses, racehorses and cafés were his subjects. Pastel became one of his favourite media, and he used it with great freedom, often in layers over charcoal.",
-    ],
-  },
-  {
-    slug: "winslow-homer",
-    name: "Winslow Homer",
-    sortName: "Homer, Winslow",
-    lifeDates: "1836–1910",
-    nationality: "American",
-    shortBio: "American painter of the sea, and one of the great watercolourists.",
-    biography: [
-      "Winslow Homer began as a magazine illustrator, covering the American Civil War, before turning to painting.",
-      "From 1883 he lived at Prouts Neck on the coast of Maine, painting the Atlantic in all weathers, and his winter journeys to the Caribbean and Florida produced watercolours of remarkable freshness.",
-    ],
-  },
-  {
-    slug: "albert-pinkham-ryder",
-    name: "Albert Pinkham Ryder",
-    sortName: "Ryder, Albert Pinkham",
-    lifeDates: "1847–1917",
-    nationality: "American",
-    shortBio: "Visionary American painter of moonlit seas and dreamlike subjects.",
-    biography: [
-      "Albert Pinkham Ryder grew up in the whaling port of New Bedford, Massachusetts, and lived most of his life in New York.",
-      "He worked for years on small panels, reworking them again and again with unconventional materials. His paintings of the sea at night, reduced to a few glowing shapes, were much admired by later modernists.",
-    ],
-  },
-  {
-    slug: "vilhelm-hammershoi",
-    name: "Vilhelm Hammershøi",
-    sortName: "Hammershøi, Vilhelm",
-    lifeDates: "1864–1916",
-    nationality: "Danish",
-    shortBio: "Danish painter of silent interiors in grey and white.",
-    biography: [
-      "Vilhelm Hammershøi trained at the Royal Danish Academy in Copenhagen and spent most of his life in the city.",
-      "His best-known pictures show the rooms of his own apartments — above all Strandgade 30 — almost empty, painted in a restrained palette of greys. Admired in his lifetime, he was largely forgotten after his death and has been rediscovered in recent decades.",
-    ],
-  },
-  {
-    slug: "jean-simeon-chardin",
-    name: "Jean Siméon Chardin",
-    sortName: "Chardin, Jean Siméon",
-    lifeDates: "1699–1779",
-    nationality: "French",
-    shortBio: "Master of still life and quiet domestic scenes in eighteenth-century Paris.",
-    biography: [
-      "Jean Siméon Chardin spent his whole life in Paris and was admitted to the Royal Academy as a painter of animals and fruit.",
-      "From the 1730s he also painted small scenes of everyday life — servants at work, children at play, a young man blowing bubbles — with a calm seriousness that set him apart from the fashionable painting of his day.",
-    ],
-  },
-  {
-    slug: "j-m-w-turner",
-    name: "J. M. W. Turner",
-    sortName: "Turner, Joseph Mallord William",
-    lifeDates: "1775–1851",
-    nationality: "British",
-    shortBio: "England’s great painter of light, weather and the sea.",
-    biography: [
-      "Joseph Mallord William Turner entered the Royal Academy Schools at fourteen and became a full Academician at twenty-six.",
-      "Travelling constantly, he filled sketchbooks with studies of landscape and weather. His late paintings, dissolving ships and storms into light, puzzled many of his contemporaries and were later seen as a forerunner of modern painting.",
-    ],
-  },
-  {
-    slug: "georges-seurat",
-    name: "Georges Seurat",
-    sortName: "Seurat, Georges",
-    lifeDates: "1859–1891",
-    nationality: "French",
-    shortBio: "The inventor of the dotted technique known as pointillism.",
-    biography: [
-      "Georges Seurat studied at the École des Beaux-Arts in Paris and developed, from the science of colour, a method of painting in small, separate touches.",
-      "In a career of barely ten years he produced a handful of large, carefully planned canvases, including A Sunday on La Grande Jatte. He died at thirty-one.",
-    ],
-  },
-];
-
-const artist = (slug: string) => {
-  const found = seedArtists.find((a) => a.slug === slug);
-  if (!found) throw new Error(`Unknown seed artist: ${slug}`);
-  return { slug: found.slug, name: found.name };
+export const seedArtist: Artist = {
+  slug: "winslow-homer",
+  name: "Winslow Homer",
+  sortName: "Homer, Winslow",
+  lifeDates: "1836–1910",
+  nationality: "American",
+  shortBio:
+    "Painter of the sea, whose oils and watercolours of the Maine coast and the Caribbean are among the most admired of his century.",
+  biography: [
+    "Winslow Homer was born in Boston in 1836 and began as a commercial illustrator, drawing for Harper’s Weekly; during the Civil War he sketched soldiers in camp and at the front. He taught himself to paint in oils in the early 1860s and was soon exhibiting in New York.",
+    "In 1881–82 he spent almost two years at Cullercoats, a fishing village on the North Sea coast of England. The women there, waiting on the shore for the boats to come in, changed his subject for good: from then on his work turned to the sea and the people who live by it.",
+    "In 1883 he settled at Prouts Neck, on the coast of Maine, and painted the surf breaking on the rocks below his studio. Winters took him south — to Florida, the Bahamas, Bermuda and Cuba — and to watercolours of a brilliance few have matched. He died at Prouts Neck in 1910.",
+  ],
+  statement: [],
 };
+
+const artist = { slug: seedArtist.slug, name: seedArtist.name };
 
 // ---------------------------------------------------------------- Exhibitions
 
@@ -206,53 +48,55 @@ type SeedExhibition = Exhibition & { workSlugs: ImageKey[] };
 
 export const seedExhibitions: SeedExhibition[] = [
   {
-    slug: "nocturnes",
-    title: "Nocturnes",
-    subtitle: "Paintings of the hours after dark",
+    slug: "the-weather-coast",
+    title: "The Weather Coast",
+    subtitle: "Prouts Neck, Maine",
     opensOn: "2026-09-12",
     closesOn: "2027-02-14",
     statement: [
-      "When the light goes, painting changes. Colour sinks, edges soften, and what is left is atmosphere — the glow of a moon through cloud, the lamps of a fairground, a pale square of moonlight on a floor.",
-      "From Friedrich’s two wanderers to Seurat’s gaslit sideshow, each of these works finds its own way to paint what the eye can barely see. They were made to be looked at slowly, and they reward it.",
+      "For the last twenty-seven years of his life, Homer lived on a rocky point on the coast of Maine, and the sea below his studio became his great subject. He painted it in every weather, but above all when it was at its most violent.",
+      "The four paintings in this room show the same stretch of shore — by day and by moonlight, in a gale and in the grey after one. There are almost no people in them: only rock, water and the light between.",
     ],
-    workSlugs: ["two-men-contemplating-the-moon", "moonlight-marine", "moonlight-strandgade-30", "circus-sideshow"],
+    workSlugs: ["northeaster", "cannon-rock", "maine-coast", "moonlight-wood-island-light"],
   },
   {
-    slug: "the-quiet-interior",
-    title: "The Quiet Interior",
-    subtitle: "Rooms, light and stillness",
-    opensOn: "2026-10-03",
-    closesOn: "2027-03-28",
+    slug: "islands-in-the-sun",
+    title: "Islands in the Sun",
+    subtitle: "The Bahamas, Key West and Cuba",
+    opensOn: "2026-11-07",
+    closesOn: "2027-04-18",
     statement: [
-      "A window, a table, a figure absorbed in something small. The painters in this room found their subjects indoors and made stillness itself the drama.",
-      "Across three centuries — from Rembrandt’s philosopher to Hammershøi’s empty apartment — light enters from one side and settles on what matters.",
+      "Homer escaped the Maine winters by travelling south, and there, working mostly in watercolour, he found a new palette: turquoise water, white sails, the green of palms against a storm.",
+      "Alongside the watercolours hang two oils that grew out of these journeys — a sailor adrift on the Gulf Stream, and the harbour of Santiago de Cuba by searchlight.",
     ],
     workSlugs: [
-      "young-woman-with-a-water-pitcher",
-      "soap-bubbles",
-      "aristotle-with-a-bust-of-homer",
-      "moonlight-strandgade-30",
+      "sloop-nassau",
+      "palm-tree-nassau",
+      "hurricane-bahamas",
+      "shore-and-surf-nassau",
+      "fishing-boats-key-west",
+      "the-gulf-stream",
+      "searchlight-on-harbor-entrance",
     ],
   },
   {
-    slug: "open-air",
-    title: "Open Air",
-    subtitle: "Sea, sky and distance",
+    slug: "people-of-the-shore",
+    title: "People of the Shore",
+    subtitle: "Figures by the sea",
     statement: [
-      "Four painters looking outward: at a continent, a wheat field in Provence, a harbour in the Bahamas and the open ocean in a storm.",
-      "Some worked on the spot and at speed; others spent months assembling a single view from dozens of sketches. All of them were after the same thing — the feeling of space, air and weather.",
+      "Before the sea became Homer’s whole subject, it was the setting for the people who lived beside it: bathers on a Massachusetts beach, and the fisherwomen of an English village who waited, in all weathers, for the boats.",
+      "These works trace that change — from a sunlit afternoon in 1870 to the drawings and watercolours of Cullercoats, where his art found its gravity.",
     ],
-    workSlugs: ["heart-of-the-andes", "wheat-field-with-cypresses", "sloop-nassau", "whalers"],
+    workSlugs: ["eagle-head-manchester", "inside-the-bar", "fisherwomen"],
   },
 ];
 
-// ---------------------------------------------------------------- Artworks
+// ---------------------------------------------------------------- Works
 
 type SeedWork = {
   slug: ImageKey;
   title: string;
   yearLabel: string;
-  artistSlug: string;
   medium: Medium;
   mediumDescription: string;
   heightCm: number;
@@ -264,248 +108,254 @@ type SeedWork = {
   description: string[];
 };
 
+/** Works on paper hang in slim frames; oils in the classic moulding. */
+const onPaper = { frameStyle: "SLIM" as const };
+const watercolour = {
+  ...onPaper,
+  medium: seedMediums.watercolour,
+  mediumDescription: "Watercolour and graphite on off-white wove paper",
+};
+const oil = { medium: seedMediums.oil, mediumDescription: "Oil on canvas" };
+
 /** In curated order: the order the works hang in the collection. */
 const works: SeedWork[] = [
   {
-    slug: "two-men-contemplating-the-moon",
-    title: "Two Men Contemplating the Moon",
-    yearLabel: "c. 1825–30",
-    artistSlug: "caspar-david-friedrich",
-    medium: seedMediums.oil,
-    mediumDescription: "Oil on canvas",
-    heightCm: 34.9,
-    widthCm: 43.8,
-    priceCents: 4_200_000,
-    frameStyle: "SLIM",
-    alt: "Two men in dark cloaks stand on a rocky path beside a gnarled, leaning oak, looking out at a crescent moon in a violet evening sky.",
+    slug: "moonlight-wood-island-light",
+    title: "Moonlight, Wood Island Light",
+    yearLabel: "1894",
+    ...oil,
+    heightCm: 78.1,
+    widthCm: 102.2,
+    priceCents: 13_800_000,
+    alt: "Waves break over dark rocks under a clouded night sky; moonlight catches the spray and lays a pale track across the sea.",
     description: [
-      "Two figures, seen from behind, pause on a forest path at dusk to watch a crescent moon rise. Friedrich returned to the subject more than once; this later version follows a composition he first painted in 1819.",
-      "The moon is a sliver and a single star shines beside it; almost everything else is shadow and the violet afterglow of the sun. The men stand where we would stand, so that looking at the painting becomes an act of looking with them.",
+      "Moonlight glances off the spray of a wave breaking on the rocks at Prouts Neck, and a pale track runs out across the water towards the horizon. Almost everything else is darkness, held in tones of blue-black and grey.",
+      "Homer’s family remembered that he painted it out of doors, on a single summer night. It has the directness of something seen and set down at once: the sea at night, with nothing between it and the viewer.",
     ],
   },
   {
-    slug: "young-woman-with-a-water-pitcher",
-    title: "Young Woman with a Water Pitcher",
-    yearLabel: "c. 1662",
-    artistSlug: "johannes-vermeer",
-    medium: seedMediums.oil,
-    mediumDescription: "Oil on canvas",
-    heightCm: 45.7,
-    widthCm: 40.6,
-    priceCents: 6_800_000,
-    alt: "A young woman in a white linen headdress stands at a leaded window, one hand on the casement and the other on a silver pitcher resting on a table covered with a patterned carpet.",
+    slug: "snap-the-whip",
+    title: "Snap the Whip",
+    yearLabel: "1872",
+    ...oil,
+    heightCm: 30.5,
+    widthCm: 50.8,
+    priceCents: 6_400_000,
+    alt: "Barefoot boys hold hands and run in a line across a meadow in front of a red schoolhouse; the boys at the end of the line tumble to the ground.",
     description: [
-      "A young woman opens a leaded window with one hand while the other rests on a pitcher standing in its basin. Light from the window passes through her linen headdress and collar and turns them faintly blue.",
-      "Nothing happens, and that is the point: a moment of domestic stillness arranged with the precision Vermeer is known for — the map on the wall, the carpet on the table, the jewel box, all held in a cool, even light.",
+      "Schoolboys play snap the whip in a summer meadow: the line runs, the leader stops short, and the boys at the far end are flung off their feet. Behind them stands a small red one-room schoolhouse.",
+      "Homer painted the subject twice in 1872; this is the smaller of the two versions. Made a few years after the Civil War, it looks back to a country childhood that was already passing.",
     ],
   },
   {
-    slug: "heart-of-the-andes",
-    title: "Heart of the Andes",
-    yearLabel: "1859",
-    artistSlug: "frederic-edwin-church",
-    medium: seedMediums.oil,
-    mediumDescription: "Oil on canvas",
-    heightCm: 168,
-    widthCm: 302.9,
-    priceCents: 8_800_000,
-    alt: "A vast South American landscape: a waterfall and pool in a sunlit clearing, dense tropical forest, and snow-capped Andes on the far horizon.",
+    slug: "northeaster",
+    title: "Northeaster",
+    yearLabel: "1895, reworked by 1901",
+    ...oil,
+    heightCm: 87.6,
+    widthCm: 127,
+    priceCents: 12_800_000,
+    alt: "A great wave bursts into white spray against dark coastal rocks under a heavy grey sky.",
     description: [
-      "Church built this panorama from sketches made on two journeys through Ecuador and Colombia, compressing a continent’s worth of scenery — tropical forest, a waterfall, a village church and the snow-capped peak of Chimborazo — into a single view.",
-      "When it was first shown in New York in 1859 it hung alone in a darkened room, set in a frame like a window and lit by gas. Visitors paid admission and queued to see it, some bringing opera glasses to study its detail.",
-    ],
-  },
-  {
-    slug: "dancer-with-a-fan",
-    title: "Dancer with a Fan",
-    yearLabel: "c. 1880",
-    artistSlug: "edgar-degas",
-    medium: seedMediums.pastel,
-    mediumDescription: "Pastel on grey-green laid paper",
-    heightCm: 61,
-    widthCm: 41.9,
-    priceCents: 3_600_000,
-    status: "SOLD",
-    frameStyle: "SLIM",
-    alt: "A ballet dancer in a pale tutu stands half turned away, lifting an open fan to her face, drawn in charcoal and pastel on grey-green paper.",
-    description: [
-      "Degas drew dancers more than any other subject, usually not on stage but in rehearsal or waiting in the wings. Here a single dancer, half turned away, lifts a fan to her face; the tutu is a few strokes of pale pastel over charcoal.",
-      "Much of the grey-green paper is left bare and does the work of shadow — an economy that makes the figure feel caught mid-movement.",
-    ],
-  },
-  {
-    slug: "the-musicians",
-    title: "The Musicians",
-    yearLabel: "1597",
-    artistSlug: "caravaggio",
-    medium: seedMediums.oil,
-    mediumDescription: "Oil on canvas",
-    heightCm: 92.1,
-    widthCm: 118.4,
-    priceCents: 7_600_000,
-    alt: "Four young men in loose classical robes crowd together with a lute, a violin and sheet music; one looks directly out at the viewer.",
-    description: [
-      "Four young men in loose, classical costume prepare to make music: one tunes a lute, another studies a score, a third looks out at us, and a winged boy — Cupid — reaches for a bunch of grapes. It is among the earliest pictures Caravaggio painted for Cardinal Francesco Maria del Monte, a great patron of music in Rome.",
-      "Its subject is music and love, and its manner was new: models painted from life, lit sharply from one side and crowded close to the picture’s edge.",
-    ],
-  },
-  {
-    slug: "moonlight-marine",
-    title: "Moonlight Marine",
-    yearLabel: "1870–90",
-    artistSlug: "albert-pinkham-ryder",
-    medium: seedMediums.oil,
-    mediumDescription: "Oil and possibly wax on wood panel",
-    heightCm: 29.2,
-    widthCm: 30.5,
-    priceCents: 2_900_000,
-    frameStyle: "SLIM",
-    alt: "Dark silhouettes of a sailing boat and a heaving sea against a pale yellow-green sky, where the moon glows behind drifting clouds; the paint surface is densely crackled.",
-    description: [
-      "Ryder worked on his small paintings for years, building up layers of paint, varnish and sometimes wax until the surface became almost sculptural. Here a boat under sail rides a dark swell beneath clouds lit from behind by the moon.",
-      "His unstable materials have left the surface deeply crackled, but the image has only gained from it: a few massed shapes, and a sky that seems to glow from within.",
-    ],
-  },
-  {
-    slug: "wheat-field-with-cypresses",
-    title: "Wheat Field with Cypresses",
-    yearLabel: "1889",
-    artistSlug: "vincent-van-gogh",
-    medium: seedMediums.oil,
-    mediumDescription: "Oil on canvas",
-    heightCm: 73.2,
-    widthCm: 93.4,
-    priceCents: 8_400_000,
-    alt: "A golden wheat field under a swirling sky of white clouds, with a tall dark cypress rising on the right and green olive trees beyond.",
-    description: [
-      "Painted in the summer of 1889 at Saint-Rémy-de-Provence, where Van Gogh was a voluntary patient at the asylum of Saint-Paul. He wrote to his brother that the cypresses were always on his mind, and that they were as beautiful in line and proportion as an Egyptian obelisk.",
-      "He counted this among his best summer canvases and painted two further versions of it that autumn.",
-    ],
-  },
-  {
-    slug: "madame-x",
-    title: "Madame X (Madame Pierre Gautreau)",
-    yearLabel: "1883–84",
-    artistSlug: "john-singer-sargent",
-    medium: seedMediums.oil,
-    mediumDescription: "Oil on canvas",
-    heightCm: 208.6,
-    widthCm: 109.9,
-    priceCents: 9_500_000,
-    status: "SOLD",
-    alt: "A woman in a black satin evening gown with jewelled straps stands with her face in profile, her pale skin set against a warm brown ground, one hand resting on a small table.",
-    description: [
-      "Sargent’s portrait of Virginie Amélie Avegno Gautreau, an American-born Parisian celebrated for her beauty, caused a scandal at the Paris Salon of 1884. In its first state one jewelled strap had slipped from her shoulder; after the outcry, Sargent repainted it in place.",
-      "He kept the painting for more than thirty years, calling it the best thing he had done.",
-    ],
-  },
-  {
-    slug: "soap-bubbles",
-    title: "Soap Bubbles",
-    yearLabel: "c. 1733–34",
-    artistSlug: "jean-simeon-chardin",
-    medium: seedMediums.oil,
-    mediumDescription: "Oil on canvas",
-    heightCm: 61,
-    widthCm: 63.2,
-    priceCents: 3_900_000,
-    alt: "A young man leans on a stone window ledge, blowing a large bubble through a straw, while a small child peers over the ledge to watch.",
-    description: [
-      "A young man leans out over a stone window ledge, blowing a bubble through a straw while a small child peers up to watch it grow. Chardin painted several versions of the composition in the 1730s.",
-      "The bubble — a traditional reminder of how brief life is — hangs at the centre, nearly transparent, made from a few touches of reflected light.",
-    ],
-  },
-  {
-    slug: "whalers",
-    title: "Whalers",
-    yearLabel: "c. 1845",
-    artistSlug: "j-m-w-turner",
-    medium: seedMediums.oil,
-    mediumDescription: "Oil on canvas",
-    heightCm: 91.8,
-    widthCm: 122.6,
-    priceCents: 7_200_000,
-    alt: "A whaling ship and small boats almost dissolved in pale yellow mist and spray, with a dark shape breaking the surface of a heaving sea.",
-    description: [
-      "In his seventies Turner painted a group of whaling scenes for the Royal Academy, drawing on a recently published natural history of the sperm whale. Here a ship and its boats are almost lost in spray and pale light as the hunt reaches its climax.",
-      "It is less a description than an experience of weather — the kind of painting that left some critics of the day unsure what they were looking at, and that later painters admired for exactly that reason.",
-    ],
-  },
-  {
-    slug: "aristotle-with-a-bust-of-homer",
-    title: "Aristotle with a Bust of Homer",
-    yearLabel: "1653",
-    artistSlug: "rembrandt-van-rijn",
-    medium: seedMediums.oil,
-    mediumDescription: "Oil on canvas",
-    heightCm: 143.5,
-    widthCm: 136.5,
-    priceCents: 12_000_000,
-    alt: "A bearded man in a broad black hat and wide white sleeves, a heavy gold chain across his chest, rests his hand on a marble bust of Homer in a dim interior.",
-    description: [
-      "Painted for a Sicilian collector, Don Antonio Ruffo, this is one of Rembrandt’s most celebrated works: the philosopher Aristotle rests his hand on a bust of the poet Homer, while from his gold chain hangs a medallion bearing the portrait of his pupil, Alexander the Great.",
-      "Rembrandt lets most of the canvas fall into warm darkness, so that the light gathers on the sleeve, the chain and the two faces — the thinker and the poet he contemplates.",
+      "A northeasterly gale drives a wave against the ledges at Prouts Neck, and the sea explodes upwards in a tower of spray. There is no horizon to speak of and no place to stand: only rock, water and weather.",
+      "Homer first exhibited the painting in 1895 and later reworked it, painting out two figures in oilskins who had stood on the rocks. Without them, the storm is the whole subject.",
     ],
   },
   {
     slug: "sloop-nassau",
     title: "Sloop, Nassau",
     yearLabel: "1899",
-    artistSlug: "winslow-homer",
-    medium: seedMediums.watercolour,
-    mediumDescription: "Watercolour and graphite on off-white wove paper",
+    ...watercolour,
     heightCm: 37.8,
     widthCm: 54.3,
-    priceCents: 1_850_000,
-    frameStyle: "SLIM",
-    alt: "A white sloop with billowing sails heels over on turquoise water beside a small red rowing boat, under a grey and pink sky.",
+    priceCents: 3_400_000,
+    alt: "A white sloop with billowing sails rides out a squall on turquoise water under a darkening sky, a small red boat alongside.",
     description: [
-      "Winslow Homer spent the winter of 1898–99 in the Bahamas, and the watercolours he made there are among the freshest of his career: white sails, turquoise water, and weather always about to change.",
-      "Much of the paper is left untouched to stand for sail and surf, and the sea is laid in with quick, overlapping washes that still look wet.",
+      "A sloop with its sails half lowered rides out a squall off Nassau. The water shifts from turquoise to deep blue, and a pink light still touches the clouds as the weather comes in.",
+      "On his winter journeys to the Bahamas Homer worked almost entirely in watercolour. Here the white of the paper does much of the work — in the sails, the foam and the breaks in the cloud.",
     ],
   },
   {
-    slug: "moonlight-strandgade-30",
-    title: "Moonlight, Strandgade 30",
-    yearLabel: "1900–1906",
-    artistSlug: "vilhelm-hammershoi",
-    medium: seedMediums.oil,
-    mediumDescription: "Oil on canvas",
-    heightCm: 41,
-    widthCm: 51.1,
-    priceCents: 4_600_000,
-    frameStyle: "SLIM",
-    alt: "An empty panelled room at night: a tall window and a closed white door, with moonlight laying a pale grid of window panes across the floor.",
+    slug: "the-veteran-in-a-new-field",
+    title: "The Veteran in a New Field",
+    yearLabel: "1865",
+    ...oil,
+    heightCm: 61.3,
+    widthCm: 96.8,
+    priceCents: 11_800_000,
+    status: "SOLD",
+    alt: "A man in a white shirt, seen from behind, swings a scythe through a field of ripe golden wheat under a pale blue sky; a jacket and canteen lie at the lower right.",
     description: [
-      "Hammershøi painted the rooms of his Copenhagen apartment at Strandgade 30 again and again, usually empty or with a single figure seen from behind. Here no one is present at all; the moon throws the window’s grid across the floor.",
-      "The palette is almost colourless — greys, whites, a little warmth in the wood — and the stillness is complete. It is one of the quietest paintings in the collection, and one of the hardest to stop looking at.",
+      "A former soldier, home from the Civil War, cuts ripe wheat with a scythe. His army jacket and canteen lie discarded at the lower right; everything else is the golden field and a clear summer sky.",
+      "Painted in the months after the war ended, the picture is about a return to peace: the soldier has gone back to the land. Yet a lone figure with a scythe also recalls the Grim Reaper, at a time when the country was counting its dead.",
     ],
   },
   {
-    slug: "circus-sideshow",
-    title: "Circus Sideshow (Parade de cirque)",
-    yearLabel: "1887–88",
-    artistSlug: "georges-seurat",
-    medium: seedMediums.oil,
-    mediumDescription: "Oil on canvas",
-    heightCm: 99.7,
-    widthCm: 149.9,
-    priceCents: 9_100_000,
-    alt: "A night-time circus sideshow in muted blue and violet dots: a trombonist stands on a raised platform under a row of gas lamps, flanked by performers, with the silhouetted heads of spectators below.",
+    slug: "palm-tree-nassau",
+    title: "Palm Tree, Nassau",
+    yearLabel: "1898",
+    ...watercolour,
+    heightCm: 54.3,
+    widthCm: 37.8,
+    priceCents: 2_900_000,
+    alt: "A single tall palm bends in the wind on a green hillside above a blue sea, its fronds streaming to one side.",
     description: [
-      "Seurat’s first painting of a night scene shows the parade — the free performance staged outside a travelling circus in Paris to lure passers-by inside. A trombonist stands on the platform under a row of gas lamps while the crowd waits below.",
-      "Built entirely from small touches of contrasting colour, the picture has a hushed, frozen quality quite unlike the noise of a fairground. It was first shown at the Salon des Indépendants in 1888.",
+      "A lone palm on a hill above the sea at Nassau bends before the wind, its fronds streaming out to one side. Below, the water is a band of pure blue.",
+      "The tall, narrow format — unusual for Homer — follows the tree up into the sky, and the wind is everywhere in the brushwork: in the fronds, the grass and the scudding cloud.",
+    ],
+  },
+  {
+    slug: "cannon-rock",
+    title: "Cannon Rock",
+    yearLabel: "1895",
+    ...oil,
+    heightCm: 101.6,
+    widthCm: 101.6,
+    priceCents: 12_400_000,
+    alt: "Seen from a cliff above, green-blue waves surge into a cleft between two dark masses of rock and break in white foam.",
+    description: [
+      "From high on the rocks, we look almost straight down on the surf as it surges into a narrow cleft on the shore at Prouts Neck, at a place known locally as Cannon Rock.",
+      "The square canvas and the steep, cropped view recall the Japanese prints of Homer’s day. There is no horizon at all — only the rhythm of green water breaking white against the stone.",
+    ],
+  },
+  {
+    slug: "fisherwomen",
+    title: "Fisherwomen",
+    yearLabel: "1882",
+    ...onPaper,
+    medium: seedMediums.drawing,
+    mediumDescription: "Charcoal, white chalk and graphite on off-white wove paper",
+    heightCm: 21.6,
+    widthCm: 31.8,
+    priceCents: 950_000,
+    alt: "A charcoal drawing of two women in heavy shawls bent into the wind as they walk along a shore with baskets on their backs; a figure and a boat are sketched behind them.",
+    description: [
+      "Two fisherwomen lean into the wind as they walk the shore, baskets on their backs. The drawing is quick and sure: a few dark strokes of charcoal for the figures, touches of white chalk for the light.",
+      "Homer made it at Cullercoats, the fishing village on the North Sea coast of England where he lived in 1881–82. The women who worked there became the heroines of his art.",
+    ],
+  },
+  {
+    slug: "the-gulf-stream",
+    title: "The Gulf Stream",
+    yearLabel: "1899, reworked by 1906",
+    ...oil,
+    heightCm: 71.4,
+    widthCm: 124.8,
+    priceCents: 14_200_000,
+    alt: "A man lies on the deck of a small dismasted boat tossed on a rough blue-green sea; sharks circle in the water around it and a waterspout rises in the distance.",
+    description: [
+      "A lone sailor lies on the deck of a dismasted boat, adrift in heavy seas. Sharks circle, a waterspout rises in the distance, and a ship on the far horizon has not seen him.",
+      "Homer built the picture from sketches and watercolours made on his journeys to the Bahamas. Asked what would become of the sailor, he replied, with dry humour, that the man would be rescued and return home.",
+    ],
+  },
+  {
+    slug: "inside-the-bar",
+    title: "Inside the Bar",
+    yearLabel: "1883",
+    ...watercolour,
+    heightCm: 40.6,
+    widthCm: 73.7,
+    priceCents: 3_800_000,
+    status: "SOLD",
+    alt: "A fisherwoman holding a basket stands on a wet shore, her skirts blown by a strong wind, as sailing boats come in under a stormy grey sky.",
+    description: [
+      "A fisherwoman stands braced against the wind on the shore, her shawl and skirts pulled sideways, as the boats run for the shelter of the harbour. The sky is heavy with weather.",
+      "Homer painted it in 1883, after his return from Cullercoats, working from studies made in England. The single, monumental figure speaks for all those who waited on the shore for the fleet.",
+    ],
+  },
+  {
+    slug: "eagle-head-manchester",
+    title: "Eagle Head, Manchester, Massachusetts (High Tide)",
+    yearLabel: "1870",
+    ...oil,
+    heightCm: 66,
+    widthCm: 96.5,
+    priceCents: 9_600_000,
+    alt: "Three women who have been bathing wring out their hair and dresses on a sunlit beach; a small black dog barks at the waves, and a green headland rises behind.",
+    description: [
+      "Three women come out of the sea at high tide: one wrings the water from her hair, another stands with her back to us, a third sits on the sand. A small dog barks at the retreating wave.",
+      "When Homer exhibited the painting in 1870, critics found the wet bathing dresses improper. Today it reads as a fresh, unposed moment of summer on the Massachusetts shore.",
+    ],
+  },
+  {
+    slug: "hurricane-bahamas",
+    title: "Hurricane, Bahamas",
+    yearLabel: "1898",
+    ...watercolour,
+    heightCm: 36.7,
+    widthCm: 53.5,
+    priceCents: 3_200_000,
+    alt: "Palm trees bend and thrash in a storm above the red and grey roofs of low houses, under a dark, heavy sky.",
+    description: [
+      "A storm tears through the palms above the rooftops of Nassau. The trees bend almost double, their fronds whipped into ragged shapes against a sky of wet grey.",
+      "Homer let the washes run and bleed to catch the violence of the wind. Few painters have made a medium so often thought of as gentle look so wild.",
+    ],
+  },
+  {
+    slug: "searchlight-on-harbor-entrance",
+    title: "Searchlight on Harbor Entrance, Santiago de Cuba",
+    yearLabel: "1902",
+    ...oil,
+    heightCm: 77.5,
+    widthCm: 128.3,
+    priceCents: 11_200_000,
+    alt: "At night, the dark silhouettes of a watchtower and an old cannon stand on a fortress wall above a harbour; a searchlight beam crosses the cloudy sky and a small moon glows above.",
+    description: [
+      "An old cannon and a watchtower stand in silhouette on the walls of Morro Castle, the fortress guarding the harbour of Santiago de Cuba, while a searchlight from the fleet offshore sweeps the sky.",
+      "The scene recalls the Spanish–American War of 1898, when warships blockaded the harbour and lit its entrance by night. Homer had visited Santiago years before; here he paints the war as an eerie stillness, with no one in sight.",
+    ],
+  },
+  {
+    slug: "fishing-boats-key-west",
+    title: "Fishing Boats, Key West",
+    yearLabel: "1903",
+    ...watercolour,
+    heightCm: 35.4,
+    widthCm: 55.2,
+    priceCents: 2_700_000,
+    alt: "White sailing boats with loosened sails lie at anchor on pale blue water under a bright sky; a man works aboard one of them.",
+    description: [
+      "Fishing boats rest at anchor off Key West, their sails loosened to dry in the sun. The water is pale and still, the light high and bright.",
+      "It is watercolour at its most economical: much of the sunlit sail and sky is simply bare paper, framed by a few quick, exact strokes.",
+    ],
+  },
+  {
+    slug: "maine-coast",
+    title: "Maine Coast",
+    yearLabel: "1896",
+    ...oil,
+    heightCm: 76.2,
+    widthCm: 101.6,
+    priceCents: 11_800_000,
+    alt: "Green-grey waves roll in and break in white foam over dark rocks in the foreground under a low grey sky.",
+    description: [
+      "Wave after wave rolls in towards the ledges below Homer’s studio at Prouts Neck and breaks in white foam over the rocks. The sky is low and grey, the sea a deep, cold green.",
+      "The rocks in the foreground seem to meet us head-on, as if we too stood at the water’s edge, with the whole weight of the Atlantic coming in.",
+    ],
+  },
+  {
+    slug: "shore-and-surf-nassau",
+    title: "Shore and Surf, Nassau",
+    yearLabel: "1899",
+    ...watercolour,
+    heightCm: 37.9,
+    widthCm: 54.3,
+    priceCents: 3_100_000,
+    alt: "Turquoise waves break in white against a low, rocky shore under grey clouds; a steamship and a lighthouse are small on the horizon.",
+    description: [
+      "Waves in turquoise and ultramarine roll onto the low rocks of the Bahamas shore. On the horizon a steamer passes, and a lighthouse stands at the sea’s edge.",
+      "It shows Homer’s watercolour at its freest: broad, bright washes laid side by side, with flecks of bare paper for the foam.",
     ],
   },
 ];
 
-export const featuredArtworkSlug: ImageKey = "two-men-contemplating-the-moon";
+export const featuredArtworkSlug: ImageKey = "moonlight-wood-island-light";
 
-export const seedArtworks: Artwork[] = works.map(({ alt, status, frameStyle, artistSlug, ...work }) => {
+export const seedArtworks: Artwork[] = works.map(({ alt, status, frameStyle, ...work }) => {
   const image = images[work.slug];
   return {
     ...work,
-    artist: artist(artistSlug),
+    artist,
     status: status ?? "AVAILABLE",
     frameStyle: frameStyle ?? "CLASSIC",
     isDemo: true,
