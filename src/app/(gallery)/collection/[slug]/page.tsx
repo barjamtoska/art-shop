@@ -21,7 +21,7 @@ export async function generateMetadata({ params }: PageProps<"/collection/[slug]
   if (!artwork) return {};
   return {
     title: `${artwork.title}, ${artwork.artist.name}`,
-    description: artwork.description[0],
+    description: artwork.metaDescription ?? artwork.description[0],
   };
 }
 
@@ -38,7 +38,7 @@ export default async function ArtworkRoom({ params }: PageProps<"/collection/[sl
 
   return (
     <article>
-      <ArtworkZoom image={artwork.image} zoomSrc={artwork.image.src} title={artwork.title}>
+      <ArtworkZoom image={artwork.image} zoomSrc={artwork.image.zoomSrc} title={artwork.title}>
         <div className="mx-auto max-w-7xl px-4 sm:px-8">
           <Link
             href="/collection"

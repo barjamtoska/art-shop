@@ -1,0 +1,24 @@
+# Local development database. Production uses Neon (see docs/DEPLOYMENT.md).
+# Start with `docker compose up -d`; data persists in the `maison-pg` volume.
+services:
+  postgres:
+    image: postgres:17-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: maison
+      POSTGRES_PASSWORD: maison
+      POSTGRES_DB: maison
+    ports:
+      - "5433:5432"
+    volumes:
+      - maison-pg:/var/lib/postgresql/data
+      # Creates maison_test alongside maison, for the integration tests.
+      - ./scripts/db-init:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U maison -d maison"]
+      interval: 2s
+      timeout: 3s
+      retries: 20
+
+volumes:
+  maison-pg:

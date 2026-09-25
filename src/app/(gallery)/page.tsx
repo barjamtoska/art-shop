@@ -16,8 +16,10 @@ const delay = (ms: number) => ({ "--delay": `${ms}ms` }) as CSSProperties;
  */
 export default async function Entrance() {
   const [work, exhibitions] = await Promise.all([getFeaturedArtwork(), getExhibitions()]);
-  const nowShowing = exhibitions[0];
-  const size = roomSize(work.image.width / work.image.height, { maxPx: 560, heightShare: 0.5 });
+  const nowShowing = exhibitions.find((e) => e.works.length > 0);
+  // Before the first work is hung, the Entrance shows an empty lit frame.
+  const aspectRatio = work ? work.image.width / work.image.height : 0.8;
+  const size = roomSize(aspectRatio, { maxPx: work ? 560 : 300, heightShare: 0.5 });
 
   return (
     <>
@@ -33,24 +35,32 @@ export default async function Entrance() {
           {site.tagline}
         </p>
 
-        <Link
-          href={`/collection/${work.slug}`}
-          className="mt-14 block sm:mt-16"
-          style={{ width: size.width }}
-          aria-label={`${work.title}, ${work.artist.name}`}
-        >
-          <FramedArtwork image={work.image} frameStyle={work.frameStyle} size="hero" sizes={size.sizes} preload />
-        </Link>
+        {work ? (
+          <>
+            <Link
+              href={`/collection/${work.slug}`}
+              className="mt-14 block sm:mt-16"
+              style={{ width: size.width }}
+              aria-label={`${work.title}, ${work.artist.name}`}
+            >
+              <FramedArtwork image={work.image} frameStyle={work.frameStyle} size="hero" sizes={size.sizes} preload />
+            </Link>
 
-        {/* On phones, title and artist sit on their own lines rather than breaking mid-name. */}
-        <p className="fade-in mt-10 font-display text-lg text-ivory-muted" style={delay(600)}>
-          <cite className="block sm:inline">{work.title}</cite>
-          <span className="sr-only">, </span>
-          <span className="mx-2 hidden text-gold/80 sm:inline" aria-hidden="true">
-            ·
-          </span>
-          <span className="block sm:inline">{work.artist.name}</span>
-        </p>
+            {/* On phones, title and artist sit on their own lines rather than breaking mid-name. */}
+            <p className="fade-in mt-10 font-display text-lg text-ivory-muted" style={delay(600)}>
+              <cite className="block sm:inline">{work.title}</cite>
+              <span className="sr-only">, </span>
+              <span className="mx-2 hidden text-gold/80 sm:inline" aria-hidden="true">
+                ·
+              </span>
+              <span className="block sm:inline">{work.artist.name}</span>
+            </p>
+          </>
+        ) : (
+          <div className="mt-14 sm:mt-16" style={{ width: size.width }}>
+            <FramedArtwork emptyAspectRatio={aspectRatio} size="hero" />
+          </div>
+        )}
 
         <div className="fade-in mt-12" style={delay(750)}>
           <QuietLink href="/collection">{copy.actions.enterCollection}</QuietLink>

@@ -1,0 +1,93 @@
+import "server-only";
+import { z } from "zod";
+
+/*
+ * Server environment, validated once. Secrets live only in environment
+ * variables (.env.local in development, the host's settings in production).
+ *
+ * Email (Resend) and images (Cloudinary) are optional in development, with
+ * local fallbacks, and required in production.
+ */
+
+/**
+ * LOCAL_PRODUCTION_TEST=1 lets a production build run on a laptop or in CI
+ * without Resend or Cloudinary (the development fallbacks stay on, and sign-in
+ * is not rate limited), so it can be tested end to end. It is ignored on
+ * Vercel's production deployment.
+ */
+const localProductionTest = process.env.LOCAL_PRODUCTION_TEST === "1" && process.env.VERCEL_ENV !== "production";
+
+const optional = z
+  .string()
+  .trim()
+  .transform((value) => value || undefined)
+  .optional();
+
+const schema = z
+  .object({
+    NODE_ENV: z.enum(["development", "test", "production"]).default("development"),
+    DATABASE_URL: z.string().min(1, "DATABASE_URL is required"),
+    SITE_URL: z.url().default("http://localhost:3000"),
+    BETTER_AUTH_SECRET: z.string().min(32, "BETTER_AUTH_SECRET must be at least 32 characters"),
+    ADMIN_EMAILS: z
+      .string()
+      .default("")
+      .transform((value) =>
+        value
+          .split(",")
+          .map((email) => email.trim().toLowerCase())
+          .filter(Boolean),
+      ),
+    RESEND_API_KEY: optional,
+    EMAIL_FROM: z.string().default("Maison <gallery@example.com>"),
+    CLOUDINARY_CLOUD_NAME: optional,
+    CLOUDINARY_API_KEY: optional,
+    CLOUDINARY_API_SECRET: optional,
+    CLOUDINARY_FOLDER: z.string().default("maison"),
+  })
+  .superRefine((env, ctx) => {
+    // The build prerenders pages (it needs only the database); the running
+    // production server needs everything — except in a local test of a
+    // production build (see `localFallbacks` below).
+    if (env.NODE_ENV !== "production" || process.env.NEXT_PHASE === "phase-production-build") return;
+    if (localProductionTest) return;
+    const required = [
+      "RESEND_API_KEY",
+      "CLOUDINARY_CLOUD_NAME",
+      "CLOUDINARY_API_KEY",
+      "CLOUDINARY_API_SECRET",
+    ] as const;
+    for (const key of required) {
+      if (!env[key]) ctx.addIssue({ code: "custom", path: [key], message: `${key} is required in production` });
+    }
+    if (env.ADMIN_EMAILS.length === 0) {
+      ctx.addIssue({ code: "custom", path: ["ADMIN_EMAILS"], message: "ADMIN_EMAILS is required in production" });
+    }
+  });
+
+function load() {
+  const parsed = schema.safeParse(process.env);
+  if (!parsed.success) {
+    const problems = parsed.error.issues.map((issue) => `  - ${issue.path.join(".")}: ${issue.message}`).join("\n");
+    throw new Error(`Invalid environment configuration:\n${problems}\nSee .env.example.`);
+  }
+  return parsed.data;
+}
+
+export const env = load();
+
+export const cloudinaryConfigured = Boolean(
+  env.CLOUDINARY_CLOUD_NAME && env.CLOUDINARY_API_KEY && env.CLOUDINARY_API_SECRET,
+);
+
+export const emailConfigured = Boolean(env.RESEND_API_KEY);
+
+/**
+ * Whether development fallbacks may be used when a service is not configured
+ * (sign-in links to .dev-mail, uploads to public/uploads): in development, and
+ * in a local test of a production build. Never on the live site.
+ */
+export const localFallbacks = env.NODE_ENV !== "production" || localProductionTest;
+
+/** Sign-in rate limits apply on every real production server. */
+export const rateLimited = env.NODE_ENV === "production" && !localProductionTest;

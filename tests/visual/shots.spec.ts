@@ -1,4 +1,5 @@
 import { test, type Page } from "@playwright/test";
+import { signInAsAdmin } from "../e2e/support";
 
 /**
  * Captures screenshots of key pages into ./screenshots/<project>/ for review
@@ -6,8 +7,11 @@ import { test, type Page } from "@playwright/test";
  *   <page>-1.png, -2.png …  what a visitor sees, screen by screen
  *   <page>.png              full-page overview (wall stretched to fit)
  * Run with `npm run shots` (optionally `-- --grep lab`).
+ * Admin pages sign in first (see tests/e2e/support.ts).
  */
-const pages = [
+type Shot = { name: string; path: string; admin?: boolean; open?: (page: Page) => Promise<void> };
+
+const pages: Shot[] = [
   { name: "entrance", path: "/" },
   { name: "collection", path: "/collection" },
   { name: "collection-filtered", path: "/collection?exhibition=nocturnes" },
@@ -19,6 +23,23 @@ const pages = [
   { name: "artist", path: "/artists/edgar-degas" },
   { name: "not-found", path: "/this-room-does-not-exist" },
   { name: "lab", path: "/lab" },
+  { name: "admin-sign-in", path: "/admin/sign-in" },
+  { name: "admin-overview", path: "/admin", admin: true },
+  { name: "admin-artworks", path: "/admin/artworks", admin: true },
+  {
+    name: "admin-artwork",
+    path: "/admin/artworks",
+    admin: true,
+    open: (page) => page.getByRole("link", { name: "Young Woman with a Water Pitcher" }).click(),
+  },
+  { name: "admin-artwork-new", path: "/admin/artworks/new", admin: true },
+  {
+    name: "admin-exhibition",
+    path: "/admin/exhibitions",
+    admin: true,
+    open: (page) => page.getByRole("link", { name: "Nocturnes" }).click(),
+  },
+  { name: "admin-mediums", path: "/admin/mediums", admin: true },
 ];
 
 const MAX_SCREENS = 8;
@@ -45,11 +66,17 @@ async function loadEverything(page: Page) {
   });
 }
 
-for (const { name, path } of pages) {
+for (const { name, path, admin, open } of pages) {
   test(`screenshot ${name}`, async ({ page }, testInfo) => {
     // Reduced motion shows every work fully lit, so shots are deterministic.
     await page.emulateMedia({ reducedMotion: "reduce" });
+    if (admin) await signInAsAdmin(page);
     await page.goto(path, { waitUntil: "networkidle" });
+    if (open) {
+      // Wait for the navigation itself: the network is idle before it starts.
+      await Promise.all([page.waitForURL((url) => url.pathname !== path), open(page)]);
+      await page.waitForLoadState("networkidle");
+    }
     await loadEverything(page);
 
     const dir = `screenshots/${testInfo.project.name}`;

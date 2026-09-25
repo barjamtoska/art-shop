@@ -9,7 +9,7 @@
   --color-*: initial;
   --color-wall: #501210;
   --color-wall-deep: #2e0908;
-  --color-wall-shadow: #1a0409;
+  --color-wall-shadow: #1a0504;
   --color-gold: #b8935a;
   --color-gold-light: #d9be86;
   --color-gold-deep: #7a5a2a;
@@ -17,6 +17,9 @@
   --color-ivory-muted: #cbbfa8;
   --color-light: #ffe8c2;
   --color-mat: #dfd2b9;
+  /* Admin feedback: errors and non-blocking advice. */
+  --color-alert: #f0b8a8;
+  --color-notice: #e8cf9a;
 
   --tracking-caps: 0.14em;
   --tracking-display: 0.08em;

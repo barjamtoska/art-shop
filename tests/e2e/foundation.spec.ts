@@ -1,9 +1,10 @@
 import { expect, test } from "@playwright/test";
 import { skipInteractionOnWindowsWebKit } from "./support";
 
+// On /collection, not /lab: the lab is development-only (404 in production builds).
 test.describe("design foundation", () => {
   test("never scrolls sideways (spotlights are clipped at the page edge)", async ({ page }) => {
-    await page.goto("/lab");
+    await page.goto("/collection");
     const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
     expect(overflow).toBeLessThanOrEqual(0);
   });
@@ -12,7 +13,7 @@ test.describe("design foundation", () => {
     skipInteractionOnWindowsWebKit();
 
     test("works below the fold light up as they come into view", async ({ page }) => {
-      await page.goto("/lab", { waitUntil: "networkidle" });
+      await page.goto("/collection", { waitUntil: "networkidle" });
       const last = page.locator("[data-reveal]").last();
 
       // Off-screen works are switched off once the page is interactive (generous
@@ -26,13 +27,13 @@ test.describe("design foundation", () => {
 
   test("with reduced motion, every work is simply lit", async ({ page }) => {
     await page.emulateMedia({ reducedMotion: "reduce" });
-    await page.goto("/lab");
+    await page.goto("/collection");
     await page.waitForLoadState("networkidle");
     await expect(page.locator("[data-lit]")).toHaveCount(0);
   });
 
   test("every painting has alt text", async ({ page }) => {
-    await page.goto("/lab");
+    await page.goto("/collection");
     const missing = await page.locator("img:not([alt]), img[alt='']").count();
     expect(missing).toBe(0);
   });

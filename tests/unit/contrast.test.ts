@@ -36,7 +36,7 @@ const light = hex(token("light"));
 // lifted by the spotlight's outer falloff where placards hang. The pool's
 // peak (crimson 0.62, glow 0.07) only ever falls behind the frame itself;
 // see `.spot` in FramedArtwork.module.css.
-const mottled = over([104, 24, 40], 0.35, wall);
+const mottled = over([108, 28, 22], 0.35, wall);
 const litWall = over(light, 0.04, over([152, 44, 34], 0.2, mottled));
 
 const backgrounds = { wall, wallDeep, litWall };
@@ -62,4 +62,13 @@ describe("text contrast on the wall (WCAG AA)", () => {
   it("the mat is never pure white", () => {
     expect(token("mat").toLowerCase()).not.toBe("#ffffff");
   });
+});
+
+describe("admin feedback colours (WCAG AA)", () => {
+  for (const name of ["alert", "notice"]) {
+    it(`${name} on the deep wall ≥ 4.5:1`, () => {
+      expect(contrast(hex(token(name)), wallDeep)).toBeGreaterThanOrEqual(4.5);
+      expect(contrast(hex(token(name)), wall)).toBeGreaterThanOrEqual(4.5);
+    });
+  }
 });

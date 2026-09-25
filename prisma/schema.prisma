@@ -1,0 +1,300 @@
+// Maison — data model.
+//
+// Rules the schema enforces (with raw SQL in the first migration where Prisma
+// cannot express them):
+// - Each work is unique: an Artwork is one physical painting (stock = 1).
+// - At most one PAID order per artwork (partial unique index): the database
+//   itself refuses a double sale.
+// - At most one featured artwork, shown on the Entrance (partial unique index).
+// - Certificate numbers come from a sequence, so they never repeat.
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ------------------------------------------------------------------ Catalogue
+
+enum ArtworkStatus {
+  AVAILABLE
+  RESERVED
+  SOLD
+}
+
+enum FrameStyle {
+  CLASSIC
+  SLIM
+}
+
+enum ImageKind {
+  PRIMARY
+  DETAIL
+  INSTALLATION
+}
+
+enum ImageStorage {
+  /// Served from /public (seed images, and development uploads).
+  LOCAL
+  CLOUDINARY
+}
+
+model Artist {
+  id          String    @id @default(cuid())
+  slug        String    @unique
+  name        String
+  /// Alphabetical order, e.g. "Vermeer, Johannes".
+  sortName    String
+  lifeDates   String    @default("")
+  nationality String    @default("")
+  shortBio    String    @default("")
+  /// Paragraphs separated by a blank line.
+  biography   String    @default("")
+  published   Boolean   @default(true)
+  artworks    Artwork[]
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model Medium {
+  id       String    @id @default(cuid())
+  slug     String    @unique
+  name     String
+  artworks Artwork[]
+}
+
+model Exhibition {
+  id        String           @id @default(cuid())
+  slug      String           @unique
+  title     String
+  subtitle  String           @default("")
+  /// Curator's statement: paragraphs separated by a blank line.
+  statement String           @default("")
+  opensOn   DateTime?        @db.Date
+  closesOn  DateTime?        @db.Date
+  /// Order on the Exhibitions page; the first is "Now showing".
+  position  Int              @default(0)
+  published Boolean          @default(true)
+  works     ExhibitionWork[]
+  createdAt DateTime         @default(now())
+  updatedAt DateTime         @updatedAt
+}
+
+model ExhibitionWork {
+  exhibitionId String
+  artworkId    String
+  /// Curated hanging order within the exhibition.
+  position     Int        @default(0)
+  exhibition   Exhibition @relation(fields: [exhibitionId], references: [id], onDelete: Cascade)
+  artwork      Artwork    @relation(fields: [artworkId], references: [id], onDelete: Cascade)
+
+  @@id([exhibitionId, artworkId])
+  @@index([artworkId])
+}
+
+model Artwork {
+  id                String           @id @default(cuid())
+  slug              String           @unique
+  title             String
+  artistId          String
+  artist            Artist           @relation(fields: [artistId], references: [id], onDelete: Restrict)
+  mediumId          String
+  medium            Medium           @relation(fields: [mediumId], references: [id], onDelete: Restrict)
+  /// As a museum lists it, e.g. "Oil on canvas, laid down on panel".
+  mediumDescription String
+  /// As shown, e.g. "c. 1662" or "1883–84".
+  yearLabel         String
+  /// Dimensions in millimetres (exact, no floating point).
+  heightMm          Int
+  widthMm           Int
+  depthMm           Int?
+  /// EUR cents, VAT included, shipping included.
+  priceCents        Int
+  status            ArtworkStatus    @default(AVAILABLE)
+  /// A hold for a collector in checkout. Past this time the hold is void.
+  reservedUntil     DateTime?
+  reservedOrderId   String?          @unique
+  soldAt            DateTime?
+  published         Boolean          @default(false)
+  featured          Boolean          @default(false)
+  /// Hanging order in the collection.
+  position          Int              @default(0)
+  /// "About the work": paragraphs separated by a blank line.
+  description       String           @default("")
+  provenance        String?
+  inscription       String?
+  framingNote       String?
+  frameStyle        FrameStyle       @default(CLASSIC)
+  metaDescription   String?
+  /// Public-domain demonstration works: never acquirable with live payments.
+  isDemo            Boolean          @default(false)
+  images            ArtworkImage[]
+  exhibitions       ExhibitionWork[]
+  orders            Order[]
+  createdAt         DateTime         @default(now())
+  updatedAt         DateTime         @updatedAt
+
+  @@index([status, published])
+  @@index([artistId])
+  @@index([mediumId])
+  @@index([published, position])
+}
+
+model ArtworkImage {
+  id          String       @id @default(cuid())
+  artworkId   String
+  artwork     Artwork      @relation(fields: [artworkId], references: [id], onDelete: Cascade)
+  kind        ImageKind    @default(PRIMARY)
+  position    Int          @default(0)
+  storage     ImageStorage
+  /// Cloudinary public ID, or a path under /public for LOCAL.
+  key         String
+  width       Int
+  height      Int
+  blurDataUrl String?
+  /// Describes the painting for people who cannot see it. Required.
+  alt         String
+  credit      String?
+  createdAt   DateTime     @default(now())
+
+  @@index([artworkId, kind, position])
+}
+
+// ------------------------------------------------------------------ Sales
+
+enum OrderStatus {
+  PENDING
+  PAID
+  EXPIRED
+  CANCELLED
+  REFUNDED
+  /// Paid for a work that had already sold; refunded automatically.
+  CONFLICT_REFUNDED
+}
+
+model Order {
+  id                    String      @id @default(cuid())
+  artworkId             String
+  artwork               Artwork     @relation(fields: [artworkId], references: [id], onDelete: Restrict)
+  status                OrderStatus @default(PENDING)
+  amountCents           Int
+  currency              String      @default("eur")
+  stripeSessionId       String?     @unique
+  stripePaymentIntentId String?     @unique
+  reservationExpiresAt  DateTime
+  collectorName         String?
+  email                 String?
+  phone                 String?
+  shippingAddress       Json?
+  /// e.g. MAI-2026-0001, assigned when paid (from certificate_number_seq).
+  certificateNumber     String?     @unique
+  /// Unguessable token for the certificate URL.
+  certificateToken      String      @unique
+  clientIpHash          String?
+  paidAt                DateTime?
+  closedAt              DateTime?
+  refundedAt            DateTime?
+  shippedAt             DateTime?
+  trackingReference     String?
+  confirmationSentAt    DateTime?
+  createdAt             DateTime    @default(now())
+  updatedAt             DateTime    @updatedAt
+
+  @@index([artworkId, status])
+  @@index([status, createdAt])
+}
+
+/// Stripe event IDs already handled: makes the webhook idempotent.
+model StripeEvent {
+  id         String   @id
+  type       String
+  receivedAt DateTime @default(now())
+}
+
+model Enquiry {
+  id           String    @id @default(cuid())
+  name         String
+  email        String
+  message      String
+  artworkId    String?
+  clientIpHash String?
+  createdAt    DateTime  @default(now())
+  handledAt    DateTime?
+
+  @@index([handledAt, createdAt])
+}
+
+// ------------------------------------------------------------------ Admin auth (Better Auth)
+
+model User {
+  id            String    @id
+  name          String
+  email         String    @unique
+  emailVerified Boolean   @default(false)
+  image         String?
+  sessions      Session[]
+  accounts      Account[]
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  @@map("user")
+}
+
+model Session {
+  id        String   @id
+  expiresAt DateTime
+  token     String   @unique
+  ipAddress String?
+  userAgent String?
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+  @@map("session")
+}
+
+model Account {
+  id                    String    @id
+  accountId             String
+  providerId            String
+  userId                String
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  @@index([userId])
+  @@map("account")
+}
+
+model Verification {
+  id         String   @id
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([identifier])
+  @@map("verification")
+}
+
+model RateLimit {
+  id          String @id
+  key         String @unique
+  count       Int
+  lastRequest BigInt
+
+  @@map("rateLimit")
+}

@@ -42,6 +42,9 @@ export function FramedArtwork({
       data-size={size}
       data-reveal={unlit ? undefined : ""}
       data-interactive={interactive ? "" : undefined}
+      // LightsController sets data-lit, sometimes before a streamed part of
+      // the page hydrates; that attribute belongs to the client.
+      suppressHydrationWarning
     >
       {!unlit && <span className={styles.spot} aria-hidden="true" />}
       <div className={styles.frame} data-style={frameStyle === "SLIM" ? "slim" : "classic"}>

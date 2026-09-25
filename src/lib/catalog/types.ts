@@ -1,13 +1,16 @@
 /**
- * Domain types shared by the public site. Phase 2 serves these from the typed
- * seed collection; Phase 3 serves the same shapes from Prisma.
+ * Domain types shared by the public site, served from the database by
+ * src/lib/catalog. Pages depend on these shapes, never on Prisma's.
  */
 
 export type ArtworkStatus = "AVAILABLE" | "RESERVED" | "SOLD";
 export type FrameStyle = "CLASSIC" | "SLIM";
 
 export type ArtworkImage = {
+  /** Master for next/image to resize. */
   src: string;
+  /** The large version for the brushwork viewer. */
+  zoomSrc: string;
   width: number;
   height: number;
   alt: string;
@@ -34,6 +37,8 @@ export type Artwork = {
   status: ArtworkStatus;
   frameStyle: FrameStyle;
   image: ArtworkImage;
+  /** For search results and link previews; falls back to the first paragraph. */
+  metaDescription?: string;
   /** "About the work", one string per paragraph. */
   description: string[];
   inscription?: string;

@@ -4,7 +4,8 @@
  * replaced with the gallery's real works before launch.
  *
  * Images are fetched and resized by `scripts/fetch-seed-images.mts`.
- * Phase 3 loads this same data into the database (prisma/seed.ts).
+ * prisma/seed.ts loads this data into the database; the /lab page reads it
+ * directly.
  */
 import images from "../../public/seed/images.json";
 import type { Artist, Artwork, ArtworkStatus, Exhibition, FrameStyle, Medium } from "@/lib/catalog/types";
@@ -513,6 +514,7 @@ export const seedArtworks: Artwork[] = works.map(({ alt, status, frameStyle, art
       .map((e) => ({ slug: e.slug, title: e.title })),
     image: {
       src: image.src,
+      zoomSrc: image.src,
       width: image.width,
       height: image.height,
       blurDataURL: image.blurDataURL,

@@ -24,8 +24,9 @@ export default async function ExhibitionsPage() {
 
       <ol className="mx-auto mt-24 max-w-6xl space-y-44">
         {exhibitions.map((exhibition, index) => {
-          const [lead] = exhibition.works;
-          const size = hangSize(lead.widthCm, lead.heightCm, 0.9);
+          // An exhibition still being hung shows an empty frame.
+          const lead = exhibition.works.at(0);
+          const size = hangSize(lead?.widthCm ?? 40, lead?.heightCm ?? 50, 0.9);
           const href = `/exhibitions/${exhibition.slug}`;
           return (
             <li
@@ -37,7 +38,11 @@ export default async function ExhibitionsPage() {
             >
               <div className="flex flex-1 justify-center">
                 <div style={{ width: size.width }}>
-                  <FramedArtwork image={lead.image} frameStyle={lead.frameStyle} sizes={size.sizes} />
+                  {lead ? (
+                    <FramedArtwork image={lead.image} frameStyle={lead.frameStyle} sizes={size.sizes} />
+                  ) : (
+                    <FramedArtwork emptyAspectRatio={0.8} />
+                  )}
                 </div>
               </div>
               <div className="flex-1 text-center md:text-left">
