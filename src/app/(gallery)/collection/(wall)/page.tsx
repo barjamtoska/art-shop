@@ -7,6 +7,8 @@ import { getCollection, getFilterOptions } from "@/lib/catalog";
 import { collectionHref, parseCollectionFilters, toRoman } from "@/lib/catalog/filters";
 
 export const metadata: Metadata = {
+  // Every filtered view of the collection points search engines here.
+  alternates: { canonical: "/collection" },
   title: copy.collection.title,
   description: "Paintings hung and lit as in a museum at night. Every work is unique.",
 };

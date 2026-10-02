@@ -64,6 +64,8 @@ export function FramedArtwork({
                 sizes={sizes}
                 quality={90}
                 preload={preload}
+                // Ahead of the fonts: on a slow connection the painting comes first.
+                fetchPriority={preload ? "high" : undefined}
                 placeholder={image.blurDataURL ? "blur" : "empty"}
                 blurDataURL={image.blurDataURL}
               />

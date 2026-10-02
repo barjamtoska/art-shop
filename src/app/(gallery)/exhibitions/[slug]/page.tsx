@@ -13,7 +13,11 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: PageProps<"/exhibitions/[slug]">): Promise<Metadata> {
   const exhibition = await getExhibition((await params).slug);
   if (!exhibition) return {};
-  return { title: exhibition.title, description: exhibition.statement[0] };
+  return {
+    title: exhibition.title,
+    description: exhibition.statement[0],
+    alternates: { canonical: `/exhibitions/${exhibition.slug}` },
+  };
 }
 
 export default async function ExhibitionPage({ params }: PageProps<"/exhibitions/[slug]">) {

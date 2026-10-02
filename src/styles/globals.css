@@ -152,6 +152,37 @@
   animation: gallery-fade-in 800ms var(--ease-gallery) var(--delay, 0ms) both;
 }
 
+/* Between pages (where the browser supports view transitions): the old room
+   dims over 400ms, then the new one comes up over 600ms. No movement; the
+   header and wall stay still. */
+@keyframes gallery-fade-out {
+  to {
+    opacity: 0;
+  }
+}
+
+::view-transition {
+  pointer-events: none;
+}
+
+::view-transition-group(.room) {
+  animation: none;
+}
+
+::view-transition-old(.room) {
+  animation: gallery-fade-out 400ms var(--ease-gallery) both;
+}
+
+::view-transition-new(.room) {
+  animation: gallery-fade-in 600ms var(--ease-gallery) 200ms both;
+}
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 600ms;
+  animation-timing-function: var(--ease-gallery);
+}
+
 /* ------------------------------------------------------------------ *
  * Full-screen dialogs (mobile menu, brushwork viewer)
  * ------------------------------------------------------------------ */
@@ -199,6 +230,11 @@ html:has(dialog[open]) {
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
+  }
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
   }
 }
 

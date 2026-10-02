@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- A small gilded frame on the maroon wall: mitred moulding lit from above, an ivory mat, a night painting. -->
+  <defs>
+    <linearGradient id="gilt" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#6E5427"/>
+      <stop offset=".3" stop-color="#B8935A"/>
+      <stop offset=".5" stop-color="#DCC08A"/>
+      <stop offset=".72" stop-color="#9C7A43"/>
+      <stop offset="1" stop-color="#C4A067"/>
+    </linearGradient>
+    <linearGradient id="night" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#2B3A4A"/>
+      <stop offset=".62" stop-color="#46556A"/>
+      <stop offset=".63" stop-color="#1E2A30"/>
+      <stop offset="1" stop-color="#121A1E"/>
+    </linearGradient>
+  </defs>
+  <rect width="64" height="64" rx="10" fill="#501210"/>
+  <rect x="9" y="7" width="46" height="50" fill="url(#gilt)"/>
+  <path d="M9 7h46l-6 6H15z" fill="#D8BC85" opacity=".55"/>
+  <path d="M9 57h46l-6-6H15z" fill="#5E4420" opacity=".6"/>
+  <rect x="15" y="13" width="34" height="38" fill="#E6DAC3"/>
+  <rect x="20" y="18" width="24" height="26" fill="url(#night)"/>
+  <circle cx="37" cy="24" r="2.6" fill="#FFE8C2"/>
+</svg>

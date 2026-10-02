@@ -43,6 +43,25 @@ Public pages are generated from the database and kept until the catalogue change
 
 In production, add a webhook endpoint for `https://<your domain>/api/webhooks/stripe` in the Stripe Dashboard with those three events. `GET /api/cron/release-reservations` (protected by `CRON_SECRET`) releases holds whose expiry event never arrived; it is scheduled daily on Vercel.
 
+## Pages, search and sharing
+
+About, Visit (with an enquiry form), Shipping & returns, Terms of sale and Privacy are drafts. Their text is in `src/content/pages.ts`, and contact details are in `src/config/site.ts`. Items in [brackets] still need a decision: delivery times, import duties, the cost of return shipping, governing law, retention periods and the supervisory authority. Until a reviewer has read them, every page shows "Draft text, to be reviewed before launch". Set `pagesReviewed = true` to remove it.
+
+Each page has a title, description and canonical URL. Each work has a link-preview image of the framed painting (`opengraph-image.tsx`) and `VisualArtwork` structured data. `/sitemap.xml` lists every public page, and `/robots.txt` keeps the admin, API, acquisition and certificate pages out of search. Security headers, including the Content Security Policy, are set in `next.config.ts`.
+
+Accessibility is checked in `tests/e2e/accessibility.spec.ts`, which runs axe (WCAG 2.1 AA) on every public page, and in the keyboard walkthroughs in `tests/e2e/gallery.spec.ts`.
+
+**Lighthouse results** (production build, mobile, real throttling), as of Phase 5:
+
+| Page | Performance | LCP | CLS |
+| --- | --- | --- | --- |
+| Entrance | 95 | 2.3 s | 0 |
+| Artwork | 90 | 2.6 s | 0.05 |
+| Visit | 98 | 1.7 s | 0 |
+| Collection wall | 81 | 2.9 s | 0 |
+
+Accessibility, best practices and SEO score 100 on all four pages. The collection wall's main-thread time is spent styling sixteen lit frames. When running Lighthouse locally, put a proxy in front of the server that strips the `Cross-Origin-Opener-Policy` header. Otherwise Lighthouse cannot record the page load and reports `NO_NAVSTART`. Real visitors are not affected.
+
 ## Scripts
 
 | Script                | What it does                                                                                   |

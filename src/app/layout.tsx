@@ -2,12 +2,13 @@ import type { Metadata, Viewport } from "next";
 import { Cormorant_Garamond, Cormorant_SC, Inter } from "next/font/google";
 import { LightsController } from "@/components/gallery/LightsController";
 import { site } from "@/config/site";
+import { env } from "@/lib/env";
 import "@/styles/globals.css";
 
 const cormorant = Cormorant_Garamond({
   variable: "--font-cormorant",
   subsets: ["latin"],
-  weight: ["300", "400", "500"],
+  weight: ["300", "400"],
   style: ["normal", "italic"],
   display: "swap",
 });
@@ -15,7 +16,7 @@ const cormorant = Cormorant_Garamond({
 const cormorantSC = Cormorant_SC({
   variable: "--font-cormorant-sc",
   subsets: ["latin"],
-  weight: ["400", "500"],
+  weight: "400",
   display: "swap",
 });
 
@@ -26,8 +27,13 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(env.SITE_URL),
   title: { default: site.name, template: `%s — ${site.name}` },
   description: site.description,
+  applicationName: site.name,
+  openGraph: { siteName: site.name, locale: site.locale.replace("-", "_"), type: "website" },
+  twitter: { card: "summary_large_image" },
+  formatDetection: { telephone: false, email: false, address: false },
 };
 
 export const viewport: Viewport = {

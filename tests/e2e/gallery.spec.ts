@@ -87,6 +87,50 @@ test.describe("a visit to the gallery", () => {
     await expect(skip).toBeVisible();
   });
 
+  test("the collection can be filtered and a work acquired with the keyboard alone", async ({
+    page,
+    browserName,
+    isMobile,
+  }) => {
+    test.skip(browserName === "webkit" || isMobile, "Keyboard walkthrough at desktop, in Chromium");
+    const focusVisible = async () => {
+      const outline = await page.evaluate(() => getComputedStyle(document.activeElement!).outlineStyle);
+      expect(outline, "the focused element shows a focus outline").not.toBe("none");
+    };
+
+    await page.goto("/collection");
+    const exhibitionMenu = page.locator("summary", { hasText: "Exhibition" });
+    for (let i = 0; i < 20 && !(await exhibitionMenu.evaluate((el) => el === document.activeElement)); i++) {
+      await page.keyboard.press("Tab");
+    }
+    await expect(exhibitionMenu).toBeFocused();
+    await focusVisible();
+    await page.keyboard.press("Enter");
+    const option = page.getByRole("link", { name: "The Weather Coast", exact: true });
+    await expect(option).toBeVisible();
+    for (let i = 0; i < 10 && !(await option.evaluate((el) => el === document.activeElement)); i++) {
+      await page.keyboard.press("Tab");
+    }
+    await expect(option).toBeFocused();
+    await page.keyboard.press("Enter");
+    await expect(page).toHaveURL(/exhibition=the-weather-coast/);
+
+    const work = page.getByRole("link", { name: "Northeaster", exact: true });
+    for (let i = 0; i < 40 && !(await work.evaluate((el) => el === document.activeElement)); i++) {
+      await page.keyboard.press("Tab");
+    }
+    await expect(work).toBeFocused();
+    await page.keyboard.press("Enter");
+    await expect(page).toHaveURL(/\/collection\/northeaster$/);
+
+    const acquire = page.getByRole("button", { name: "Acquire this work" });
+    for (let i = 0; i < 15 && !(await acquire.evaluate((el) => el === document.activeElement)); i++) {
+      await page.keyboard.press("Tab");
+    }
+    await expect(acquire).toBeFocused();
+    await focusVisible();
+  });
+
   test("on a phone, the menu opens over the room and leads on", async ({ page, isMobile }) => {
     test.skip(!isMobile, "The menu is for small screens");
     await page.goto("/");

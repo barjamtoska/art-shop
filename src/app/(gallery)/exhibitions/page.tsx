@@ -8,6 +8,7 @@ import { formatExhibitionDates } from "@/lib/format";
 import { hangSize } from "@/lib/hang";
 
 export const metadata: Metadata = {
+  alternates: { canonical: "/exhibitions" },
   title: copy.exhibitions.title,
   description: copy.exhibitions.intro,
 };

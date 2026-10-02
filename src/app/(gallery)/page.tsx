@@ -1,11 +1,16 @@
+import type { Metadata } from "next";
 import type { CSSProperties } from "react";
 import Link from "next/link";
 import { FramedArtwork } from "@/components/gallery/FramedArtwork";
+import { JsonLd } from "@/components/site/JsonLd";
 import { QuietLink } from "@/components/ui/Quiet";
 import { copy } from "@/config/copy";
 import { site } from "@/config/site";
 import { getExhibitions, getFeaturedArtwork } from "@/lib/catalog";
 import { roomSize } from "@/lib/hang";
+import { galleryJsonLd } from "@/lib/structured-data";
+
+export const metadata: Metadata = { alternates: { canonical: "/" } };
 
 const delay = (ms: number) => ({ "--delay": `${ms}ms` }) as CSSProperties;
 
@@ -23,6 +28,7 @@ export default async function Entrance() {
 
   return (
     <>
+      <JsonLd data={galleryJsonLd()} />
       <div className="dim-wall" aria-hidden="true" />
       <section className="flex min-h-[calc(100svh-6rem)] flex-col items-center justify-center px-4 pt-4 pb-20 text-center">
         <h1

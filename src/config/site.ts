@@ -11,4 +11,20 @@ export const site = {
   locale: "en-IE",
   /** Certificates of acquisition are numbered MAI-2026-0001, MAI-2026-0002 … */
   certificatePrefix: "MAI",
+  /**
+   * How to reach the gallery (Visit page, footer, legal pages, structured
+   * data). PLACEHOLDERS — replace every value before launch.
+   */
+  contact: {
+    email: "gallery@example.com",
+    phone: "+353 1 000 0000",
+    /** Shown line by line. */
+    address: ["[Street address]", "[Postcode] [City]", "[Country]"],
+    /** e.g. a Google Maps link to the address. */
+    mapUrl: "https://maps.google.com/?q=[gallery+address]",
+    hours: "By appointment",
+    /** The legal seller named in the terms of sale (company or sole trader), and its registration. */
+    legalName: "[Legal name of the seller]",
+    registration: "[Company number / VAT number]",
+  },
 } as const;

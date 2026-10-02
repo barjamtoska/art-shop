@@ -8,6 +8,13 @@ export const copy = {
     { href: "/collection", label: "Collection" },
     { href: "/exhibitions", label: "Exhibitions" },
     { href: "/artist", label: "The Artist" },
+    { href: "/visit", label: "Visit" },
+  ],
+  footerLinks: [
+    { href: "/about", label: "About" },
+    { href: "/shipping-and-returns", label: "Shipping & returns" },
+    { href: "/terms", label: "Terms of sale" },
+    { href: "/privacy", label: "Privacy" },
   ],
   skipLink: "Skip to the gallery",
   menu: { open: "Menu", close: "Close", label: "Main" },

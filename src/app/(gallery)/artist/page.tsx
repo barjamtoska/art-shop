@@ -2,15 +2,17 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { FramedArtwork } from "@/components/gallery/FramedArtwork";
 import { Hang } from "@/components/gallery/Hang";
+import { JsonLd } from "@/components/site/JsonLd";
 import { QuietLink } from "@/components/ui/Quiet";
 import { copy } from "@/config/copy";
 import { getArtist } from "@/lib/catalog";
 import { ROOM_SIZE } from "@/lib/catalog/filters";
+import { artistJsonLd } from "@/lib/structured-data";
 
 export async function generateMetadata(): Promise<Metadata> {
   const artist = await getArtist();
   if (!artist) return { title: copy.artist.title };
-  return { title: artist.name, description: artist.shortBio };
+  return { title: artist.name, description: artist.shortBio, alternates: { canonical: "/artist" } };
 }
 
 /** The gallery's one artist: their life, their words, their work. */
@@ -24,6 +26,7 @@ export default async function ArtistPage() {
 
   return (
     <div className="px-4 sm:px-8">
+      <JsonLd data={artistJsonLd(artist)} />
       <header className="mx-auto max-w-3xl pt-10 text-center sm:pt-16">
         <p className="font-caps text-label tracking-caps text-ivory-muted">{a.title}</p>
         <h1 className="mt-4 text-5xl sm:text-7xl">{artist.name}</h1>
