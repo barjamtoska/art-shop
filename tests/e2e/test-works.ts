@@ -43,6 +43,19 @@ export async function makeWork(): Promise<{ slug: string; title: string }> {
   return { slug, title };
 }
 
+/** The order most recently opened for a work: its id, amount and checkout session. */
+export async function latestOrder(slug: string) {
+  return withDb(async (client) => {
+    const { rows } = await client.query<{ id: string; amountCents: number; currency: string; stripeSessionId: string }>(
+      `select o.id, o."amountCents", o.currency, o."stripeSessionId" from "Order" o
+       join "Artwork" a on a.id = o."artworkId" where a.slug = $1 order by o."createdAt" desc limit 1`,
+      [slug],
+    );
+    if (!rows[0]) throw new Error(`No order for ${slug}`);
+    return rows[0];
+  });
+}
+
 export async function removeTestWorks() {
   await withDb(async (client) => {
     const where = `"artworkId" in (select id from "Artwork" where slug like '${PREFIX}%')`;

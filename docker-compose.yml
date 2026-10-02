@@ -20,5 +20,13 @@ services:
       timeout: 3s
       retries: 20
 
+  # Stripe's official API mock: tests send real Stripe requests here and it
+  # checks them against Stripe's API (tests/integration/stripe-contract.test.ts).
+  stripe-mock:
+    image: stripe/stripe-mock:v0.206.0
+    restart: unless-stopped
+    ports:
+      - "12111:12111"
+
 volumes:
   maison-pg:

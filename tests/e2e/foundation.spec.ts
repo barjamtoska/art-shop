@@ -1,5 +1,5 @@
 import { expect, test } from "@playwright/test";
-import { skipInteractionOnWindowsWebKit } from "./support";
+import { settled, skipInteractionOnWindowsWebKit } from "./support";
 
 // On /collection, not /lab: the lab is development-only (404 in production builds).
 test.describe("design foundation", () => {
@@ -13,7 +13,7 @@ test.describe("design foundation", () => {
     skipInteractionOnWindowsWebKit();
 
     test("works below the fold light up as they come into view", async ({ page }) => {
-      await page.goto("/collection", { waitUntil: "networkidle" });
+      await page.goto("/collection");
       const last = page.locator("[data-reveal]").last();
 
       // Off-screen works are switched off once the page is interactive (generous
@@ -28,7 +28,11 @@ test.describe("design foundation", () => {
   test("with reduced motion, every work is simply lit", async ({ page }) => {
     await page.emulateMedia({ reducedMotion: "reduce" });
     await page.goto("/collection");
-    await page.waitForLoadState("networkidle");
+    await settled(page);
+    // Where motion is welcome, works below the fold would be switched off by now
+    // and switched on here; with reduced motion, nothing changes.
+    await page.locator("[data-reveal]").last().scrollIntoViewIfNeeded();
+    await page.waitForTimeout(1000);
     await expect(page.locator("[data-lit]")).toHaveCount(0);
   });
 

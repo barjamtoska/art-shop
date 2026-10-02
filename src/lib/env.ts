@@ -46,6 +46,11 @@ const schema = z
     CLOUDINARY_FOLDER: z.string().default("maison"),
     STRIPE_SECRET_KEY: optional,
     STRIPE_WEBHOOK_SECRET: optional,
+    /** Tests only: send Stripe API calls to stripe-mock (e.g. http://localhost:12111). Refused in production. */
+    STRIPE_API_BASE: z
+      .url()
+      .optional()
+      .or(z.literal("").transform(() => undefined)),
     /** Protects the scheduled clean-up of lapsed holds. */
     CRON_SECRET: optional,
     /** Where sale notifications go; defaults to the admin addresses. */
@@ -57,6 +62,9 @@ const schema = z
     // production build (see `localFallbacks` below).
     if (env.NODE_ENV !== "production" || process.env.NEXT_PHASE === "phase-production-build") return;
     if (localProductionTest) return;
+    if (env.STRIPE_API_BASE) {
+      ctx.addIssue({ code: "custom", path: ["STRIPE_API_BASE"], message: "STRIPE_API_BASE is for tests only" });
+    }
     const required = [
       "RESEND_API_KEY",
       "CLOUDINARY_CLOUD_NAME",
@@ -74,8 +82,19 @@ const schema = z
     }
   });
 
+/**
+ * A Vercel preview deployment is its own site: sign-in links, Stripe's return
+ * addresses and canonical URLs point at the preview, never at production.
+ * (VERCEL_BRANCH_URL stays the same across a branch's deployments.)
+ */
+const previewHost = process.env.VERCEL_ENV === "preview" && (process.env.VERCEL_BRANCH_URL || process.env.VERCEL_URL);
+
+/** A Vercel preview deployment (kept out of search engines). */
+export const isPreview = Boolean(previewHost);
+
 function load() {
-  const parsed = schema.safeParse(process.env);
+  const source = previewHost ? { ...process.env, SITE_URL: `https://${previewHost}` } : process.env;
+  const parsed = schema.safeParse(source);
   if (!parsed.success) {
     const problems = parsed.error.issues.map((issue) => `  - ${issue.path.join(".")}: ${issue.message}`).join("\n");
     throw new Error(`Invalid environment configuration:\n${problems}\nSee .env.example.`);

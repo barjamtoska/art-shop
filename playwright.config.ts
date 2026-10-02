@@ -11,6 +11,10 @@ export default defineConfig({
   testDir: "tests",
   testMatch: ["e2e/**/*.spec.ts", "visual/**/*.spec.ts"],
   fullyParallel: true,
+  // GitHub's runners have two cores. A test that passes on its retry is
+  // reported as flaky, never silently: look into it.
+  workers: process.env.CI ? 2 : undefined,
+  retries: process.env.CI ? 1 : 0,
   // Against the dev server, a route's first visit waits on compilation.
   expect: { timeout: 10_000 },
   reporter: process.env.CI ? "github" : "line",
@@ -40,9 +44,10 @@ export default defineConfig({
     },
   ],
   webServer: {
-    command: `npm run dev -- --port ${PORT}`,
+    // CI tests the production build: E2E_SERVER="npx next start --port 3100".
+    command: process.env.E2E_SERVER ?? `npm run dev -- --port ${PORT}`,
     url: baseURL,
-    reuseExistingServer: true,
+    reuseExistingServer: !process.env.CI,
     timeout: 180_000,
   },
 });

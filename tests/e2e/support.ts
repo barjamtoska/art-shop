@@ -16,6 +16,20 @@ export function skipInteractionOnWindowsWebKit() {
   );
 }
 
+/**
+ * Waits until the page is as a visitor sees it: loaded, fonts in, every
+ * painting on screen decoded. (Not "network idle": a production build keeps
+ * prefetching linked rooms, so the network may never fall quiet.)
+ */
+export async function settled(page: Page) {
+  await page.waitForLoadState("load");
+  await page.evaluate(async () => {
+    await document.fonts.ready;
+    const onScreen = Array.from(document.images).filter((img) => img.checkVisibility() && img.loading !== "lazy");
+    await Promise.all(onScreen.map((img) => img.decode().catch(() => undefined)));
+  });
+}
+
 /** The admin address the tests sign in with; must be in ADMIN_EMAILS. */
 export const ADMIN_EMAIL = process.env.E2E_ADMIN_EMAIL ?? "admin@example.com";
 

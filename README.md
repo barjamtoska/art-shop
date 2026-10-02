@@ -9,7 +9,7 @@ Requires Node 20.9+ (developed on Node 24) and Docker (for the local database).
 ```bash
 npm install                              # also generates the Prisma client
 cp .env.example .env.local               # then set BETTER_AUTH_SECRET and ADMIN_EMAILS
-npm run db:up                            # Postgres 17 on localhost:5433
+npm run db:up                            # Postgres 17 on :5433, stripe-mock on :12111
 npm run db:migrate                       # create the tables
 npm run db:seed                          # load the demonstration collection
 npx playwright install chromium webkit   # for screenshots and e2e tests
@@ -43,6 +43,18 @@ Public pages are generated from the database and kept until the catalogue change
 
 In production, add a webhook endpoint for `https://<your domain>/api/webhooks/stripe` in the Stripe Dashboard with those three events. `GET /api/cron/release-reservations` (protected by `CRON_SECRET`) releases holds whose expiry event never arrived; it is scheduled daily on Vercel.
 
+**Against stripe-mock (tests):** [stripe-mock](https://github.com/stripe/stripe-mock) is Stripe's official mock of its API. It checks every request against Stripe's published API, so a misspelt parameter or an unsupported country fails a test, not a sale. `npm run db:up` starts it on port 12111, where `tests/integration/stripe-contract.test.ts` uses it. CI also runs the whole end-to-end suite with the server's Stripe client pointed at it (`STRIPE_API_BASE`, tests only), with the tests sending Stripe's signed webhooks.
+
+## Deployment
+
+Vercel (Frankfurt) with Neon Postgres. Every step is in [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md): accounts, environment variables, Stripe, Resend, Cloudinary, the domain, and the go-live checklist.
+
+On every push, CI (`.github/workflows/ci.yml`) runs:
+
+- lint, formatting and types;
+- the Vitest suite, against Postgres and stripe-mock;
+- a production build, tested end to end in Chromium at desktop and phone sizes.
+
 ## Pages, search and sharing
 
 About, Visit (with an enquiry form), Shipping & returns, Terms of sale and Privacy are drafts. Their text is in `src/content/pages.ts`, and contact details are in `src/config/site.ts`. Items in [brackets] still need a decision: delivery times, import duties, the cost of return shipping, governing law, retention periods and the supervisory authority. Until a reviewer has read them, every page shows "Draft text, to be reviewed before launch". Set `pagesReviewed = true` to remove it.
@@ -53,34 +65,36 @@ Accessibility is checked in `tests/e2e/accessibility.spec.ts`, which runs axe (W
 
 **Lighthouse results** (production build, mobile, real throttling), as of Phase 5:
 
-| Page | Performance | LCP | CLS |
-| --- | --- | --- | --- |
-| Entrance | 95 | 2.3 s | 0 |
-| Artwork | 90 | 2.6 s | 0.05 |
-| Visit | 98 | 1.7 s | 0 |
-| Collection wall | 81 | 2.9 s | 0 |
+| Page            | Performance | LCP   | CLS  |
+| --------------- | ----------- | ----- | ---- |
+| Entrance        | 95          | 2.3 s | 0    |
+| Artwork         | 90          | 2.6 s | 0.05 |
+| Visit           | 98          | 1.7 s | 0    |
+| Collection wall | 81          | 2.9 s | 0    |
 
 Accessibility, best practices and SEO score 100 on all four pages. The collection wall's main-thread time is spent styling sixteen lit frames. When running Lighthouse locally, put a proxy in front of the server that strips the `Cross-Origin-Opener-Policy` header. Otherwise Lighthouse cannot record the page load and reports `NO_NAVSTART`. Real visitors are not affected.
 
 ## Scripts
 
-| Script                | What it does                                                                                   |
-| --------------------- | ---------------------------------------------------------------------------------------------- |
-| `npm run dev`         | Start the dev server                                                                           |
-| `npm run build`       | Production build (needs the database: public pages are prerendered from it)                    |
-| `npm run lint`        | ESLint                                                                                         |
-| `npm run typecheck`   | TypeScript, no emit                                                                            |
-| `npm test`            | Unit tests, plus integration tests against `maison_test` (emptied and re-seeded on every run)  |
-| `npm run test:e2e`    | End-to-end tests: the gallery, the admin (sign-in, editing, uploads), 404s, keyboard, alt text |
-| `npm run shots`       | Screenshots at 1440px and 390px in Chromium and WebKit into `./screenshots`                    |
-| `npm run db:up`       | Start the local Postgres (Docker)                                                              |
-| `npm run db:migrate`  | Apply migrations in development (and create new ones after a schema change)                    |
-| `npm run db:deploy`   | Apply migrations without prompts (production, CI)                                              |
-| `npm run db:seed`     | Load the demonstration collection. Safe to run again: existing records are left as they are    |
-| `npm run db:studio`   | Browse the database                                                                            |
-| `npm run seed:images` | Re-download and prepare the public-domain seed paintings (`-- --force` to refresh)             |
+| Script                 | What it does                                                                                                  |
+| ---------------------- | ------------------------------------------------------------------------------------------------------------- |
+| `npm run dev`          | Start the dev server                                                                                          |
+| `npm run build`        | Production build (needs the database: public pages are prerendered from it)                                   |
+| `npm run vercel-build` | What Vercel runs: database migrations, then the production build                                              |
+| `npm run lint`         | ESLint                                                                                                        |
+| `npm run format:check` | Prettier, without changing files (CI)                                                                         |
+| `npm run typecheck`    | TypeScript, no emit                                                                                           |
+| `npm test`             | Unit tests, plus integration tests against `maison_test` (emptied and re-seeded on every run) and stripe-mock |
+| `npm run test:e2e`     | End-to-end tests: the gallery, acquisitions, the admin, accessibility, headers, sitemap, keyboard             |
+| `npm run shots`        | Screenshots at 1440px and 390px in Chromium and WebKit into `./screenshots`                                   |
+| `npm run db:up`        | Start the local Postgres (Docker)                                                                             |
+| `npm run db:migrate`   | Apply migrations in development (and create new ones after a schema change)                                   |
+| `npm run db:deploy`    | Apply migrations without prompts (production, CI)                                                             |
+| `npm run db:seed`      | Load the demonstration collection. Safe to run again: existing records are left as they are                   |
+| `npm run db:studio`    | Browse the database                                                                                           |
+| `npm run seed:images`  | Re-download and prepare the public-domain seed paintings (`-- --force` to refresh)                            |
 
-The e2e tests run against the dev server on port 3100 and change the development database, putting back what they change. To test a production build, run `npm run build`, then `LOCAL_PRODUCTION_TEST=1 SITE_URL=http://localhost:3200 npx next start --port 3200`, then `PORT=3200 npm run test:e2e`.
+The e2e tests run against the dev server on port 3100 and change the development database, putting back what they change. To test a production build as CI does, set the environment from the `e2e` job in `.github/workflows/ci.yml` (with `PORT`, `SITE_URL` and `E2E_SERVER` on a free port), run `npm run build`, then `npm run test:e2e -- --project=desktop-chromium --project=mobile-chromium`.
 
 ## Seed images
 

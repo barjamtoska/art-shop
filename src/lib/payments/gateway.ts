@@ -39,13 +39,30 @@ export type PaymentGateway = {
   refund(paymentIntentId: string, idempotencyKey: string): Promise<{ id: string }>;
 };
 
-/** Stripe's client; also verifies webhook signatures (no network needed for that). */
-export const stripe = new Stripe(env.STRIPE_SECRET_KEY ?? "sk_test_signature_verification_only", {
-  appInfo: { name: "Maison gallery" },
-  maxNetworkRetries: 2,
-});
+/**
+ * A Stripe client. In tests, `apiBase` points it at stripe-mock, which checks
+ * every request against Stripe's published API.
+ */
+export function createStripeClient(secretKey: string, apiBase?: string) {
+  const base = apiBase ? new URL(apiBase) : null;
+  return new Stripe(secretKey, {
+    appInfo: { name: "Maison gallery" },
+    maxNetworkRetries: 2,
+    ...(base && {
+      host: base.hostname,
+      port: Number(base.port) || (base.protocol === "https:" ? 443 : 80),
+      protocol: base.protocol === "https:" ? "https" : "http",
+    }),
+  });
+}
 
-const stripeGateway: PaymentGateway = {
+/** Stripe's client; also verifies webhook signatures (no network needed for that). */
+export const stripe = createStripeClient(
+  env.STRIPE_SECRET_KEY ?? "sk_test_signature_verification_only",
+  env.STRIPE_API_BASE,
+);
+
+export const createStripeGateway = (stripe: Stripe): PaymentGateway => ({
   kind: "stripe",
   async createCheckoutSession(request) {
     const session = await stripe.checkout.sessions.create(
@@ -93,7 +110,9 @@ const stripeGateway: PaymentGateway = {
     const refund = await stripe.refunds.create({ payment_intent: paymentIntentId }, { idempotencyKey });
     return { id: refund.id };
   },
-};
+});
+
+const stripeGateway = createStripeGateway(stripe);
 
 const localGateway: PaymentGateway = {
   kind: "local",

@@ -16,7 +16,8 @@ export default async function setup() {
     throw new Error(`Refusing to empty "${name}": the test database's name must end in _test.`);
   }
 
-  const env = { ...process.env, DATABASE_URL: url };
+  // Both: prisma.config.ts prefers DATABASE_URL_UNPOOLED when it is set.
+  const env = { ...process.env, DATABASE_URL: url, DATABASE_URL_UNPOOLED: url };
   const prisma = (args: string[]) =>
     execFileSync(process.execPath, ["node_modules/prisma/build/index.js", ...args], { env, stdio: "pipe" });
 
