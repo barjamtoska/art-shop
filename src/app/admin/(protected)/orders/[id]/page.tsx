@@ -6,7 +6,8 @@ import { PageHeader, StatusLabel, formatDateTime } from "@/components/admin/ui";
 import { orderStatusLabels } from "@/lib/admin-labels";
 import { db } from "@/lib/db";
 import { formatPrice } from "@/lib/format";
-import { markShipped } from "../actions";
+import { ActionButton } from "@/components/admin/ActionButton";
+import { markShipped, resendConfirmation, returnToSale } from "../actions";
 
 export const metadata: Metadata = { title: "Order" };
 
@@ -83,6 +84,37 @@ export default async function OrderPage({ params }: PageProps<"/admin/orders/[id
           </div>
         ))}
       </dl>
+
+      {order.status === "PAID" && (
+        <section aria-labelledby="confirmation" className="mt-14 max-w-xl">
+          <h2 id="confirmation" className="mb-2 text-2xl">
+            Confirmation email
+          </h2>
+          <p className="mb-5 text-sm text-ivory-muted">
+            {order.confirmationSentAt
+              ? `Sent ${formatDateTime(order.confirmationSentAt)} to ${order.email}.`
+              : "Not sent yet (or the last attempt failed)."}
+          </p>
+          <ActionButton action={resendConfirmation.bind(null, order.id)} label="Send it again" />
+        </section>
+      )}
+
+      {order.status === "REFUNDED" && (
+        <section aria-labelledby="return" className="mt-14 max-w-xl">
+          <h2 id="return" className="mb-2 text-2xl">
+            Return the work to sale
+          </h2>
+          <p className="mb-5 text-sm text-ivory-muted">
+            This sale was refunded, but the work stays “in a private collection” until you decide otherwise — for
+            example, once it is back with you.
+          </p>
+          <ActionButton
+            action={returnToSale.bind(null, order.id)}
+            label="Make the work available again"
+            confirmation="Put this work back on sale? It will show its price and can be acquired again."
+          />
+        </section>
+      )}
 
       {order.status === "PAID" && (
         <section aria-labelledby="shipping" className="mt-14 max-w-xl">

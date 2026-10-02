@@ -4,13 +4,15 @@ import { notFound } from "next/navigation";
 import { ArtworkZoom, ZoomButton, ZoomSurface } from "@/components/gallery/ArtworkZoom";
 import { FramedArtwork } from "@/components/gallery/FramedArtwork";
 import { Hang } from "@/components/gallery/Hang";
+import { AcquireForm } from "@/components/gallery/AcquireForm";
 import { Placard } from "@/components/gallery/Placard";
-import { QuietButton, QuietLink } from "@/components/ui/Quiet";
+import { QuietLink } from "@/components/ui/Quiet";
 import { copy } from "@/config/copy";
 import { getArtist, getArtwork, getArtworkSlugs, getRelatedWorks } from "@/lib/catalog";
 import type { Artwork } from "@/lib/catalog/types";
 import { formatDimensionsCm, formatDimensionsIn } from "@/lib/format";
 import { roomSize } from "@/lib/hang";
+import { acquireWork } from "./actions";
 
 export async function generateStaticParams() {
   return (await getArtworkSlugs()).map((slug) => ({ slug }));
@@ -157,12 +159,8 @@ export default async function ArtworkRoom({ params }: PageProps<"/collection/[sl
   );
 }
 
-/** The single, quiet action. Wired to Stripe Checkout in Phase 4. */
+/** The single, quiet action: only for a work that is available now. */
 function AcquireAction({ artwork }: { artwork: Artwork }) {
   if (artwork.status !== "AVAILABLE") return null;
-  return (
-    <QuietButton type="button" disabled title="Acquisitions open soon">
-      {copy.actions.acquire}
-    </QuietButton>
-  );
+  return <AcquireForm action={acquireWork.bind(null, artwork.slug)} />;
 }

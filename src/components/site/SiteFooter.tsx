@@ -4,7 +4,7 @@ import { site } from "@/config/site";
 
 export function SiteFooter() {
   return (
-    <footer className="mx-auto mt-48 max-w-7xl px-4 pb-16 sm:px-8">
+    <footer className="mx-auto mt-48 max-w-7xl px-4 pb-16 sm:px-8 print:hidden">
       <div className="grid gap-12 border-t border-gold/25 pt-12 md:grid-cols-3">
         <div>
           <p className="font-caps text-2xl tracking-display text-ivory">{site.name}</p>

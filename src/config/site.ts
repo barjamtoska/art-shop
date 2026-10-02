@@ -9,4 +9,6 @@ export const site = {
     "A private gallery of paintings, hung and lit as they would be in a museum at night. Each work is unique.",
   currency: "EUR",
   locale: "en-IE",
+  /** Certificates of acquisition are numbered MAI-2026-0001, MAI-2026-0002 … */
+  certificatePrefix: "MAI",
 } as const;

@@ -278,5 +278,5 @@ describe("the artist", () => {
         stdio: "pipe",
       });
     }
-  });
+  }, 60_000); // re-seeds the test database afterwards
 });

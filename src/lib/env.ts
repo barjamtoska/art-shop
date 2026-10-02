@@ -5,8 +5,8 @@ import { z } from "zod";
  * Server environment, validated once. Secrets live only in environment
  * variables (.env.local in development, the host's settings in production).
  *
- * Email (Resend) and images (Cloudinary) are optional in development, with
- * local fallbacks, and required in production.
+ * Email (Resend), images (Cloudinary) and payments (Stripe) are optional in
+ * development, with local fallbacks, and required in production.
  */
 
 /**
@@ -44,6 +44,12 @@ const schema = z
     CLOUDINARY_API_KEY: optional,
     CLOUDINARY_API_SECRET: optional,
     CLOUDINARY_FOLDER: z.string().default("maison"),
+    STRIPE_SECRET_KEY: optional,
+    STRIPE_WEBHOOK_SECRET: optional,
+    /** Protects the scheduled clean-up of lapsed holds. */
+    CRON_SECRET: optional,
+    /** Where sale notifications go; defaults to the admin addresses. */
+    GALLERY_EMAIL: optional,
   })
   .superRefine((env, ctx) => {
     // The build prerenders pages (it needs only the database); the running
@@ -56,6 +62,9 @@ const schema = z
       "CLOUDINARY_CLOUD_NAME",
       "CLOUDINARY_API_KEY",
       "CLOUDINARY_API_SECRET",
+      "STRIPE_SECRET_KEY",
+      "STRIPE_WEBHOOK_SECRET",
+      "CRON_SECRET",
     ] as const;
     for (const key of required) {
       if (!env[key]) ctx.addIssue({ code: "custom", path: [key], message: `${key} is required in production` });
@@ -91,3 +100,18 @@ export const localFallbacks = env.NODE_ENV !== "production" || localProductionTe
 
 /** Sign-in rate limits apply on every real production server. */
 export const rateLimited = env.NODE_ENV === "production" && !localProductionTest;
+
+export const stripeConfigured = Boolean(env.STRIPE_SECRET_KEY);
+
+/** Live payments: real money changes hands (demonstration works are refused). */
+export const liveStripe = Boolean(env.STRIPE_SECRET_KEY?.startsWith("sk_live_"));
+
+/**
+ * Webhook signing secret. Without Stripe in development, the local test
+ * checkout signs its events with this fixed secret, so the webhook still
+ * verifies every signature exactly as in production.
+ */
+export const webhookSecret = env.STRIPE_WEBHOOK_SECRET ?? (localFallbacks ? "whsec_local_development_only" : undefined);
+
+/** Recipients of sale notifications. */
+export const galleryEmails = env.GALLERY_EMAIL ? [env.GALLERY_EMAIL] : env.ADMIN_EMAILS;

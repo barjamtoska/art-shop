@@ -6,7 +6,7 @@ import { NavLinks } from "./NavLinks";
 
 export function SiteHeader() {
   return (
-    <header className="mx-auto flex max-w-7xl items-center justify-between px-4 py-6 sm:px-8 sm:py-8">
+    <header className="mx-auto flex max-w-7xl items-center justify-between px-4 py-6 sm:px-8 sm:py-8 print:hidden">
       <Link href="/" className="font-caps text-xl tracking-display text-ivory">
         {site.name}
       </Link>

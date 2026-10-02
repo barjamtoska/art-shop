@@ -76,6 +76,48 @@ export const copy = {
     body: "The work or page you were looking for is not on view. It may have moved to another room.",
     back: "Return to the entrance",
   },
+  acquisition: {
+    preparing: "Preparing your acquisition…",
+    holdNote: "The work is held for you while you complete the acquisition. Shipping is included, worldwide.",
+    refused: {
+      "not-found": "This work is no longer on view.",
+      sold: "This work has just joined a private collection.",
+      reserved: "Another collector is considering this work. It may become available again shortly.",
+      demo: "This is a demonstration work and cannot be acquired.",
+      "too-many-holds": "You already have works on hold. Please complete or leave those acquisitions first.",
+      "payment-unavailable": "Acquisitions are briefly unavailable. Please try again in a moment.",
+    },
+    complete: {
+      title: "Thank you",
+      next: "A confirmation is on its way to your email. We will be in touch shortly to arrange delivery.",
+      certificate: "View your certificate of acquisition",
+      recordingTitle: "Your acquisition is being recorded",
+      recordingBody: "This takes a moment. Please keep this page open.",
+      slowBody:
+        "This is taking longer than usual. Your payment is safe: you will receive a confirmation by email shortly.",
+      conflictTitle: "We are very sorry",
+      conflictBody:
+        "This work was acquired by another collector moments before your payment arrived. Your payment has been refunded in full.",
+      endedTitle: "This acquisition was not completed",
+      endedBody: "No payment was taken. The work may still be available.",
+      backToCollection: "Return to the collection",
+    },
+    cancelled: {
+      title: "Your acquisition was not completed",
+      body: "No payment was taken, and the work is available again.",
+      backToWork: "Return to the work",
+    },
+  },
+  certificate: {
+    title: "Certificate of Acquisition",
+    intro: "This certifies that the original work described below",
+    acquiredBy: "was acquired by",
+    on: "on",
+    number: "Certificate no.",
+    signature: "For the gallery",
+    print: "Print this certificate",
+    refunded: "This acquisition was later refunded; the certificate is no longer valid.",
+  },
   error: {
     title: "A light has gone out in this room",
     body: "Something went wrong while preparing this page. Please try again in a moment.",

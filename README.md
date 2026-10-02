@@ -28,6 +28,21 @@ What the admin can change: works, the artist's profile and portrait, exhibitions
 
 Public pages are generated from the database and kept until the catalogue changes. Every admin save refreshes them.
 
+## Acquisitions (payments)
+
+"Acquire this work" holds the work for that visitor (36 minutes) and opens a checkout (31 minutes). Only a verified Stripe webhook marks a work sold; a payment for a work that has already sold is refunded automatically. The collector gets a confirmation email and a printable certificate of acquisition; the gallery gets a notification, and the order appears under Admin → Orders.
+
+**Without Stripe keys (development):** a local test checkout stands in for Stripe's page. Choosing "Complete test payment" sends a signed Stripe-format event to the real webhook, so the sale is recorded exactly as in production. No payment is taken, and this page does not exist in production.
+
+**With Stripe in test mode:**
+
+1. Put your test key in `.env.local`: `STRIPE_SECRET_KEY="sk_test_…"`.
+2. Install the [Stripe CLI](https://stripe.com/docs/stripe-cli) and run `stripe listen --forward-to localhost:3000/api/webhooks/stripe --events checkout.session.completed,checkout.session.expired,charge.refunded`.
+3. Copy the `whsec_…` secret it prints into `.env.local` as `STRIPE_WEBHOOK_SECRET`, and restart `npm run dev`.
+4. Acquire a work and pay with the test card `4242 4242 4242 4242` (any future date, any CVC).
+
+In production, add a webhook endpoint for `https://<your domain>/api/webhooks/stripe` in the Stripe Dashboard with those three events. `GET /api/cron/release-reservations` (protected by `CRON_SECRET`) releases holds whose expiry event never arrived; it is scheduled daily on Vercel.
+
 ## Scripts
 
 | Script                | What it does                                                                                   |
